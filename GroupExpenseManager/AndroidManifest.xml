@@ -1,0 +1,91 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.AndroidFriends"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="14" />
+
+    <application
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/head"
+        android:theme="@android:style/Theme.Light" >
+        <activity
+            android:name="com.AndroidFriends.src.MainActivity"
+            android:label="@string/title_activity_main" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.AndroidFriends.src.GroupsActivity"
+            android:label="@string/title_activity_groups" >
+        </activity>
+        <activity
+            android:name="com.AndroidFriends.src.NewGroupActivity"
+            android:label="@string/title_activity_new_group" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.AndroidFriends.src.GroupsActivity" />
+        </activity>
+        <activity
+            android:name="com.AndroidFriends.src.GroupSummaryActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_group_summary" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.AndroidFriends.src.GroupsActivity" />
+        </activity>
+        <activity
+            android:name="com.AndroidFriends.src.CashTransferActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_cash_transfer" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.AndroidFriends.src.GroupSummaryActivity" />
+        </activity>
+        <activity
+            android:name="com.AndroidFriends.src.AddEventActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_add_event" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.AndroidFriends.src.GroupSummaryActivity" />
+        </activity>
+        <activity
+            android:name="com.AndroidFriends.src.PossibleSolution"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_possible_solution" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.AndroidFriends.src.GroupSummaryActivity" />
+        </activity>
+        <activity
+            android:name="com.AndroidFriends.src.EditGroupActivity"
+            android:label="@string/title_activity_edit_group" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.AndroidFriends.src.GroupSummaryActivity" />
+        </activity>
+        <activity
+            android:name="com.AndroidFriends.src.HistoryActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_history" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.AndroidFriends.src.GroupSummaryActivity" />
+        </activity>
+        <activity
+            android:name="com.AndroidFriends.src.AboutActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_about" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.AndroidFriends.src.GroupsActivity" />
+        </activity>
+    </application>
+
+</manifest>

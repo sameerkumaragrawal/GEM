@@ -1,0 +1,50 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="AppTheme" parent="android:Theme.Light" />
+
+    <style name="main" parent="android:Widget.Holo.Light.TextView">
+        <item name="android:paddingLeft">50dp</item>
+        <item name="android:paddingRight">30dp</item>
+        <item name="android:scrollHorizontally">false</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textSize">14pt</item>
+        <item name="android:width">400dp</item>
+    </style>
+    <style name="newGrpPage" parent="android:Widget.TextView">
+        <item name="android:textColor">#ffffff</item>
+    </style>
+    <style name="newGrpPage2" parent="@style/newGrpPage">
+        <item name="android:textSize">16dp</item>
+    </style>
+    
+    <style name="MinusButton">
+        <item name="android:background">@drawable/minus_back</item>
+    	<item name="android:contentDescription">@string/desc</item>
+	</style>
+	
+    <style name="EditButton">
+        <item name="android:background">@drawable/edit</item>
+    	<item name="android:contentDescription">@string/desc2</item>
+	</style>
+    
+    <style name="editTextStyle" parent="android:Widget.EditText">
+        <item name="android:ems">5</item>
+        <item name="android:inputType">number</item>
+        <item name="android:paddingLeft">5dp</item>
+    </style>
+    <style name="spinnerStyle" parent="android:Widget.Spinner">
+        <item name="android:paddingRight">0dp</item>
+    </style>
+    <style name="eventMemberStyle">
+        <item name="android:paddingBottom">15dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:stretchColumns">*</item>
+    </style>
+    <style name="AlertDialogCustom" parent="android:Widget.TextView">
+        <item name="android:background">#333333</item>
+        <item name="android:typeface">monospace</item>
+        <item name="android:textSize">10dp</item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+</resources>
