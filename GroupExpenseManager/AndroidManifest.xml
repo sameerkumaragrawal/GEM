@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.AndroidFriends"
     android:versionCode="1"
@@ -25,40 +26,33 @@
             android:label="@string/title_activity_groups" >
         </activity>
         <activity
-            android:name="com.AndroidFriends.src.NewGroupActivity"
-            android:label="@string/title_activity_new_group" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.AndroidFriends.src.GroupsActivity" />
-        </activity>
-        <activity
             android:name="com.AndroidFriends.src.GroupSummaryActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_group_summary" >
+            android:label="@string/title_activity_group_summary"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.AndroidFriends.src.GroupsActivity" />
         </activity>
         <activity
             android:name="com.AndroidFriends.src.CashTransferActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_cash_transfer" >
+            android:label="@string/title_activity_cash_transfer"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.AndroidFriends.src.GroupSummaryActivity" />
         </activity>
         <activity
             android:name="com.AndroidFriends.src.AddEventActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_add_event" >
+            android:label="@string/title_activity_add_event"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.AndroidFriends.src.GroupSummaryActivity" />
         </activity>
         <activity
             android:name="com.AndroidFriends.src.PossibleSolution"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_possible_solution" >
+            android:label="@string/title_activity_possible_solution"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.AndroidFriends.src.GroupSummaryActivity" />
@@ -72,19 +66,24 @@
         </activity>
         <activity
             android:name="com.AndroidFriends.src.HistoryActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_history" >
+            android:label="@string/title_activity_history"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.AndroidFriends.src.GroupSummaryActivity" />
         </activity>
         <activity
             android:name="com.AndroidFriends.src.AboutActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_about" >
+            android:label="@string/title_activity_about"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.AndroidFriends.src.GroupsActivity" />
+        </activity>
+        <activity
+            android:name="com.AndroidFriends.src.NewGroupModActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:label="@string/title_activity_new_group" >
         </activity>
     </application>
 

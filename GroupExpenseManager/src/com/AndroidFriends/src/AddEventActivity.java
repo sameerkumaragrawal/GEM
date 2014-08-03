@@ -3,17 +3,15 @@ package com.AndroidFriends.src;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.InputType;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
@@ -27,9 +25,11 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.ImageView.ScaleType;
 import android.widget.TableRow.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.AndroidFriends.R;
 
 public class AddEventActivity extends Activity {
@@ -47,6 +47,7 @@ public class AddEventActivity extends Activity {
 	private int number1 = 0;
 	private int number2 = 0;
 	private int sharedialogid = -1;
+	private GroupDatabase gpdb;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,8 @@ public class AddEventActivity extends Activity {
 		Intent  intent = getIntent();
 		grpName = intent.getStringExtra(GroupsActivity.GROUP_NAME);
 		grpid = intent.getIntExtra(GroupsActivity.GROUP_ID,0);
+		String database="Database_"+grpid;
+		gpdb=GroupDatabase.get(this, database);
 		namearray = intent.getStringArrayExtra(GroupSummaryActivity.listofmember);
 		String new_title= grpName+" - "+String.valueOf(this.getTitle());
 		this.setTitle(new_title);
@@ -97,6 +100,7 @@ public class AddEventActivity extends Activity {
 		spin1.setAdapter(dataAdapter);
 	}
 
+	@TargetApi(11)
 	public void addMember1(View v) {
 		number1++;
 		AddEventTable1.setStretchAllColumns(true);
@@ -135,6 +139,9 @@ public class AddEventActivity extends Activity {
 			l3.height = 70;
 			ib.setLayoutParams(l3);
 			ib.setPadding(0, 10, 0, 0);
+			ib.setScaleType(ScaleType.CENTER);
+			ib.setScaleX((float) 0.8);
+			ib.setScaleY((float) 0.8);
 			ib.setOnClickListener(new View.OnClickListener() {
 
 				public void onClick(View v) {
@@ -185,6 +192,7 @@ public class AddEventActivity extends Activity {
 		},0);
 	}
 
+	@TargetApi(11)
 	public void addMember2(View v) {
 		boolean[] temparray = new boolean[popupsize];
 		for(int i=0;i<popupsize;i++){
@@ -241,6 +249,9 @@ public class AddEventActivity extends Activity {
 			l5.height = 70;
 			ib.setLayoutParams(l5);
 			ib.setPadding(0, 10, 0, 0);
+			ib.setScaleType(ScaleType.CENTER);
+			ib.setScaleX((float) 0.8);
+			ib.setScaleY((float) 0.8);
 			ib.setOnClickListener(new View.OnClickListener() {
 
 				public void onClick(View v) {
@@ -366,64 +377,7 @@ public class AddEventActivity extends Activity {
 			n.show();
 			return false;
 		}
-		SQLiteDatabase groupDb=null;
-		String database="Database_"+grpid;
-		int ID1=1;
-		try{
-			groupDb = this.openOrCreateDatabase(database, MODE_PRIVATE, null);
-			Cursor count = groupDb.rawQuery("SELECT count(*) FROM " + MainActivity.EventTable , null);
-			if(count.getCount()>0){
-				count.moveToLast();
-				ID1=count.getInt(0)+1;
-			}
-			groupDb.execSQL("INSERT INTO " + MainActivity.EventTable + " ( ID, Name, Flag ) VALUES ( '" + ID1+"', '"+eventName+"', '1' );" );
-
-			float[] memberBalance;
-			memberBalance=new float[namearray.length];
-			float[] consumedBalance;
-			consumedBalance=new float[namearray.length];
-
-			//Paid
-			for(int j=0;j<memberBalance.length;j++){
-				memberBalance[j]=0;
-				consumedBalance[j]=0;
-			}
-			for(int j=0;j<amountPaid.length;j++){
-				memberBalance[paidMembers[j]]+=amountPaid[j];
-			}
-
-			//Consumption
-			int share;
-			float eachshare;
-			for(int j=0;j<amountConsumed.length;j++){
-				share=0;
-				eachshare=0;
-				for(int i=1;i<whoConsumed.get(j).length;i++){
-					if(whoConsumed.get(j)[i]){
-						share++;
-					}
-				}
-				eachshare=amountConsumed[j]/share;
-				for(int i=1;i<whoConsumed.get(j).length;i++){
-					if(whoConsumed.get(j)[i]){
-						consumedBalance[i-1]+=eachshare;
-					}
-				}
-			}
-			for(int i=0;i<memberBalance.length;i++){
-				if(memberBalance[i]!=0 || consumedBalance[i]!=0){
-					groupDb.execSQL("INSERT INTO "+ MainActivity.TransTable + " ( MemberId, Paid, Consumed, EventId ) VALUES ( '"+(i+1)+"', '"+memberBalance[i]+"', '"+consumedBalance[i]+"', '"+ID1+"' );" );
-				}
-				memberBalance[i]-=consumedBalance[i];
-				groupDb.execSQL("UPDATE "+MainActivity.MemberTable+" SET Balance = Balance+'"+memberBalance[i]+"' WHERE ID = '"+(i+1)+"';");
-			}            
-		}catch(Exception e) {
-			Log.e("Error", "Error", e);
-		}
-		finally{ 
-			if(groupDb!=null)
-				groupDb.close();
-		}
+		gpdb.addEvent(eventName, amountPaid, paidMembers, amountConsumed, whoConsumed, namearray);
 		return true;
 	}
 

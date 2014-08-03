@@ -9,10 +9,8 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.AndroidFriends.src.NewGroupModActivity;
 import com.AndroidFriends.R;
 import com.AndroidFriends.R.id;
 
@@ -38,10 +37,12 @@ public class GroupsActivity extends Activity {
     private ListView gl;
     public final static String GROUP_NAME = "GroupSummmary/GroupName";
     public final static String GROUP_ID = "GroupSummmary/GroupID";
+    private CommonDatabase commondb;
     
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        commondb = CommonDatabase.get(this);
         setContentView(R.layout.activity_groups);
     }
 	
@@ -50,7 +51,7 @@ public class GroupsActivity extends Activity {
 		super.onStart();
 		gl = (ListView) this.findViewById(R.id.GroupsList);
 		listItems= new ArrayList<String>();
-        groupList();
+		groupList();
         adapter=new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, listItems);
         gl.setAdapter(adapter);
         gl.setClickable(true);
@@ -101,7 +102,7 @@ public class GroupsActivity extends Activity {
     }
     
     public void newGroup(View v) {
-    	Intent intent = new Intent(this, NewGroupActivity.class);
+    	Intent intent = new Intent(this, NewGroupModActivity.class);
     	startActivity(intent);
     }
 
@@ -113,7 +114,7 @@ public class GroupsActivity extends Activity {
     public void sendName(int pos) {
     	Intent intent = new Intent(this, GroupSummaryActivity.class);
     	intent.putExtra(GROUP_NAME, listItems.get(pos));
-    	intent.putExtra(GROUP_ID, GroupNameToDatabaseId(listItems.get(pos)));
+    	intent.putExtra(GROUP_ID, commondb.GroupNameToDatabaseId(listItems.get(pos)));
     	startActivity(intent);
     }
     
@@ -122,7 +123,7 @@ public class GroupsActivity extends Activity {
     	if(option == 0) {
     		Intent intent = new Intent(this, GroupSummaryActivity.class);
         	intent.putExtra(GROUP_NAME, GroupName);
-        	intent.putExtra(GROUP_ID, GroupNameToDatabaseId(GroupName));
+        	intent.putExtra(GROUP_ID, commondb.GroupNameToDatabaseId(GroupName));
         	startActivity(intent);
     	}
     	if(option == 1) {
@@ -205,57 +206,21 @@ public class GroupsActivity extends Activity {
     }
     
     public void groupList(){
-    	SQLiteDatabase groupDb=null;
     	try{
-	        groupDb = this.openOrCreateDatabase(MainActivity.CommonDatabase, MODE_PRIVATE, null);
-	        Cursor gquery = groupDb.rawQuery("SELECT Name FROM " + MainActivity.GroupTable+";",null);
-	        if(gquery.moveToFirst()){
-	    		do{
-	        		addItems(gquery.getString(0));
-	        	} while(gquery.moveToNext());
-	    	}
-    	}catch(Exception e) {
-    		e.getMessage();
-        }
-        finally{ 
-        	if(groupDb!=null)
-        		groupDb.close();
-        }
-    }
-    
-    public int GroupNameToDatabaseId(String GroupName){
-    	int databaseId=0;
-    	SQLiteDatabase commonDb=null;
-    	try{
-    		commonDb = this.openOrCreateDatabase(MainActivity.CommonDatabase, MODE_PRIVATE, null);
-	        Cursor idquery = commonDb.rawQuery("SELECT ID FROM " + MainActivity.GroupTable +" WHERE Name = '"+GroupName+"';", null);
-	        idquery.moveToFirst();
-        	databaseId = idquery.getInt(0);;
-    	}catch(Exception e) {
-    		Log.e("Error", "Error", e);
-        }
-        finally{ 
-        	if(commonDb!=null)
-        		commonDb.close();
-        }
-    	return databaseId;
+    		Cursor gquery = commondb.groupList();
+    		if(gquery.moveToFirst()){
+    			do{
+    				addItems(gquery.getString(0));
+    			} while(gquery.moveToNext());
+    		}
+    	}catch(Exception e){}
     }
     
     public void deleteGroup(){
-    	int id = GroupNameToDatabaseId(GroupName);
+    	int id = commondb.GroupNameToDatabaseId(GroupName);
     	String databasename="Database_"+id;
     	this.deleteDatabase(databasename);
-    	SQLiteDatabase commonDb=null;
-    	try{
-    		commonDb = this.openOrCreateDatabase(MainActivity.CommonDatabase, MODE_PRIVATE, null);
-    		commonDb.execSQL("DELETE FROM "+ MainActivity.GroupTable+" WHERE ID = '"+id+"';");
-    	}catch(Exception e) {
-    		Log.e("Error", "Error", e);
-        }
-        finally{ 
-        	if(commonDb!=null)
-        		commonDb.close();
-        }
+    	commondb.deleteID(id);
     	this.onStart();
     }
     

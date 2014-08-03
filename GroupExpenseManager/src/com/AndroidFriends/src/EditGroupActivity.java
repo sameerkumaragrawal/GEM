@@ -1,15 +1,13 @@
 package com.AndroidFriends.src;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.NavUtils;
 import android.text.InputType;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,9 +19,11 @@ import android.widget.ImageButton;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
-import android.widget.Toast;
+import android.widget.ImageView.ScaleType;
 import android.widget.TableRow.LayoutParams;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.AndroidFriends.R;
 
 public class EditGroupActivity extends Activity {
@@ -33,14 +33,20 @@ public class EditGroupActivity extends Activity {
 	private float scale = 0;
 	private TableLayout editgrouptable = null;
 	private int numbermembers = 0;
+	private GroupDatabase gpdb;
+	private CommonDatabase commondb;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		commondb = CommonDatabase.get(this);
+		
 		Intent intent = getIntent();
 		groupName=intent.getStringExtra(GroupsActivity.GROUP_NAME);
 		groupid = intent.getIntExtra(GroupsActivity.GROUP_ID,0);
 		namearray = intent.getStringArrayExtra(GroupSummaryActivity.listofmember);
-		
+		String database="Database_"+groupid;
+		gpdb=GroupDatabase.get(this, database);
 		String new_title= groupName+" - "+String.valueOf(this.getTitle());
 		this.setTitle(new_title);
 		setContentView(R.layout.activity_edit_group);
@@ -82,12 +88,16 @@ public class EditGroupActivity extends Activity {
 		}
 	}
 
+	@TargetApi(11)
 	public void addMember(View v){
 		numbermembers++;
 		TableRow tr = addmemberhelper("Member",null);
 		ImageButton ib = new ImageButton(this);
 		ib.setBackgroundResource(R.drawable.minus_back);
 		int pixels = (int) (55 * scale + 0.5f);
+		ib.setScaleType(ScaleType.CENTER);
+		ib.setScaleX((float) 0.8);
+		ib.setScaleY((float) 0.8);
 		LayoutParams l3 = new LayoutParams(pixels, pixels, 0.1f);
 		ib.setLayoutParams(l3);
 		ib.setOnClickListener(new View.OnClickListener() {
@@ -219,55 +229,18 @@ public class EditGroupActivity extends Activity {
 			}
 		}
 		groupName=grpname;
-		updatemembers(members);
+		gpdb.updateMembers(members,namearray);
 		return true;
 	}
 	
 	public boolean updategroupname(String grpname){
-		SQLiteDatabase myDB=null;
-		String TableName=MainActivity.GroupTable;
-		String CommonDatabase=MainActivity.CommonDatabase;
-		try {
-			myDB = this.openOrCreateDatabase(CommonDatabase, MODE_PRIVATE, null);
-			Cursor isPresent=myDB.rawQuery("SELECT ID FROM " + TableName + " WHERE Name = '"+grpname+"';", null);
-			if(isPresent.getCount()>0){
-				Toast n = Toast.makeText(EditGroupActivity.this,"Error! Group "+grpname+" already exists", Toast.LENGTH_SHORT);
-				n.setGravity(Gravity.CENTER_VERTICAL,0,0);
-				n.show();
-				return false;
-			}
-			myDB.execSQL("UPDATE "+TableName+" SET Name = '"+grpname+"' WHERE ID = '"+groupid+"';");
-		} catch(Exception e) {
-			Log.e("Error", "Error", e);
-		}
-		finally{ 
-			if(myDB!=null)
-				myDB.close();
+		if(!commondb.updategroupname(grpname,groupid)){
+			Toast n = Toast.makeText(EditGroupActivity.this,"Error! Group "+grpname+" already exists", Toast.LENGTH_SHORT);
+			n.setGravity(Gravity.CENTER_VERTICAL,0,0);
+			n.show();
+			return false;
 		}
 		return true;
-	}
-
-	public void updatemembers(String[] members){
-		SQLiteDatabase groupDb=null;
-		String database="Database_"+groupid;
-		String TableName=MainActivity.MemberTable;
-		try{
-			groupDb = this.openOrCreateDatabase(database, MODE_PRIVATE, null);
-			for(int i=0;i<namearray.length;i++){
-				if(!members[i].equals(namearray[i])){
-					groupDb.execSQL("UPDATE "+TableName+" SET Name = '"+members[i]+"' WHERE ID = '"+(i+1)+"';");
-				}
-			}
-			for(int i=namearray.length;i<members.length;i++){
-				groupDb.execSQL("INSERT INTO "+TableName + " ( ID, Name, Balance ) VALUES ( '" + (i+1)+"', '"+members[i] + "', '"+0+"' );" );
-			}
-		}catch(Exception e) {
-			Log.e("Error", "Error", e);
-		}
-		finally{ 
-			if(groupDb!=null)
-				groupDb.close();
-		}
 	}
 
 	public void finishedit(){

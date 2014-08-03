@@ -8,11 +8,9 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,6 +39,8 @@ public class HistoryActivity extends Activity {
 	private TableLayout historytable = null;
 	private GroupSummaryActivity summaryobject = new GroupSummaryActivity();
 	private LinearLayout historytablerow1,historytablerow2;
+	private GroupDatabase gpdb;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -51,6 +51,9 @@ public class HistoryActivity extends Activity {
 		setContentView(R.layout.activity_history);
 
 		grpid = intent.getIntExtra(GroupsActivity.GROUP_ID,0);
+		String database="Database_"+grpid;
+		gpdb=GroupDatabase.get(this, database);
+
 		namearray = intent.getStringArrayExtra(GroupSummaryActivity.listofmember);
 		historytable = (TableLayout) findViewById(R.id.HistoryTable);
 		historytablerow1 = (LinearLayout) findViewById(R.id.historyrow1);
@@ -105,11 +108,8 @@ public class HistoryActivity extends Activity {
 
 	public void EventList(){
 		listofevents = new ArrayList<String>();
-		String gdName="Database_"+grpid;
-		SQLiteDatabase groupDb=null;
 		try{
-			groupDb = this.openOrCreateDatabase(gdName, MODE_PRIVATE, null);
-			Cursor mquery = groupDb.rawQuery("SELECT * FROM " + MainActivity.EventTable+";",null);
+			Cursor mquery = gpdb.eventList();
 			idarray=new int[mquery.getCount()];
 			flagarray=new int[mquery.getCount()];
 			int temp=0;
@@ -120,29 +120,22 @@ public class HistoryActivity extends Activity {
 				flagarray[temp]=mquery.getInt(2);
 				temp++;
 			}while(mquery.moveToNext());
-		}catch(Exception e) {
-			Log.e("Error", "Error", e);
-		}
-		finally{ 
-			if(groupDb!=null)
-				groupDb.close();
-		}
+		}catch(Exception e){}
+		
 	}
 
 	public void filltable(int position){
 		historytable.removeAllViews();
 		int tempid = idarray[position];
 		int tempflag = flagarray[position];
-		String gdName="Database_"+grpid;
-		SQLiteDatabase groupDb=null;
+
+		String str1,str2,str3;
+		float paid,consumed;
 		try{
-			String str1,str2,str3;
-			float paid,consumed;
-			groupDb = this.openOrCreateDatabase(gdName, MODE_PRIVATE, null);
 			if(tempflag==1){
 				historytablerow2.setVisibility(View.GONE);
 				historytablerow1.setVisibility(View.VISIBLE);
-				Cursor mquery = groupDb.rawQuery("SELECT * FROM " + MainActivity.TransTable+" WHERE EventId = '"+tempid+"';", null);
+				Cursor mquery = gpdb.TransList(tempid);
 				mquery.moveToFirst();
 				do{
 					str1=namearray[mquery.getInt(0)-1];
@@ -156,7 +149,7 @@ public class HistoryActivity extends Activity {
 			else if(tempflag==2){
 				historytablerow1.setVisibility(View.GONE);
 				historytablerow2.setVisibility(View.VISIBLE);
-				Cursor mquery = groupDb.rawQuery("SELECT * FROM " + MainActivity.CashTable+" WHERE ID = '"+tempid+"';", null);
+				Cursor mquery = gpdb.CashList(tempid);
 				mquery.moveToFirst();
 				do{
 					str1=namearray[mquery.getInt(0)-1];
@@ -166,14 +159,8 @@ public class HistoryActivity extends Activity {
 					addEntry(str1,str2,str3);
 				}while(mquery.moveToNext());
 			}
-
-		}catch(Exception e) {
-			Log.e("Error", "Error", e);
-		}
-		finally{ 
-			if(groupDb!=null)
-				groupDb.close();
-		}
+		}catch(Exception e){}
+			
 	}
 
 	public void addEntry(String str1,String str2,String str3){
@@ -224,29 +211,7 @@ public class HistoryActivity extends Activity {
 	}
 
 	public void clearlog(){
-		String gdName="Database_"+grpid;
-		SQLiteDatabase groupDb=null;
-		try{
-			groupDb = this.openOrCreateDatabase(gdName, MODE_PRIVATE, null);
-			groupDb.execSQL("DROP TABLE " + MainActivity.EventTable);
-			groupDb.execSQL("DROP TABLE " + MainActivity.TransTable);
-			groupDb.execSQL("DROP TABLE " + MainActivity.CashTable);
-			groupDb.execSQL("CREATE TABLE IF NOT EXISTS "
-	     	           + MainActivity.EventTable
-	     	           + " ( ID int(11) NOT NULL, Name varchar(255) NOT NULL, Flag int(1) );");
-			groupDb.execSQL("CREATE TABLE IF NOT EXISTS "
-					+ MainActivity.TransTable
-					+ " ( MemberId int(11) NOT NULL, Paid float, Consumed float, EventId int(11) NOT NULL );");
-			groupDb.execSQL("CREATE TABLE IF NOT EXISTS "
-	       	           + MainActivity.CashTable
-	       	           + " ( FromMemberId int(11) NOT NULL, ToMemberId int(11) NOT NULL, Amount float NOT NULL, ID int(11) NOT NULL);");
-		}catch(Exception e) {
-			Log.e("Error", "Error", e);
-		}
-		finally{ 
-			if(groupDb!=null)
-				groupDb.close();
-		}
+		gpdb.clearlog();
 		this.finish();
 	}
 

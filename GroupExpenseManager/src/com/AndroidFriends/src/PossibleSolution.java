@@ -2,18 +2,16 @@ package com.AndroidFriends.src;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TableLayout;
 import android.widget.TableLayout.LayoutParams;
 import android.widget.TableRow;
 import android.widget.TextView;
+
 import com.AndroidFriends.R;
 
 public class PossibleSolution extends Activity {
@@ -28,6 +26,8 @@ public class PossibleSolution extends Activity {
 	private GroupSummaryActivity summaryobject = new GroupSummaryActivity();
 	private float[] tramountarray;
 	private int grpid = 0;
+	private GroupDatabase gpdb;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -39,6 +39,8 @@ public class PossibleSolution extends Activity {
 		balancearray = intent.getFloatArrayExtra(GroupSummaryActivity.listofbalance);
 		namearray = intent.getStringArrayExtra(GroupSummaryActivity.listofmember);
 		countmembers = intent.getIntExtra(GroupSummaryActivity.stringcount, 0);
+		String database="Database_"+grpid;
+		gpdb=GroupDatabase.get(this, database);
 		compute();
 		boolean clearflag=intent.getBooleanExtra(GroupSummaryActivity.clearflag, false);
 		if(clearflag){
@@ -88,7 +90,7 @@ public class PossibleSolution extends Activity {
 			v2.setPadding(5, 10, 5, 10);
 			v3.setWidth(80);
 			v3.setPadding(5, 10, 5, 10);
-			
+
 			tr.addView(v1);
 			tr.addView(v2);
 			tr.addView(v3);
@@ -139,29 +141,8 @@ public class PossibleSolution extends Activity {
 			ntransactions++;
 		}
 	}
-	
+
 	public void clearbalance(){
-		SQLiteDatabase groupDb=null;
-		String database="Database_"+grpid;
-		int ID1=1;
-		try{
-			groupDb = this.openOrCreateDatabase(database, MODE_PRIVATE, null);
-			Cursor count = groupDb.rawQuery("SELECT count(*) FROM " + MainActivity.EventTable , null);
-	        if(count.getCount()>0){
-	        	count.moveToLast();
-	        	ID1=count.getInt(0)+1;
-	        }
-	        groupDb.execSQL("INSERT INTO " + MainActivity.EventTable + " ( ID, Name, Flag ) VALUES ( '" + ID1+"', 'Balance Settle', '2' );" );
-	        for(int i=0;i<ntransactions;i++){
-	        	groupDb.execSQL("INSERT INTO "+ MainActivity.CashTable + " ( ID, FromMemberId, ToMemberId, Amount ) VALUES ( '"+ID1+"', '"+solutionarray[i][1]+"', '"+solutionarray[i][3]+"', '"+tramountarray[i]+"');" );
-	        }
-	        groupDb.execSQL("UPDATE "+MainActivity.MemberTable+" SET Balance = '0';");
-		}catch(Exception e) {
-			Log.e("Error", "Error", e);
-		}
-		finally{ 
-			if(groupDb!=null)
-				groupDb.close();
-		}
+		gpdb.clearBalance(ntransactions, solutionarray, tramountarray);
 	}
 }
