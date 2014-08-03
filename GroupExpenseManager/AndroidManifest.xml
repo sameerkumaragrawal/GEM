@@ -58,13 +58,6 @@
                 android:value="com.AndroidFriends.src.GroupSummaryActivity" />
         </activity>
         <activity
-            android:name="com.AndroidFriends.src.EditGroupActivity"
-            android:label="@string/title_activity_edit_group" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.AndroidFriends.src.GroupSummaryActivity" />
-        </activity>
-        <activity
             android:name="com.AndroidFriends.src.HistoryActivity"
             android:label="@string/title_activity_history"
             android:screenOrientation="portrait" >
@@ -84,6 +77,16 @@
             android:name="com.AndroidFriends.src.NewGroupModActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:label="@string/title_activity_new_group" >
+        </activity>
+        <activity
+            android:name="com.AndroidFriends.GroupSummaryModActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:label="@string/title_activity_group_summary" >
+        </activity>
+        <activity
+            android:name="com.AndroidFriends.src.EditGroupModActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:label="@string/title_activity_edit_group" >
         </activity>
     </application>
 

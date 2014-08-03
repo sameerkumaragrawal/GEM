@@ -260,7 +260,7 @@ public class GroupSummaryActivity extends Activity {
 	}
 
 	public void editGroup(View v){
-		Intent intent = new Intent(this, EditGroupActivity.class);
+		Intent intent = new Intent(this, EditGroupModActivity.class);
 		intent.putExtra(GroupsActivity.GROUP_NAME, grpName);
 		intent.putExtra(GroupsActivity.GROUP_ID, grpId);
 		intent.putExtra(listofmember, namearray);
