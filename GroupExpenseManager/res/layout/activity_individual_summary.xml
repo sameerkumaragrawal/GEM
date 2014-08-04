@@ -5,7 +5,7 @@
     android:orientation="vertical" >
 
     <LinearLayout
-        android:id="@+id/fromtopossiblesolution"
+        android:id="@+id/individualsummary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="20dp" >
@@ -13,41 +13,39 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/from"
+            android:layout_weight="1.1"
+            android:text="@string/member"
             android:gravity="center"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/solutionTo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/to"
+            android:layout_weight="1.2"
+            android:text="@string/consumed"
             android:gravity="center"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/solutionAmount"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/amount"
+            android:layout_weight="0.8"
+            android:text="@string/paid"
             android:gravity="center"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textStyle="bold" />
     </LinearLayout>
 
     <ScrollView
-        android:id="@+id/TableScrollerPossibleSolution"
+        android:id="@+id/TableScrollerIndividualSummary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="20dp" >
 
         <TableLayout
-            android:id="@+id/PossibleSolutionTable"
+            android:id="@+id/IndividualSummaryTable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:stretchColumns="0,1,2" />

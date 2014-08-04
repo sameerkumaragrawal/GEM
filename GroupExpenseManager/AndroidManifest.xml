@@ -52,6 +52,14 @@
                 android:value="com.AndroidFriends.src.GroupSummaryActivity" />
         </activity>
         <activity
+            android:name="com.AndroidFriends.src.IndividualSummaryActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:label="@string/title_activity_individual_summary" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.AndroidFriends.src.GroupSummaryActivity" />
+        </activity>
+        <activity
             android:name="com.AndroidFriends.src.HistoryActivity"
             android:label="@string/title_activity_history"
             android:configChanges="keyboardHidden|screenSize|orientation" >

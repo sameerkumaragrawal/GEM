@@ -71,7 +71,7 @@ public class PossibleSolution extends Activity {
 	}
 
 	public void filltable(){
-		TableLayout tl = (TableLayout)findViewById(R.id.PossibeSolutionTable);
+		TableLayout tl = (TableLayout)findViewById(R.id.PossibleSolutionTable);
 		for(int i=0;i<ntransactions;i++){
 			TableRow tr = new TableRow(this);
 			tr.setLayoutParams(new LayoutParams(

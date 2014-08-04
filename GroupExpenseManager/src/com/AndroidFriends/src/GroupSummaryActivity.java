@@ -28,6 +28,8 @@ public class GroupSummaryActivity extends Activity {
 	private int countmembers=0;
 	public final static String listofmember = "summaryActivity/listmember";
 	public final static String listofbalance = "summaryActivity/listbalance";
+	public final static String listofpaid = "summaryActivity/listpaid";
+	public final static String listofconsumed = "summaryActivity/listconsumed";
 	public final static String listofid = "summaryActivity/listid";
 	public final static String stringcount = "summaryActivity/count";
 	public final static String clearflag = "summaryActivity/clearflag";
@@ -201,6 +203,17 @@ public class GroupSummaryActivity extends Activity {
 		intent.putExtra(listofid, idarray);
 		intent.putExtra(listofmember, namearray);
 		intent.putExtra(listofbalance, balancearray);
+		intent.putExtra(stringcount, countmembers);
+		startActivity(intent);
+	}
+	
+	public void showSummary(View v){
+		Intent intent = new Intent(this, IndividualSummaryActivity.class);
+		intent.putExtra(GroupsActivity.GROUP_NAME, grpName);
+		intent.putExtra(listofid, idarray);
+		intent.putExtra(listofmember, namearray);
+		intent.putExtra(listofpaid, paidarray);
+		intent.putExtra(listofconsumed, consumedarray);
 		intent.putExtra(stringcount, countmembers);
 		startActivity(intent);
 	}

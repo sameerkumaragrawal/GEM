@@ -41,10 +41,12 @@
     <string name="title_activity_cash_transfer">Cash Transfer</string>
     <string name="amount">Amount</string>
     <string name="solution">Solution</string>
+    <string name="summary">Summary</string>
     <string name="history">History</string>
-    <string name="clear">Clear</string>
+    <string name="clear">Clear Balance</string>
     <string name="title_activity_add_event">Add Event</string>
     <string name="title_activity_possible_solution">Possible Solution</string>
+    <string name="title_activity_individual_summary">Individual Summary</string>
     <string name="done_button1">Done</string>
     <string name="title_activity_events">Events</string>
     <string name="done_button2">Done</string>

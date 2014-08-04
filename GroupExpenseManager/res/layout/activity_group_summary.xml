@@ -130,7 +130,15 @@
                 android:layout_weight="1"
                 android:onClick="showHistory"
                 android:text="@string/history" />
-
+			
+			<Button
+                android:id="@+id/summaryButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.2"
+                android:onClick="showSummary"
+                android:text="@string/summary" />
+            
             <Button
                 android:id="@+id/solutionButton"
                 android:layout_width="0dp"
@@ -138,14 +146,15 @@
                 android:layout_weight="1"
                 android:onClick="showSolution"
                 android:text="@string/solution" />
-
-            <Button
-                android:id="@+id/nullifyButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="nullifyAlert"
-                android:text="@string/clear" />
         </LinearLayout>
+        
+        <Button
+			android:id="@+id/nullifyButton"
+			android:layout_width="200dp"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:onClick="nullifyAlert"
+			android:layout_marginTop="20dp"
+			android:text="@string/clear" />
     </LinearLayout>
 </ScrollView>
