@@ -15,15 +15,15 @@
 
     <TextView
         android:id="@+id/textView1"
-        style="@style/main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:layout_below="@+id/imageView1"
         android:layout_marginTop="15dp"
+        android:layout_centerHorizontal="true"
         android:text="@string/main1"
         android:textStyle="bold"
-        android:typeface="normal" />
+        android:typeface="normal"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
         android:id="@+id/textView2"
@@ -32,8 +32,9 @@
         android:layout_below="@+id/textView1"
         android:layout_centerHorizontal="true"
         android:text="@string/main2"
-        android:textAppearance="@style/main"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:typeface="normal"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
         android:id="@+id/textView3"

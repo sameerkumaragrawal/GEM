@@ -2,22 +2,6 @@
 
     <style name="AppTheme" parent="android:Theme.Light" />
 
-    <style name="main" parent="android:Widget.Holo.Light.TextView">
-        <item name="android:paddingLeft">50dp</item>
-        <item name="android:paddingRight">30dp</item>
-        <item name="android:scrollHorizontally">false</item>
-        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
-        <item name="android:textColor">#ffffff</item>
-        <item name="android:textSize">14pt</item>
-        <item name="android:width">400dp</item>
-    </style>
-    <style name="newGrpPage" parent="android:Widget.TextView">
-        <item name="android:textColor">#ffffff</item>
-    </style>
-    <style name="newGrpPage2" parent="@style/newGrpPage">
-        <item name="android:textSize">16sp</item>
-    </style>
-    
     <style name="MinusButton">
         <item name="android:background">@drawable/minus_back</item>
     	<item name="android:contentDescription">@string/desc</item>
