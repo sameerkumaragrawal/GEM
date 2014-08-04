@@ -67,12 +67,12 @@
     <string name="consumedby">Consumed By</string>
     <string name="addanother">Add Another</string>
     <string name="clearhistory">Clear History</string>
-    <string name="version">Version 1.0</string>
+    <string name="version">Version 2.0</string>
     <string name="developedby">Developed by:</string>
-    <string name="aditya">2) Aditya Bhandari</string>
-    <string name="sameer">1) Sameer Agrawal</string>
-    <string name="nikunj">3) Nikunj Saunshi</string>
-    <string name="amit">4) Amit Panghal</string>
+    <string name="aditya">Aditya Bhandari</string>
+    <string name="sameer">Sameer Kumar Agrawal</string>
+    <string name="nikunj">Nikunj Saunshi</string>
+    <string name="amit">Amit Panghal</string>
     <string name="title_activity_about">Group Expense Manager - About</string>
     <string name="title_activity_new_group_mod">NewGroupModActivity</string>
     <string name="member_name">Member Name</string>
@@ -80,7 +80,12 @@
     <string name="title_activity_group_summary_mod">GroupSummaryModActivity</string>
     <string name="title_activity_edit_group_mod">EditGroupModActivity</string>
     <string name="remove_member_button">Remove this Member</string>
+<<<<<<< HEAD
     <string name="title_activity_add_event_mod">AddEventModActivity</string>
     <string name="title_activity_sample_main">SampleMainActivity</string>
+=======
+    <string name="androidfriends">Android Friends</string>
+    <string name="edit_name_button">Edit name of the group</string>
+>>>>>>> origin/sameer
 
 </resources>

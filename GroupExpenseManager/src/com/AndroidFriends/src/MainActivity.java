@@ -9,8 +9,8 @@ import com.AndroidFriends.R;
 
 public class MainActivity extends Activity {
 
-	public final static String GroupName = "com.example.myfirstapp.groupname";
-	public final static String MEMBERS = "com.example.myfirstapp.members";
+	public final static String GroupName = "com.example.gem.groupname";
+	public final static String MEMBERS = "com.example.gem.members";
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {

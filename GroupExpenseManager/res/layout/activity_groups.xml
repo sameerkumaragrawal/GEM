@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="20dp" >
+        android:padding="20dp" >
 
         <TextView
             android:layout_width="0dip"
@@ -22,20 +22,21 @@
             android:id="@+id/groupsActivityAddButton"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:onClick="newGroup"
-            android:text="@string/add_group"
-            android:layout_weight="1" />
+            android:text="@string/add_group" />
 
     </LinearLayout>
 
     <ListView
         android:id="@+id/GroupsList"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="1"
         android:clickable="false"
-        android:focusable="false" >
+        android:focusable="false"
+        android:padding="20dp" >
     </ListView>
 
 </LinearLayout>

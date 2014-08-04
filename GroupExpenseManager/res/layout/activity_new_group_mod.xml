@@ -8,12 +8,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:padding="20dp" >
 
         <TextView
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:paddingTop="5dp"
             android:text="@string/group_name"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -34,14 +36,16 @@
         android:layout_height="0dip"
         android:layout_weight="1"
         android:clickable="false"
-        android:focusable="false" />
+        android:focusable="false"
+        android:padding="20dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:gravity="bottom"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:padding="20dp" >
 
         <Button
             android:layout_width="0dp"
