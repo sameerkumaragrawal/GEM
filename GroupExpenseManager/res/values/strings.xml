@@ -80,12 +80,9 @@
     <string name="title_activity_group_summary_mod">GroupSummaryModActivity</string>
     <string name="title_activity_edit_group_mod">EditGroupModActivity</string>
     <string name="remove_member_button">Remove this Member</string>
-<<<<<<< HEAD
     <string name="title_activity_add_event_mod">AddEventModActivity</string>
     <string name="title_activity_sample_main">SampleMainActivity</string>
-=======
     <string name="androidfriends">Android Friends</string>
     <string name="edit_name_button">Edit name of the group</string>
->>>>>>> origin/sameer
 
 </resources>
