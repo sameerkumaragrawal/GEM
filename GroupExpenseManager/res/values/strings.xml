@@ -49,7 +49,7 @@
     <string name="title_activity_events">Events</string>
     <string name="done_button2">Done</string>
     <string name="add_button">Add another</string>
-    <string name="share_button">Share</string>
+    <string name="share_button">Share Among</string>
     <string name="paid">Paid</string>
     <string name="nextButton">Next</string>
     <string name="eventname">Event Name</string>
@@ -80,5 +80,7 @@
     <string name="title_activity_group_summary_mod">GroupSummaryModActivity</string>
     <string name="title_activity_edit_group_mod">EditGroupModActivity</string>
     <string name="remove_member_button">Remove this Member</string>
+    <string name="title_activity_add_event_mod">AddEventModActivity</string>
+    <string name="title_activity_sample_main">SampleMainActivity</string>
 
 </resources>

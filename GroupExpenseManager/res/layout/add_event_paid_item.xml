@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
+
+    <Spinner
+        android:id="@+id/spinnerAddEventMod"
+        android:layout_width="0dip"
+        android:layout_weight="1"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/editTextAddEventMod1"
+        android:layout_width="0dip"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="numberDecimal" >
+    </EditText>
+    <ImageButton
+        android:id="@+id/add_event_paid_item_ib"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.3"
+        android:contentDescription="@string/remove_member_button"
+        android:src="@android:drawable/ic_menu_close_clear_cancel" />
+
+</LinearLayout>

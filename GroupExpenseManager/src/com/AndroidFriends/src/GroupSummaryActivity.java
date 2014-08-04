@@ -279,7 +279,7 @@ public class GroupSummaryActivity extends Activity {
 	}
 
 	public void toAddEvent(View v) {
-		Intent intent = new Intent(this, AddEventActivity.class);
+		Intent intent = new Intent(this, AddEventModActivity.class);
 		intent.putExtra(GroupsActivity.GROUP_NAME, grpName);
 		intent.putExtra(GroupsActivity.GROUP_ID, grpId);
 		intent.putExtra(listofmember, namearray);
