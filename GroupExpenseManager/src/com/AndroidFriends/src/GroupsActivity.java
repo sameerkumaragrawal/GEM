@@ -171,7 +171,7 @@ public class GroupsActivity extends Activity {
     }
     
     public void newGroup(View v) {
-    	Intent intent = new Intent(this, NewGroupModActivity.class);
+    	Intent intent = new Intent(this, NewGroupActivity.class);
     	startActivity(intent);
     }
     
