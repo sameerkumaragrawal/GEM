@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp" >
 
     <TextView
         android:id="@+id/new_group_item_tv"

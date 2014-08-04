@@ -155,9 +155,9 @@ public class GroupSummaryActivity extends Activity {
 			v1.setGravity(Gravity.CENTER);
 			v2.setGravity(Gravity.CENTER);
 			v3.setGravity(Gravity.CENTER);
-			v1.setPadding(0, 10, 0, 10);
-			v2.setPadding(0, 10, 0, 10);
-			v3.setPadding(0, 10, 0, 10);
+			v1.setPadding(0, 20, 0, 20);
+			v2.setPadding(0, 20, 0, 20);
+			v3.setPadding(0, 20, 0, 20);
 
 			tr.addView(v1);
 			tr.addView(v2);
