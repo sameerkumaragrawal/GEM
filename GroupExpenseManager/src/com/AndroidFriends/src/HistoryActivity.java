@@ -11,6 +11,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,7 +49,7 @@ public class HistoryActivity extends Activity {
 		grpName = intent.getStringExtra(GroupsActivity.GROUP_NAME);
 		String new_title= grpName+" - "+String.valueOf(this.getTitle());
 		this.setTitle(new_title);
-		setContentView(R.layout.activity_history);
+		setContentView(R.layout.activity_history_mod);
 
 		grpid = intent.getIntExtra(GroupsActivity.GROUP_ID,0);
 		String database="Database_"+grpid;
@@ -174,15 +175,20 @@ public class HistoryActivity extends Activity {
 		v1.setText(str1);
 		v2.setText(str2);
 		v3.setText(str3);
+		
+		v1.setLayoutParams(new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1.1f));
+		v2.setLayoutParams(new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1.2f));
+		v3.setLayoutParams(new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1f));
+
 		v1.setTextColor(Color.parseColor("#FFFFFF"));
 		v2.setTextColor(Color.parseColor("#FFFFFF"));
 		v3.setTextColor(Color.parseColor("#FFFFFF"));
-		v1.setWidth(195);
-		v1.setPadding(30, 10, 10, 5);
-		v2.setWidth(150);
-		v2.setPadding(5, 10, 10, 5);
-		v3.setWidth(137);
-		v3.setPadding(5, 10, 10, 10);
+		v1.setGravity(Gravity.CENTER);
+		v2.setGravity(Gravity.CENTER);
+		v3.setGravity(Gravity.CENTER);
+		v1.setPadding(0, 10, 0, 10);
+		v2.setPadding(0, 10, 0, 10);
+		v3.setPadding(0, 10, 0, 10);
 
 		tr.addView(v1);
 		tr.addView(v2);
