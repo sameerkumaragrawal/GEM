@@ -9,7 +9,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="10dp" >
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp" >
 
         <TextView
             android:id="@+id/groupNametextView"
@@ -37,7 +40,10 @@
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="horizontal"
-        android:padding="10dp" >
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp" >
 	
 	    <Button
 	        android:id="@+id/addEventButton"
@@ -61,7 +67,10 @@
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="horizontal"
-	    android:padding="10dp" >
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp" >
 	
 	    <TextView
 	        android:id="@+id/MemberNametextView"
@@ -98,7 +107,10 @@
 	    android:id="@+id/groupSummaryTableLayout"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    android:padding="10dp" >
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp" >
 	</TableLayout>
 	
     <LinearLayout
