@@ -168,7 +168,7 @@ public class HistoryActivity extends Activity {
 	public void addEntry(String str1,String str2,String str3){
 		TableRow tr = new TableRow(this);
 		tr.setLayoutParams(new LayoutParams(
-				LayoutParams.FILL_PARENT,
+				LayoutParams.MATCH_PARENT,
 				LayoutParams.WRAP_CONTENT));
 		TextView v1= new TextView(this);
 		TextView v2= new TextView(this);

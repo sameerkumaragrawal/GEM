@@ -75,7 +75,7 @@ public class PossibleSolution extends Activity {
 		for(int i=0;i<ntransactions;i++){
 			TableRow tr = new TableRow(this);
 			tr.setLayoutParams(new LayoutParams(
-					LayoutParams.FILL_PARENT,
+					LayoutParams.MATCH_PARENT,
 					LayoutParams.WRAP_CONTENT));
 			TextView v1= new TextView(this);
 			v1.setText(solutionarray[i][0]);

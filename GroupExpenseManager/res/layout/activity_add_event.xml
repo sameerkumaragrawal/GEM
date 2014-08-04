@@ -1,183 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/addEventScroller"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:layout_alignParentTop="true"
-    android:background="#222222"
-    android:orientation="vertical" >
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="vertical" >
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="10dp" >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/AddEventLinearLayout0"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="20dp" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/eventname"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#FFFFFF"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/AddEventEventName"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="1"
-                android:inputType="text|textPersonName" />
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/PaymentView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/AddEventLinearLayout0"
-            android:layout_marginLeft="120dp"
-            android:layout_marginTop="20dp"
-            android:text="@string/payment"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="#F2F5A9"
-            android:textStyle="bold" />
-
-        <LinearLayout
-            android:id="@+id/AddEventLinearLayout1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/PaymentView"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="10dp"
             android:layout_marginTop="20dp"
             android:orientation="horizontal" >
 
             <TextView
-                android:id="@+id/paidView1"
-                android:layout_width="wrap_content"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:text="@string/paidby"
+                android:layout_weight="1"
+                android:text="@string/eventname"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-            	android:layout_marginLeft="25dp"
-                android:textColor="#FFFFFF" />
+                android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/paidView2"
-                android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/AddEventModEventName"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="110dp"
-                android:text="@string/amount"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#FFFFFF" />
+                android:layout_weight="1"
+                android:inputType="text" />
         </LinearLayout>
 
-        <TableLayout
-            android:id="@+id/AddEventTableLayout1"
-            android:layout_width="wrap_content"
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/AddEventLinearLayout1"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp" >      
-        </TableLayout>
+            android:layout_marginTop="10dp"
+            android:gravity="center_horizontal"
+            android:text="@string/payment"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:text="@string/paidby"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:text="@string/amount"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/addEventModLinearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:focusable="false"
+            android:orientation="vertical" />
 
         <Button
-            android:id="@+id/addbuttonAddevent1"
-            android:layout_width="165dp"
+            android:id="@+id/addbuttonAddeventMod1"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/AddEventTableLayout1"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="80dp"
+            android:gravity="center_horizontal"
             android:onClick="addMember1"
             android:text="@string/addanother" />
 
         <TextView
-            android:id="@+id/ConsumptionView"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/addbuttonAddevent1"
-            android:layout_marginLeft="100dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_horizontal"
             android:text="@string/consumption"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="#F2F5A9"
             android:textStyle="bold" />
 
         <LinearLayout
-            android:id="@+id/AddEventLinearLayout2"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/ConsumptionView"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="20dp"
             android:orientation="horizontal" >
 
             <TextView
-                android:id="@+id/ConsumptionView1"
-                android:layout_width="wrap_content"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
                 android:text="@string/amount"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#FFFFFF" />
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
-                android:id="@+id/ConsumptionView2"
-                android:layout_width="wrap_content"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="70dp"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
                 android:text="@string/consumedby"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#FFFFFF" />
+                android:textAppearance="?android:attr/textAppearanceMedium" />
         </LinearLayout>
 
-        <TableLayout
-            android:id="@+id/AddEventTableLayout2"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/addEventModLinearLayout2"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/AddEventLinearLayout2"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp" >
-        </TableLayout>
+            android:clickable="false"
+            android:focusable="false"
+            android:orientation="vertical" />
 
         <Button
-            android:id="@+id/addbuttonAddevent2"
-            android:layout_width="165dp"
+            android:id="@+id/addbuttonAddeventMod2"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/AddEventTableLayout2"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="80dp"
+            android:gravity="center_horizontal"
             android:onClick="addMember2"
             android:text="@string/addanother" />
-
         <Button
-            android:id="@+id/donebuttonAddevent"
-            android:layout_width="200dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/addbuttonAddevent2"
             android:layout_marginTop="30dp"
-            android:layout_marginLeft="60dp"
+            android:gravity="center_horizontal"
             android:onClick="doneAddEvent"
             android:text="@string/done" />
-    </RelativeLayout>
+    </LinearLayout>
 
 </ScrollView>

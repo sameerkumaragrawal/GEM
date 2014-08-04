@@ -131,7 +131,7 @@ public class GroupSummaryActivity extends Activity {
 		for(int j=0;j<countmembers;j++){
 			TableRow tr = new TableRow(this);
 			tr.setLayoutParams(new LayoutParams(
-					LayoutParams.FILL_PARENT,
+					LayoutParams.MATCH_PARENT,
 					LayoutParams.WRAP_CONTENT));
 			TextView v1= new TextView(this);
 			TextView v2= new TextView(this);
@@ -248,6 +248,7 @@ public class GroupSummaryActivity extends Activity {
 		}
 		return null;
 	}
+	@SuppressWarnings("deprecation")
 	public void nullifyAlert(View v) {
 		showDialog(0);
 	}
@@ -279,12 +280,13 @@ public class GroupSummaryActivity extends Activity {
 		this.finish();
 	}
 
+	@SuppressWarnings("deprecation")
 	public void DeleteAlert() {
 		showDialog(1);
 	}
 
 	public void toAddEvent(View v) {
-		Intent intent = new Intent(this, AddEventModActivity.class);
+		Intent intent = new Intent(this, AddEventActivity.class);
 		intent.putExtra(GroupsActivity.GROUP_NAME, grpName);
 		intent.putExtra(GroupsActivity.GROUP_ID, grpId);
 		intent.putExtra(listofmember, namearray);

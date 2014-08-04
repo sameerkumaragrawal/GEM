@@ -29,8 +29,8 @@
         </activity>
         <activity
             android:name="com.AndroidFriends.src.GroupSummaryActivity"
-            android:label="@string/title_activity_group_summary"
-            android:screenOrientation="portrait" >
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:label="@string/title_activity_group_summary" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.AndroidFriends.src.GroupsActivity" />
@@ -39,14 +39,6 @@
             android:name="com.AndroidFriends.src.CashTransferActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:label="@string/title_activity_cash_transfer" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.AndroidFriends.src.GroupSummaryActivity" />
-        </activity>
-        <activity
-            android:name="com.AndroidFriends.src.AddEventActivity"
-            android:label="@string/title_activity_add_event"
-            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.AndroidFriends.src.GroupSummaryActivity" />
@@ -91,7 +83,7 @@
             android:label="@string/title_activity_edit_group" >
         </activity>
         <activity
-            android:name="com.AndroidFriends.src.AddEventModActivity"
+            android:name="com.AndroidFriends.src.AddEventActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:label="@string/title_activity_add_event" >
         </activity>
