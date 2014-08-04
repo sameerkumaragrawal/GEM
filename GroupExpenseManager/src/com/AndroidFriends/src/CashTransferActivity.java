@@ -39,7 +39,7 @@ public class CashTransferActivity extends Activity {
 		this.setTitle(new_title);
 		grpid = intent.getIntExtra(GroupsActivity.GROUP_ID,0);
 		namearray = intent.getStringArrayExtra(GroupSummaryActivity.listofmember);
-		setContentView(R.layout.activity_cash_transfer_mod);
+		setContentView(R.layout.activity_cash_transfer);
 		String database="Database_"+grpid;
 		gpdb=GroupDatabase.get(this, database);
 		MemberList();

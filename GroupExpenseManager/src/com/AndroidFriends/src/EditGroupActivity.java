@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.Configuration;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -22,34 +23,59 @@ import android.widget.Toast;
 
 import com.AndroidFriends.R;
 
-public class NewGroupModActivity extends Activity {
+public class EditGroupActivity extends Activity {
 
 	private ListView list;
 	private ArrayList<String> items;
 	private ListAdaptor adaptor;
-	private int numberMembers;
+
+	private String[] namearray;
+	private String groupName="";
+	private int groupid = 0;
+	private int numbermembers = 0;
+
 	private GroupDatabase gpdb;
 	private CommonDatabase commondb;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_new_group);
 		commondb = CommonDatabase.get(this);
 
+		Intent intent = getIntent();
+		groupName=intent.getStringExtra(GroupsActivity.GROUP_NAME);
+		groupid = intent.getIntExtra(GroupsActivity.GROUP_ID,0);
+		namearray = intent.getStringArrayExtra(GroupSummaryActivity.listofmember);
+		String database="Database_"+groupid;
+		gpdb=GroupDatabase.get(this, database);
+		String new_title= groupName+" - "+String.valueOf(this.getTitle());
+		this.setTitle(new_title);
+		setContentView(R.layout.activity_edit_group);
+		
+		EditText edittext = (EditText)findViewById(R.id.editGroupeditText);
+		edittext.setText(groupName);
+		
 		adaptor = new ListAdaptor(this);
 		items = new ArrayList<String>();
 
-		list = (ListView) findViewById(R.id.newGroupListView);
+		list = (ListView) findViewById(R.id.editGroupListView);
+
 		list.setAdapter(adaptor);
 
+		numbermembers=namearray.length;
+
+		for(int j=0; j<numbermembers; j++){
+			items.add(namearray[j]);
+		}
+		adaptor.notifyDataSetChanged();
+
+		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 	}
 
-	public void addMember(View v) {
-		//Log.e("Sameer", "Here");
+
+	public void addMember(View v){
 		items.add("");
 		adaptor.notifyDataSetChanged();
-		//Log.e("Sameer", "Here2 " + items.size());
 	}
 
 	private class ListAdaptor extends BaseAdapter{
@@ -75,11 +101,11 @@ public class NewGroupModActivity extends Activity {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			Holder holder;
 			if(convertView == null){
-				convertView = inflater.inflate(R.layout.new_group_item, null);
+				convertView = inflater.inflate(R.layout.edit_group_item, null);
 				holder = new Holder();
-				holder.memberText = (TextView)convertView.findViewById(R.id.new_group_item_tv);
-				holder.name = (EditText)convertView.findViewById(R.id.new_group_item_et);
-				holder.removeButton = (ImageButton)convertView.findViewById(R.id.new_group_item_ib);
+				holder.memberText = (TextView)convertView.findViewById(R.id.edit_group_item_tv);
+				holder.name = (EditText)convertView.findViewById(R.id.edit_group_item_et);
+				holder.removeButton = (ImageButton)convertView.findViewById(R.id.edit_group_item_ib);
 				holder.watcher = new CustomTextWatcher();
 				holder.name.addTextChangedListener(holder.watcher);
 				holder.removeListener= new CustomRemoveClickListener(); 
@@ -92,6 +118,11 @@ public class NewGroupModActivity extends Activity {
 			holder.memberText.setText("Member "+(position+1));
 			holder.watcher.setPosition(position);
 			holder.name.setText(items.get(position));
+			if(position < numbermembers){
+				holder.removeButton.setVisibility(View.INVISIBLE);
+			}else{
+				holder.removeButton.setVisibility(View.VISIBLE);
+			}
 			return convertView;
 		}
 
@@ -104,11 +135,11 @@ public class NewGroupModActivity extends Activity {
 		ImageButton removeButton;
 		CustomRemoveClickListener removeListener;
 	}
-	
+
 	private class CustomRemoveClickListener implements OnClickListener{
 
 		private int position;
-		
+
 		public void setPosition(int pos){
 			position = pos;
 		}
@@ -116,7 +147,7 @@ public class NewGroupModActivity extends Activity {
 			items.remove(position);
 			adaptor.notifyDataSetChanged();
 		}
-		
+
 	}
 
 	private class CustomTextWatcher implements TextWatcher{
@@ -146,7 +177,7 @@ public class NewGroupModActivity extends Activity {
 	}
 
 	public void createToast(String message){
-		Toast n = Toast.makeText(NewGroupModActivity.this,message, Toast.LENGTH_SHORT);
+		Toast n = Toast.makeText(EditGroupActivity.this,message, Toast.LENGTH_SHORT);
 		n.setGravity(Gravity.CENTER_VERTICAL,0,0);
 		n.show();
 	}
@@ -163,15 +194,15 @@ public class NewGroupModActivity extends Activity {
 		return true;
 	}
 
-	public void done(View v) {
-		numberMembers = items.size();
-		
-		if(numberMembers<1){
+	public void doneEditGroup(View v){
+		int itemsize = items.size();
+
+		if(itemsize<1){
 			createToast("Error! Group cannot be empty");
 			return;
 		}
-		
-		EditText editText = (EditText) (findViewById(R.id.newGroupeditText));
+
+		EditText editText = (EditText) (findViewById(R.id.editGroupeditText));
 		String group_name = editText.getText().toString();
 
 		if(group_name.equals("")){
@@ -179,13 +210,13 @@ public class NewGroupModActivity extends Activity {
 			return;
 		}
 
-		String[] members = new String[numberMembers];
+		String[] members = new String[itemsize];
 
-		for(int j=0;j<numberMembers;j++){
+		for(int j=0;j<itemsize;j++){
 			members[j]="";
 		}
 
-		for (int k=0; k<numberMembers; k++) {
+		for (int k=0; k<itemsize; k++) {
 			String temp = items.get(k);
 
 			if (!checkMemberName(temp)){
@@ -193,32 +224,36 @@ public class NewGroupModActivity extends Activity {
 			}
 			members[k] = temp;
 		}
-		insertToDatabase(group_name, members);
-	}
-
-	public void insertToDatabase(String groupName, String[] members) {
-		int ID = commondb.insert(groupName);
-		if(ID<0){
-			createToast("Error! Group "+groupName+" already exists");
+		if(!updatedatabase(group_name,members)){
 			return;
 		}
-		String DatabaseName="Database_"+ID;
-		createTables(DatabaseName,members);	        
-
-		this.finish();
+		finishedit();
 	}
 
-	public void createTables(String databaseName,String[] members){
-		gpdb = GroupDatabase.get(this, databaseName);
-		gpdb.onCreateInsert(members);
-		gpdb.close();
-		GroupDatabase.closeAll();
+	public boolean updatedatabase(String grpname,String[] members){
+		if(!grpname.equals(groupName)){
+			if(!updategroupname(grpname)){
+				return false;
+			}
+		}
+		groupName=grpname;
+		gpdb.updateMembers(members,namearray);
+		return true;
 	}
 
-	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
-		// TODO Auto-generated method stub
-		super.onConfigurationChanged(newConfig);
+	public boolean updategroupname(String grpname){
+		if(!commondb.updategroupname(grpname,groupid)){
+			createToast("Error! Group "+grpname+" already exists");
+			return false;
+		}
+		return true;
 	}
 
+	public void finishedit(){
+		Intent intent = new Intent(getApplicationContext(), GroupSummaryActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		intent.putExtra(GroupsActivity.GROUP_NAME, groupName);
+		intent.putExtra(GroupsActivity.GROUP_ID, groupid);
+		startActivity(intent);
+	}
 }

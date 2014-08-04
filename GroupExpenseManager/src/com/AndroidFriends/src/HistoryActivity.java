@@ -49,7 +49,7 @@ public class HistoryActivity extends Activity {
 		grpName = intent.getStringExtra(GroupsActivity.GROUP_NAME);
 		String new_title= grpName+" - "+String.valueOf(this.getTitle());
 		this.setTitle(new_title);
-		setContentView(R.layout.activity_history_mod);
+		setContentView(R.layout.activity_history);
 
 		grpid = intent.getIntExtra(GroupsActivity.GROUP_ID,0);
 		String database="Database_"+grpid;

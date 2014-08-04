@@ -49,7 +49,7 @@ public class GroupSummaryActivity extends Activity {
 		commondb = CommonDatabase.get(this);
 		String new_title= grpName+" - "+String.valueOf(this.getTitle());
 		this.setTitle(new_title);
-		setContentView(R.layout.activity_group_summary_mod);
+		setContentView(R.layout.activity_group_summary);
 		TextView header = (TextView) findViewById(R.id.groupNametextView);
 		header.setText(grpName);
 		MemberListWithBalance();
@@ -264,7 +264,7 @@ public class GroupSummaryActivity extends Activity {
 	}
 
 	public void editGroup(View v){
-		Intent intent = new Intent(this, EditGroupModActivity.class);
+		Intent intent = new Intent(this, EditGroupActivity.class);
 		intent.putExtra(GroupsActivity.GROUP_NAME, grpName);
 		intent.putExtra(GroupsActivity.GROUP_ID, grpId);
 		intent.putExtra(listofmember, namearray);

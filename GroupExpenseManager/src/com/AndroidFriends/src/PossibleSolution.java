@@ -49,7 +49,7 @@ public class PossibleSolution extends Activity {
 			clearbalance();
 			this.finish();
 		}
-		setContentView(R.layout.activity_possible_solution_mod);
+		setContentView(R.layout.activity_possible_solution);
 		filltable();
 	}
 

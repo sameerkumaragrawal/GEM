@@ -85,7 +85,7 @@
             android:label="@string/title_activity_group_summary" >
         </activity>
         <activity
-            android:name="com.AndroidFriends.src.EditGroupModActivity"
+            android:name="com.AndroidFriends.src.EditGroupActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:label="@string/title_activity_edit_group" >
         </activity>
