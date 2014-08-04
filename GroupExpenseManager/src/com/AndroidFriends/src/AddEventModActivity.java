@@ -22,6 +22,7 @@ import com.AndroidFriends.R;
 public class AddEventModActivity extends Activity {
 
 	private int nspinners = 0;
+	private int ndialogs = 0;
 	private String grpName = "";
 	private int grpid = 0;
 	private String[] namearray =null;
@@ -29,9 +30,7 @@ public class AddEventModActivity extends Activity {
 	
 	private LinearLayout plist;
 	
-	private ListView slist;
-	private ArrayList<String> sitems;
-	//private SListAdaptor sadaptor;
+	private LinearLayout slist;
 	
 	/*
 	private List<String> list = new ArrayList<String>();
@@ -64,10 +63,16 @@ public class AddEventModActivity extends Activity {
 		
 		inflater = LayoutInflater.from(this);
 		plist = (LinearLayout) findViewById(R.id.addEventModLinearLayout1);
+		slist = (LinearLayout) findViewById(R.id.addEventModLinearLayout2);
 			
 	}
 	
-	public View getView(){
+	public void addMember1(View v) {
+		plist.addView(getPaidView());
+		nspinners++;
+	}
+	
+	public View getPaidView(){
 		View convertView = inflater.inflate(R.layout.add_event_paid_item, null);
 		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, namearray); 
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -75,14 +80,14 @@ public class AddEventModActivity extends Activity {
 		Spinner spin = (Spinner)convertView.findViewById(R.id.spinnerAddEventMod);
 		spin.setAdapter(dataAdapter);
 		ImageButton ib = (ImageButton)convertView.findViewById(R.id.add_event_paid_item_ib);
-		CustomRemoveListener removeListener = new CustomRemoveListener();
+		CustomRemoveListener1 removeListener = new CustomRemoveListener1();
 		removeListener.setPosition(nspinners);
 		ib.setOnClickListener(removeListener);
 		
 		return convertView;
 	}
 	
-	private class CustomRemoveListener implements OnClickListener{
+	private class CustomRemoveListener1 implements OnClickListener{
 
 		private int position;
 		
@@ -96,9 +101,34 @@ public class AddEventModActivity extends Activity {
 		
 	}
 	
-	public void addMember1(View v) {
-		plist.addView(getView());
-		nspinners++;
+	public void addMember2(View v) {
+		slist.addView(getConsumedView());
+		ndialogs++;
+	}
+	
+	public View getConsumedView(){
+		View convertView = inflater.inflate(R.layout.add_event_consumed_item, null);
+		
+		ImageButton ib = (ImageButton)convertView.findViewById(R.id.add_event_consumed_item_ib);
+		CustomRemoveListener2 removeListener = new CustomRemoveListener2();
+		removeListener.setPosition(ndialogs);
+		ib.setOnClickListener(removeListener);
+		
+		return convertView;
+	}
+	
+	private class CustomRemoveListener2 implements OnClickListener{
+
+		private int position;
+		
+		public void setPosition(int pos){
+			position = pos;
+		}
+		public void onClick(View v) {
+			slist.removeViewAt(position);		
+			ndialogs--;
+		}
+		
 	}
 	
 	/*

@@ -11,8 +11,6 @@
         android:layout_weight="1"
         android:ems="10"
         android:inputType="numberDecimal" >
-
-        <requestFocus />
     </EditText>
 
     <Button
@@ -21,5 +19,13 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="@string/share_button" />
+    
+    <ImageButton
+        android:id="@+id/add_event_consumed_item_ib"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.3"
+        android:contentDescription="@string/remove_member_button"
+        android:src="@android:drawable/ic_menu_close_clear_cancel" />
 
 </LinearLayout>
