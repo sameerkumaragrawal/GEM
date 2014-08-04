@@ -94,10 +94,6 @@
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:label="@string/title_activity_add_event" >
         </activity>
-        <activity
-            android:name="com.AndroidFriends.src.SampleMainActivity"
-            android:label="@string/title_activity_sample_main" >
-        </activity>
     </application>
 
 </manifest>
