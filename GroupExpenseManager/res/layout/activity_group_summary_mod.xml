@@ -1,12 +1,137 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="${packageName}.${activityClass}" >
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:orientation="horizontal"
+        android:padding="10dp" >
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/groupNametextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:gravity="center"
+            android:text="@string/grpname"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textStyle="bold" />
+
+        <ImageButton
+	        android:id="@+id/editButton"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="0.2"
+            android:onClick="editGroup"
+	        android:contentDescription="@string/edit_name_button"
+	        android:src="@android:drawable/ic_menu_edit" />
+    </LinearLayout>
+    
+    <LinearLayout
+	    android:id="@+id/groupSummaryLinearLayout"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+        android:padding="10dp" >
+	
+	    <Button
+	        android:id="@+id/addEventButton"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:onClick="toAddEvent"
+	        android:text="@string/addevent" />
+	
+	    <Button
+	        android:id="@+id/cashTransferButton"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:onClick="cashTransfer"
+	        android:text="@string/cashtransfer" />
+	</LinearLayout>
+	
+    <LinearLayout
+	    android:id="@+id/groupSummaryLinearLayoutMiddle"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:padding="10dp" >
+	
+	    <TextView
+	        android:id="@+id/MemberNametextView"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:text="@string/groupsummaryname"
+	        android:gravity="center"
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:textStyle="bold" />
+	
+	    <TextView
+	        android:id="@+id/ToPaytextView"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="0.7"
+	        android:text="@string/topay"
+	        android:gravity="center"
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:textStyle="bold" />
+	
+	    <TextView
+	        android:id="@+id/ToGettextView"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="0.7"
+	        android:text="@string/toget"
+	        android:gravity="center"
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:textStyle="bold" />
+	</LinearLayout>
+        
+    <TableLayout
+	    android:id="@+id/groupSummaryTableLayout"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:padding="10dp" >
+	</TableLayout>
+	
+    <LinearLayout
+		android:id="@+id/groupSummaryBottomLinearLayout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:padding="10dp"
+		android:orientation="horizontal" >
+		
+		<Button
+			android:id="@+id/historyButton"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:onClick="showHistory"
+			android:text="@string/history" />
+		
+		<Button
+			android:id="@+id/solutionButton"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:onClick="showSolution"
+			android:text="@string/solution" />
+
+		<Button
+			android:id="@+id/nullifyButton"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:onClick="nullifyAlert"
+			android:text="@string/clear" />
+	
+	</LinearLayout>
+
+</LinearLayout>

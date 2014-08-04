@@ -9,7 +9,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,7 +49,7 @@ public class GroupSummaryActivity extends Activity {
 		commondb = CommonDatabase.get(this);
 		String new_title= grpName+" - "+String.valueOf(this.getTitle());
 		this.setTitle(new_title);
-		setContentView(R.layout.activity_group_summary);
+		setContentView(R.layout.activity_group_summary_mod);
 		TextView header = (TextView) findViewById(R.id.groupNametextView);
 		header.setText(grpName);
 		MemberListWithBalance();
@@ -145,15 +145,19 @@ public class GroupSummaryActivity extends Activity {
 				v3.setText(floatToString(a));
 				v2.setText(null);
 			}			
+			v1.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
+			v2.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 0.7f));
+			v3.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 0.7f));
+
 			v1.setTextColor(Color.parseColor("#FFFFFF"));
 			v2.setTextColor(Color.parseColor("#FFFFFF"));
 			v3.setTextColor(Color.parseColor("#FFFFFF"));
-			v1.setWidth(190);
-			v1.setPadding(15, 10, 10, 5);
-			v2.setWidth(137);
-			v2.setPadding(5, 10, 10, 5);
-			v3.setWidth(137);
-			v3.setPadding(5, 10, 10, 10);
+			v1.setGravity(Gravity.CENTER);
+			v2.setGravity(Gravity.CENTER);
+			v3.setGravity(Gravity.CENTER);
+			v1.setPadding(10, 10, 10, 10);
+			v2.setPadding(10, 10, 10, 10);
+			v3.setPadding(10, 10, 10, 10);
 
 			tr.addView(v1);
 			tr.addView(v2);
