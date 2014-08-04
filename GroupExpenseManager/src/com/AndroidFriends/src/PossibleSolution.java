@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TableLayout;
@@ -48,7 +49,7 @@ public class PossibleSolution extends Activity {
 			clearbalance();
 			this.finish();
 		}
-		setContentView(R.layout.activity_possible_solution);
+		setContentView(R.layout.activity_possible_solution_mod);
 		filltable();
 	}
 
@@ -81,15 +82,20 @@ public class PossibleSolution extends Activity {
 			v2.setText(solutionarray[i][2]);
 			TextView v3= new TextView(this);
 			v3.setText(solutionarray[i][4]);
+			
+			v1.setLayoutParams(new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1f));
+			v2.setLayoutParams(new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1f));
+			v3.setLayoutParams(new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1f));
+			
 			v1.setTextColor(Color.parseColor("#FFFFFF"));
 			v2.setTextColor(Color.parseColor("#FFFFFF"));
 			v3.setTextColor(Color.parseColor("#FFFFFF"));
-			v1.setWidth(120);
-			v1.setPadding(20, 10, 5, 10);
-			v2.setWidth(130);
-			v2.setPadding(5, 10, 5, 10);
-			v3.setWidth(80);
-			v3.setPadding(5, 10, 5, 10);
+			v1.setGravity(Gravity.CENTER);
+			v2.setGravity(Gravity.CENTER);
+			v3.setGravity(Gravity.CENTER);
+			v1.setPadding(0, 10, 0, 10);
+			v2.setPadding(0, 10, 0, 10);
+			v3.setPadding(0, 10, 0, 10);
 
 			tr.addView(v1);
 			tr.addView(v2);
