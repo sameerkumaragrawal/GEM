@@ -11,13 +11,14 @@
     <application
         android:icon="@drawable/ic_launcher"
         android:label="@string/head"
+        android:allowBackup="true"
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.AndroidFriends.src.MainActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
             android:label="@string/title_activity_main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -36,8 +37,8 @@
         </activity>
         <activity
             android:name="com.AndroidFriends.src.CashTransferActivity"
-            android:label="@string/title_activity_cash_transfer"
-            android:screenOrientation="portrait" >
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:label="@string/title_activity_cash_transfer" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.AndroidFriends.src.GroupSummaryActivity" />
@@ -52,8 +53,8 @@
         </activity>
         <activity
             android:name="com.AndroidFriends.src.PossibleSolution"
-            android:label="@string/title_activity_possible_solution"
-            android:screenOrientation="portrait" >
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:label="@string/title_activity_possible_solution" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.AndroidFriends.src.GroupSummaryActivity" />
@@ -61,7 +62,7 @@
         <activity
             android:name="com.AndroidFriends.src.HistoryActivity"
             android:label="@string/title_activity_history"
-            android:screenOrientation="portrait" >
+            android:configChanges="keyboardHidden|screenSize|orientation" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.AndroidFriends.src.GroupSummaryActivity" />
@@ -69,7 +70,7 @@
         <activity
             android:name="com.AndroidFriends.src.AboutActivity"
             android:label="@string/title_activity_about"
-            android:screenOrientation="portrait" >
+            android:configChanges="keyboardHidden|screenSize|orientation" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.AndroidFriends.src.GroupsActivity" />

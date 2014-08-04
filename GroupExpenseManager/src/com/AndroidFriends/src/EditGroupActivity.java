@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -255,5 +256,10 @@ public class EditGroupActivity extends Activity {
 		intent.putExtra(GroupsActivity.GROUP_NAME, groupName);
 		intent.putExtra(GroupsActivity.GROUP_ID, groupid);
 		startActivity(intent);
+	}
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		// TODO Auto-generated method stub
+		super.onConfigurationChanged(newConfig);
 	}
 }

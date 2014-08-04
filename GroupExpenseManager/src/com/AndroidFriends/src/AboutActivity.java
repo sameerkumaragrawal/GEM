@@ -1,6 +1,7 @@
 package com.AndroidFriends.src;
 
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
@@ -31,5 +32,10 @@ public class AboutActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+    @Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		// TODO Auto-generated method stub
+		super.onConfigurationChanged(newConfig);
+	}
 
 }

@@ -2,6 +2,7 @@ package com.AndroidFriends.src;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -150,5 +151,10 @@ public class PossibleSolution extends Activity {
 
 	public void clearbalance(){
 		gpdb.clearBalance(ntransactions, solutionarray, tramountarray);
+	}
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		// TODO Auto-generated method stub
+		super.onConfigurationChanged(newConfig);
 	}
 }

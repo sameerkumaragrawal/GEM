@@ -2,8 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="${packageName}.${activityClass}" >
+    android:orientation="vertical" >
 	
     <LinearLayout
         android:id="@+id/cashTransferLinear1"
@@ -18,7 +17,6 @@
             android:text="@string/from"
             android:gravity="center"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="#ffffff"
             android:textStyle="bold" />
 
         <TextView
@@ -28,7 +26,6 @@
             android:text="@string/to"
             android:gravity="center"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="#ffffff"
             android:textStyle="bold" />
     </LinearLayout>
     
@@ -67,8 +64,7 @@
             android:text="@string/amount"
             android:layout_weight="1"
             android:gravity="center"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="#ffffff" />
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <EditText
             android:id="@+id/cashTransferamountText"

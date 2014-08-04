@@ -6,6 +6,7 @@ import java.util.List;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Menu;
@@ -104,5 +105,10 @@ public class CashTransferActivity extends Activity {
 		float a = Float.valueOf(temp);
 		gpdb.CashTransfer(fM, tM, a);
 		this.finish();	
+	}
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		// TODO Auto-generated method stub
+		super.onConfigurationChanged(newConfig);
 	}
 }
