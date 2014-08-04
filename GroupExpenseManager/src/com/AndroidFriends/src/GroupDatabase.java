@@ -132,7 +132,7 @@ public class GroupDatabase extends SQLiteOpenHelper{
 		getDB().insert(CashTable,null,value2);
 
 		getDB().execSQL("UPDATE "+MemberTable+" SET Paid = Paid + ? WHERE ID = ?",new Object[]{amount,fromMember});
-		getDB().execSQL("UPDATE "+MemberTable+" SET Consumed = Consumed + ? WHERE ID = ?",new Object[]{amount,toMember});
+		getDB().execSQL("UPDATE "+MemberTable+" SET Paid = Paid - ? WHERE ID = ?",new Object[]{amount,toMember});
 	}
 
 	public void addEvent(String eventName, float[] amountPaid, int[] paidMembers, float[] amountConsumed, List<boolean[]> whoConsumed,String[] namearray){
