@@ -6,35 +6,41 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.ContextThemeWrapper;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
-import com.AndroidFriends.src.NewGroupModActivity;
 import com.AndroidFriends.R;
 import com.AndroidFriends.R.id;
 
 @TargetApi(11)
 public class GroupsActivity extends Activity {
 
-	public int position;
+	public int selPosition;
 	public String GroupName;
 	 //LIST OF ARRAY STRINGS WHICH WILL SERVE AS LIST ITEMS
-	public ArrayList<String> listItems=null;
+	public ArrayList<String> items;
 	public String[] stringArray = new String[] { "Open", "Delete" };
 
     //DEFINING STRING ADAPTER WHICH WILL HANDLE DATA OF LISTVIEW
-    ArrayAdapter<String> adapter;
-    private ListView gl;
+	private ListAdaptor adaptor;
+    private ListView list;
     public final static String GROUP_NAME = "GroupSummmary/GroupName";
     public final static String GROUP_ID = "GroupSummmary/GroupID";
     private CommonDatabase commondb;
@@ -49,29 +55,92 @@ public class GroupsActivity extends Activity {
 	@Override
 	public void onStart(){
 		super.onStart();
-		gl = (ListView) this.findViewById(R.id.GroupsList);
-		listItems= new ArrayList<String>();
+		
+		adaptor = new ListAdaptor(this);
+		items = new ArrayList<String>();
+
+		list = (ListView) findViewById(R.id.GroupsList);
+		list.setAdapter(adaptor);
+		
 		groupList();
-        adapter=new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, listItems);
-        gl.setAdapter(adapter);
-        gl.setClickable(true);
-        gl.setOnItemClickListener(new AdapterView.OnItemClickListener() {  
-        	@SuppressWarnings("rawtypes")
-    		public void onItemClick(AdapterView parentView, View childView, int position, long id) {
-        		sendName(position);
-        	}
-            @SuppressWarnings({ "rawtypes", "unused" })
-    		public void onNothingClick(AdapterView parentView) {
-            }
-        });
-        gl.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-        	
-        	@SuppressWarnings("rawtypes")
-			public boolean onItemLongClick(AdapterView parentView, View childView, int position, long id) {
-        		showDialog1(position);
-        		return true;
-        	}
-        });
+	}
+	
+	private class ListAdaptor extends BaseAdapter{
+
+		private LayoutInflater inflater;
+
+		public ListAdaptor(Context context){
+			inflater = LayoutInflater.from(context);
+		}
+
+		public int getCount() {
+			return items.size();
+		}
+
+		public String getItem(int position) {
+			return items.get(position);
+		}
+
+		public long getItemId(int position) {
+			return position;
+		}
+
+		public View getView(int position, View convertView, ViewGroup parent) {
+			Holder holder;
+			if(convertView == null){
+				convertView = inflater.inflate(R.layout.group_item, null);
+				holder = new Holder();
+				holder.memberText = (TextView)convertView.findViewById(R.id.group_item_tv);
+				holder.clickListener= new CustomOnClickListener(); 
+				holder.memberText.setOnClickListener(holder.clickListener);
+				holder.longClickListener= new CustomOnLongClickListener();
+				holder.memberText.setOnLongClickListener(holder.longClickListener);
+				convertView.setTag(holder);
+			}else{
+				holder = (Holder) convertView.getTag();
+			}
+			holder.clickListener.setPosition(position);
+			holder.longClickListener.setPosition(position);
+			holder.memberText.setText(items.get(position));
+			return convertView;
+		}
+
+	}
+	
+	private class Holder{
+		TextView memberText;
+		CustomOnClickListener clickListener;
+		CustomOnLongClickListener longClickListener;
+	}
+	
+	private class CustomOnClickListener implements OnClickListener{
+
+		private int position;
+		
+		public void setPosition(int pos){
+			position = pos;
+		}
+		
+		public void onClick(View v) {
+			selPosition = position;
+			sendOption(0);			
+		}
+		
+	}
+	
+	private class CustomOnLongClickListener implements OnLongClickListener{
+
+		private int position;
+		
+		public void setPosition(int pos){
+			position = pos;
+		}
+		
+		public boolean onLongClick(View v) {
+			showOpenDialog(position);
+    		return true;
+		}
+		
 	}
 	
 	@Override
@@ -105,21 +174,9 @@ public class GroupsActivity extends Activity {
     	Intent intent = new Intent(this, NewGroupModActivity.class);
     	startActivity(intent);
     }
-
-    //METHOD WHICH WILL HANDLE DYNAMIC INSERTION
-    public void addItems(String s) {
-    	listItems.add(s);
-    }
-    
-    public void sendName(int pos) {
-    	Intent intent = new Intent(this, GroupSummaryActivity.class);
-    	intent.putExtra(GROUP_NAME, listItems.get(pos));
-    	intent.putExtra(GROUP_ID, commondb.GroupNameToDatabaseId(listItems.get(pos)));
-    	startActivity(intent);
-    }
     
     public void sendOption(int option) {
-    	GroupName = listItems.get(position);
+    	GroupName = items.get(selPosition);
     	if(option == 0) {
     		Intent intent = new Intent(this, GroupSummaryActivity.class);
         	intent.putExtra(GROUP_NAME, GroupName);
@@ -131,17 +188,17 @@ public class GroupsActivity extends Activity {
     	}
     }
     
-    public void showDialog1(int pos) {
+    public void showOpenDialog(int pos) {
     	AlertDialog.Builder builder = new AlertDialog.Builder(
     			new ContextThemeWrapper(this, R.style.DialogTheme));
     	//builder.setTitle("Select Color Mode");
 
-    	position = pos;
+    	selPosition = pos;
     	
     	ListView modeList = new ListView(this);
     	
     	ArrayAdapter<String> modeAdapter = new ArrayAdapter<String>(
-    			this, android.R.layout.simple_list_item_1, android.R.id.text1, stringArray);
+    			this, android.R.layout.simple_list_item_activated_1, android.R.id.text1, stringArray);
     	modeList.setAdapter(modeAdapter);
 
     	builder.setView(modeList);
@@ -210,10 +267,11 @@ public class GroupsActivity extends Activity {
     		Cursor gquery = commondb.groupList();
     		if(gquery.moveToFirst()){
     			do{
-    				addItems(gquery.getString(0));
+    				items.add(gquery.getString(0));
     			} while(gquery.moveToNext());
     		}
     	}catch(Exception e){}
+    	adaptor.notifyDataSetChanged();
     }
     
     public void deleteGroup(){
@@ -221,7 +279,8 @@ public class GroupsActivity extends Activity {
     	String databasename="Database_"+id;
     	this.deleteDatabase(databasename);
     	commondb.deleteID(id);
-    	this.onStart();
+    	items.remove(selPosition);
+    	adaptor.notifyDataSetChanged();
     }
     
 }
