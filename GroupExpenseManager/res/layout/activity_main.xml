@@ -56,14 +56,25 @@
         android:text="@string/developedby"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textStyle="bold" />
+	
+	<TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/textView4"
+        android:layout_marginTop="10dp"
+        android:text="@string/androidfriends"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/textView4"
-        android:layout_marginTop="20dp"
+        android:layout_below="@+id/textView9"
+        android:layout_marginTop="10dp"
         android:text="@string/sameer"
         android:textAppearance="?android:attr/textAppearanceSmall" />
     

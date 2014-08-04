@@ -144,10 +144,10 @@ public class GroupSummaryActivity extends Activity {
 			else {
 				v3.setText(floatToString(a));
 				v2.setText(null);
-			}			
-			v1.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
-			v2.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 0.7f));
-			v3.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 0.7f));
+			}	
+			v1.setLayoutParams(new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1f));
+			v2.setLayoutParams(new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 0.7f));
+			v3.setLayoutParams(new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 0.7f));
 
 			v1.setTextColor(Color.parseColor("#FFFFFF"));
 			v2.setTextColor(Color.parseColor("#FFFFFF"));
@@ -155,9 +155,9 @@ public class GroupSummaryActivity extends Activity {
 			v1.setGravity(Gravity.CENTER);
 			v2.setGravity(Gravity.CENTER);
 			v3.setGravity(Gravity.CENTER);
-			v1.setPadding(10, 10, 10, 10);
-			v2.setPadding(10, 10, 10, 10);
-			v3.setPadding(10, 10, 10, 10);
+			v1.setPadding(0, 10, 0, 10);
+			v2.setPadding(0, 10, 0, 10);
+			v3.setPadding(0, 10, 0, 10);
 
 			tr.addView(v1);
 			tr.addView(v2);
