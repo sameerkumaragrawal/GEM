@@ -79,5 +79,6 @@
     <string name="group_name">Group Name</string>
     <string name="title_activity_group_summary_mod">GroupSummaryModActivity</string>
     <string name="title_activity_edit_group_mod">EditGroupModActivity</string>
+    <string name="remove_member_button">Remove this Member</string>
 
 </resources>

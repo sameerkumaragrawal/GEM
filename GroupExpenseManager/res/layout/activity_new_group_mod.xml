@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#222222" >
+    android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,7 +15,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/group_name"
-            android:textColor="#FFFFFF"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <EditText
@@ -50,16 +48,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="addMember"
-            android:text="@string/add"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:text="@string/add" />
 
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="done"
-            android:text="@string/done"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:text="@string/done" />
     </LinearLayout>
 
 </LinearLayout>

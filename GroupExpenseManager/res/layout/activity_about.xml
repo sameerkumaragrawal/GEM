@@ -1,8 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#222222" >
+    android:layout_height="match_parent" >
 
     <ImageView
         android:id="@+id/imageView1"
@@ -24,7 +23,6 @@
         android:layout_marginTop="15dp"
         android:text="@string/main1"
         android:textStyle="bold"
-        android:textColor="#F5F6CE"
         android:typeface="normal" />
 
     <TextView
@@ -35,7 +33,6 @@
         android:layout_centerHorizontal="true"
         android:text="@string/main2"
         android:textAppearance="@style/main"
-        android:textColor="#F5F6CE"
         android:textStyle="bold" />
 
     <TextView
@@ -46,7 +43,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:text="@string/version"
-        android:textColor="#F5F6CE"
         android:textStyle="bold" />
 
     <TextView
@@ -58,8 +54,7 @@
         android:layout_marginTop="40dp"
         android:text="@string/developedby"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textStyle="bold"
-        android:textColor="#FFFFFF" />
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textView5"
@@ -69,8 +64,7 @@
         android:layout_below="@+id/textView4"
         android:layout_marginTop="20dp"
         android:text="@string/sameer"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="#FFFFFF" />
+        android:textAppearance="?android:attr/textAppearanceSmall" />
     
     <TextView
         android:id="@+id/textView6"
@@ -80,8 +74,7 @@
         android:layout_below="@+id/textView5"
         android:layout_marginTop="10dp"
         android:text="@string/aditya"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="#FFFFFF" />
+        android:textAppearance="?android:attr/textAppearanceSmall" />
     
     <TextView
         android:id="@+id/textView7"
@@ -91,8 +84,7 @@
         android:layout_below="@+id/textView6"
         android:layout_marginTop="10dp"
         android:text="@string/nikunj"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="#FFFFFF" />
+        android:textAppearance="?android:attr/textAppearanceSmall" />
     
     <TextView
         android:id="@+id/textView8"
@@ -102,7 +94,6 @@
         android:layout_below="@+id/textView7"
         android:layout_marginTop="10dp"
         android:text="@string/amit"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="#FFFFFF" />
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </RelativeLayout>

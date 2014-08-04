@@ -133,7 +133,7 @@ public class GroupsActivity extends Activity {
     
     public void showDialog1(int pos) {
     	AlertDialog.Builder builder = new AlertDialog.Builder(
-    			new ContextThemeWrapper(this, android.R.style.Theme_Holo_Light_Dialog));
+    			new ContextThemeWrapper(this, R.style.DialogTheme));
     	//builder.setTitle("Select Color Mode");
 
     	position = pos;
