@@ -8,25 +8,30 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" 
-        android:orientation="vertical">
+        android:orientation="vertical"
+       	android:paddingLeft="20dp"
+       	android:paddingRight="20dp" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+        	android:paddingTop="20dp"
+        	android:paddingBottom="20dp" >
 
             <TextView
-                android:layout_width="0dip"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:text="@string/eventname"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/AddEventModEventName"
-                android:layout_width="0dip"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:inputType="text" />
@@ -44,7 +49,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+        	android:paddingTop="10dp"
+        	android:paddingBottom="10dp" >
 
             <TextView
                 android:layout_width="0dip"
@@ -52,15 +59,17 @@
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:text="@string/paidby"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="1.7"
                 android:gravity="center_horizontal"
                 android:text="@string/amount"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
@@ -69,14 +78,15 @@
             android:layout_height="wrap_content"
             android:clickable="false"
             android:focusable="false"
-            android:orientation="vertical" />
+            android:orientation="vertical"
+        	android:paddingTop="10dp"
+        	android:paddingBottom="10dp" />
 
         <Button
             android:id="@+id/addbuttonAddeventMod1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:gravity="center_horizontal"
+            android:gravity="center"
             android:onClick="addMember1"
             android:text="@string/addanother" />
 
@@ -87,12 +97,16 @@
             android:gravity="center_horizontal"
             android:text="@string/consumption"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+        	android:paddingTop="10dp"
+        	android:paddingBottom="10dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+        	android:paddingTop="10dp"
+        	android:paddingBottom="10dp" >
 
             <TextView
                 android:layout_width="0dip"
@@ -100,15 +114,17 @@
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:text="@string/amount"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="1.7"
                 android:gravity="center_horizontal"
                 android:text="@string/consumedby"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
@@ -117,21 +133,23 @@
             android:layout_height="wrap_content"
             android:clickable="false"
             android:focusable="false"
-            android:orientation="vertical" />
+            android:orientation="vertical"
+        	android:paddingTop="10dp"
+        	android:paddingBottom="10dp" />
 
         <Button
             android:id="@+id/addbuttonAddeventMod2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:gravity="center_horizontal"
+            android:gravity="center"
             android:onClick="addMember2"
             android:text="@string/addanother" />
+        
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
             android:onClick="doneAddEvent"
             android:text="@string/done" />
     </LinearLayout>
