@@ -3,16 +3,15 @@ package com.AndroidFriends.src;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TableLayout;
+import android.widget.TableLayout.LayoutParams;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.TableLayout.LayoutParams;
 
 import com.AndroidFriends.R;
 
@@ -23,8 +22,6 @@ public class IndividualSummaryActivity extends Activity {
 	private int countmembers;
 	private String groupName="";
 	private GroupSummaryActivity summaryobject = new GroupSummaryActivity();
-	private int grpid = 0;
-	private GroupDatabase gpdb;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -37,8 +34,6 @@ public class IndividualSummaryActivity extends Activity {
 		consumedarray = intent.getFloatArrayExtra(GroupSummaryActivity.listofconsumed);
 		namearray = intent.getStringArrayExtra(GroupSummaryActivity.listofmember);
 		countmembers = intent.getIntExtra(GroupSummaryActivity.stringcount, 0);
-		String database="Database_"+grpid;
-		gpdb=GroupDatabase.get(this, database);
 		setContentView(R.layout.activity_individual_summary);
 		filltable();
 	}
@@ -77,9 +72,6 @@ public class IndividualSummaryActivity extends Activity {
 			v2.setLayoutParams(new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1.2f));
 			v3.setLayoutParams(new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 0.8f));
 			
-			v1.setTextColor(Color.parseColor("#FFFFFF"));
-			v2.setTextColor(Color.parseColor("#FFFFFF"));
-			v3.setTextColor(Color.parseColor("#FFFFFF"));
 			v1.setGravity(Gravity.CENTER);
 			v2.setGravity(Gravity.CENTER);
 			v3.setGravity(Gravity.CENTER);
