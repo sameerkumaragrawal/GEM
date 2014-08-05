@@ -151,7 +151,8 @@
             android:layout_marginTop="20dp"
             android:gravity="center"
             android:onClick="doneAddEvent"
-            android:text="@string/done" />
+            android:text="@string/done"
+			android:layout_marginBottom="10dp" />
     </LinearLayout>
 
 </ScrollView>

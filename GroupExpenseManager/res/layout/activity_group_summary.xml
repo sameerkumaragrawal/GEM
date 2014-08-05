@@ -43,10 +43,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingBottom="10dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="10dp" >
+            android:layout_marginTop="10dp"
+            android:padding="10dp" >
 
             <Button
                 android:id="@+id/addEventButton"
@@ -70,10 +68,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingBottom="10dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="10dp" >
+            android:padding="10dp" >
 
             <TextView
                 android:id="@+id/MemberNametextView"
@@ -110,10 +105,7 @@
             android:id="@+id/groupSummaryTableLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="10dp" >
+            android:padding="10dp" >
         </TableLayout>
 
         <LinearLayout
@@ -155,6 +147,7 @@
 			android:layout_gravity="center"
 			android:onClick="nullifyAlert"
 			android:layout_marginTop="20dp"
+			android:layout_marginBottom="10dp"
 			android:text="@string/clear" />
     </LinearLayout>
 </ScrollView>
