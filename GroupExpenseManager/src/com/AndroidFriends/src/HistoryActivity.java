@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Gravity;
@@ -181,9 +180,6 @@ public class HistoryActivity extends Activity {
 		v2.setLayoutParams(new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1.2f));
 		v3.setLayoutParams(new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1f));
 
-		v1.setTextColor(Color.parseColor("#FFFFFF"));
-		v2.setTextColor(Color.parseColor("#FFFFFF"));
-		v3.setTextColor(Color.parseColor("#FFFFFF"));
 		v1.setGravity(Gravity.CENTER);
 		v2.setGravity(Gravity.CENTER);
 		v3.setGravity(Gravity.CENTER);

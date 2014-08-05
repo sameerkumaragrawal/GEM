@@ -3,7 +3,6 @@ package com.AndroidFriends.src;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Gravity;
@@ -88,9 +87,6 @@ public class PossibleSolution extends Activity {
 			v2.setLayoutParams(new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1f));
 			v3.setLayoutParams(new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1f));
 			
-			v1.setTextColor(Color.parseColor("#FFFFFF"));
-			v2.setTextColor(Color.parseColor("#FFFFFF"));
-			v3.setTextColor(Color.parseColor("#FFFFFF"));
 			v1.setGravity(Gravity.CENTER);
 			v2.setGravity(Gravity.CENTER);
 			v3.setGravity(Gravity.CENTER);
