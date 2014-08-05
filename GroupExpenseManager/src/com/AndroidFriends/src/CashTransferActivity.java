@@ -90,6 +90,12 @@ public class CashTransferActivity extends Activity {
 		});
 	}
 	
+	public void createToast(String message){
+		Toast n = Toast.makeText(CashTransferActivity.this,message, Toast.LENGTH_SHORT);
+		n.setGravity(Gravity.CENTER_VERTICAL,0,0);
+		n.show();
+	}
+	
 	public void transferDone() {
 		int fM = spin1.getSelectedItemPosition()+1;
 		int tM = spin2.getSelectedItemPosition()+1;
@@ -97,11 +103,14 @@ public class CashTransferActivity extends Activity {
 		editText = (EditText) findViewById(R.id.cashTransferamountText);
 		String temp = editText.getText().toString();
 		if (temp.equals("")){
-			Toast n = Toast.makeText(CashTransferActivity.this,"Error! Cannot leave the amount empty", Toast.LENGTH_SHORT);
-			n.setGravity(Gravity.CENTER_VERTICAL,0,0);
-			n.show();
+			createToast("Error! Cannot leave the amount empty");
 			return;
 		}
+		if(fM==tM){
+			createToast("Error! To and From person cannot be same");
+			return;
+		}
+		
 		float a = Float.valueOf(temp);
 		gpdb.CashTransfer(fM, tM, a);
 		this.finish();	
