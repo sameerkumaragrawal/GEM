@@ -1,6 +1,7 @@
 package com.AndroidFriends.src;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import android.app.Activity;
@@ -13,12 +14,15 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.AndroidFriends.R;
@@ -31,6 +35,8 @@ public class AddEventActivity extends Activity {
 	private int grpid = 0;
 	private String[] namearray =null;
 	private LayoutInflater inflater;
+	private Spinner eventSpinner, memberSpinner;
+	private Button doneButton;
 
 	private LinearLayout plist;
 	ArrayList<CustomRemoveListener1> plistListeners;
@@ -41,25 +47,13 @@ public class AddEventActivity extends Activity {
 
 	AlertDialog.Builder alertDialogBuilder;
 
-	/*
-	private List<String> list = new ArrayList<String>();
-	 */
 	private List<boolean[]> checkedItems = null;
 	private boolean[] tempCheckedItems = null;
 
 	private CharSequence[] items;
-	/*
-	private TableLayout AddEventTable1 = null;
-	private TableLayout AddEventTable2 = null;
-	 */
 
 	private int popupsize = 0;
-	/*
-	public float scale = 0;
-	private int number1 = 0;
-	private int number2 = 0;
-	private int sharedialogid = -1;
-	 */
+
 	private GroupDatabase gpdb;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -75,14 +69,67 @@ public class AddEventActivity extends Activity {
 		setContentView(R.layout.activity_add_event);
 
 		gpdb=GroupDatabase.get(this, database);
+		
+		addItemsOnTypeSpinner();
+		doneButton = (Button) findViewById(R.id.doneButton);
+		eventSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
+			public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) 
+			{
+				if (position == 0) {
+					doneButton.setOnClickListener(new Button.OnClickListener() {
+					    public void onClick(View v) {
+					    	doneAddEvent(v);
+					    }
+					});
+					groupEvent();
+				}
+				else {
+					doneButton.setOnClickListener(new Button.OnClickListener() {
+					    public void onClick(View v) {
+					    	doneAddIndividualEvent(v);
+					    }
+					});
+					individualEvent();
+				}
+			}			
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+			}
+
+		});
+	}
+	
+	public void groupEvent() {
+		LinearLayout individualExpense1 = (LinearLayout) findViewById(R.id.addIndividualExpense1);
+		individualExpense1.setVisibility(View.GONE);
+		LinearLayout individualExpense2 = (LinearLayout) findViewById(R.id.addIndividualExpense2);
+		individualExpense2.setVisibility(View.GONE);
+		
+		TextView groupExpense1 = (TextView) findViewById(R.id.addGroupExpense1);
+		groupExpense1.setVisibility(View.VISIBLE);
+		LinearLayout groupExpense2 = (LinearLayout) findViewById(R.id.addGroupExpense2);
+		groupExpense2.setVisibility(View.VISIBLE);
+		LinearLayout groupExpense3 = (LinearLayout) findViewById(R.id.addGroupExpense3);
+		groupExpense3.setVisibility(View.VISIBLE);
+		Button groupExpense4 = (Button) findViewById(R.id.addGroupExpense4);
+		groupExpense4.setVisibility(View.VISIBLE);
+		TextView groupExpense5 = (TextView) findViewById(R.id.addGroupExpense5);
+		groupExpense5.setVisibility(View.VISIBLE);
+		LinearLayout groupExpense6 = (LinearLayout) findViewById(R.id.addGroupExpense6);
+		groupExpense6.setVisibility(View.VISIBLE);
+		LinearLayout groupExpense7 = (LinearLayout) findViewById(R.id.addGroupExpense7);
+		groupExpense7.setVisibility(View.VISIBLE);
+		Button groupExpense8 = (Button) findViewById(R.id.addGroupExpense8);
+		groupExpense8.setVisibility(View.VISIBLE);
+		
 		plistListeners = new ArrayList<CustomRemoveListener1>();
 		slistRListeners = new ArrayList<CustomRemoveListener2>();
 		slistCListeners = new ArrayList<CustomClickListener>();
 		
 		inflater = LayoutInflater.from(this);
-		plist = (LinearLayout) findViewById(R.id.addEventModLinearLayout1);
-		slist = (LinearLayout) findViewById(R.id.addEventModLinearLayout2);
+		plist = (LinearLayout) findViewById(R.id.addGroupExpense3);
+		slist = (LinearLayout) findViewById(R.id.addGroupExpense7);
 
 		checkedItems = new ArrayList<boolean[]>();
 		popupsize = namearray.length+1;
@@ -104,6 +151,57 @@ public class AddEventActivity extends Activity {
 		EditText event = (EditText) findViewById(R.id.AddEventModEventName);
 		event.requestFocus();
 	}
+	
+	public void individualEvent() {
+		TextView groupExpense1 = (TextView) findViewById(R.id.addGroupExpense1);
+		groupExpense1.setVisibility(View.GONE);
+		LinearLayout groupExpense2 = (LinearLayout) findViewById(R.id.addGroupExpense2);
+		groupExpense2.setVisibility(View.GONE);
+		LinearLayout groupExpense3 = (LinearLayout) findViewById(R.id.addGroupExpense3);
+		groupExpense3.setVisibility(View.GONE);
+		Button groupExpense4 = (Button) findViewById(R.id.addGroupExpense4);
+		groupExpense4.setVisibility(View.GONE);
+		TextView groupExpense5 = (TextView) findViewById(R.id.addGroupExpense5);
+		groupExpense5.setVisibility(View.GONE);
+		LinearLayout groupExpense6 = (LinearLayout) findViewById(R.id.addGroupExpense6);
+		groupExpense6.setVisibility(View.GONE);
+		LinearLayout groupExpense7 = (LinearLayout) findViewById(R.id.addGroupExpense7);
+		groupExpense7.setVisibility(View.GONE);
+		Button groupExpense8 = (Button) findViewById(R.id.addGroupExpense8);
+		groupExpense8.setVisibility(View.GONE);
+		
+		LinearLayout individualExpense1 = (LinearLayout) findViewById(R.id.addIndividualExpense1);
+		individualExpense1.setVisibility(View.VISIBLE);
+		LinearLayout individualExpense2 = (LinearLayout) findViewById(R.id.addIndividualExpense2);
+		individualExpense2.setVisibility(View.VISIBLE);
+		
+		removeMember1(null);
+		removeMember2(null);
+		
+		addItemsOnMemberSpinner();
+	}
+	
+	public void addItemsOnTypeSpinner() {
+		eventSpinner = (Spinner) findViewById(R.id.spinnerEventType);
+		List<String> list = new ArrayList<String>();
+		list.add("Group expense");
+		list.add("Individual expense");
+		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+			android.R.layout.simple_spinner_item, list);
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		eventSpinner.setAdapter(dataAdapter);
+		eventSpinner.setPrompt("Select event type");
+	}
+	
+	public void addItemsOnMemberSpinner() {
+		memberSpinner = (Spinner) findViewById(R.id.spinnerIndividualExpense);
+		List<String> list = new ArrayList<String>(Arrays.asList(namearray));
+		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+			android.R.layout.simple_spinner_item, list);
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		memberSpinner.setAdapter(dataAdapter);
+		memberSpinner.setPrompt("Select member");
+	}
 
 	public void MemberList(){
 		items = new CharSequence [popupsize];
@@ -116,6 +214,11 @@ public class AddEventActivity extends Activity {
 	public void addMember1(View v) {
 		plist.addView(getPaidView());
 		nspinners++;
+	}
+	
+	public void removeMember1(View v) {
+		plist.removeAllViews();
+		nspinners = 0;
 	}
 
 	public View getPaidView(){
@@ -168,6 +271,11 @@ public class AddEventActivity extends Activity {
 		checkedItems.add(temparray);
 		slist.addView(getConsumedView());
 		ndialogs++;
+	}
+	
+	public void removeMember2(View v) {
+		slist.removeAllViews();
+		ndialogs = 0;
 	}
 
 	public View getConsumedView(){
@@ -345,6 +453,39 @@ public class AddEventActivity extends Activity {
 		}
 		this.finish();
 		 
+	}
+	
+	public boolean addIndividualEvent(String eventName, float amount, int member){
+		gpdb.addIndividualEvent(eventName, amount, member);
+		return true;
+	}
+	
+	public void doneAddIndividualEvent(View v){
+		EditText event = (EditText) findViewById(R.id.AddEventModEventName);
+		String eventname = event.getText().toString();
+		if(eventname.equals("")){
+			createToast("Error! Cannot leave the event name empty");
+			return;
+		}
+		
+		float eventAmount;
+		int memberId;
+		EditText et = (EditText) findViewById(R.id.editTextIndividualExpense);
+		Spinner sp = (Spinner) findViewById(R.id.spinnerIndividualExpense); 
+		String amt = et.getText().toString();
+		if(amt.equals("")){
+			createToast("Error! Cannot leave the amount field empty");
+			return;
+		}
+		else{
+			eventAmount = Float.valueOf(amt);
+			memberId = sp.getSelectedItemPosition();
+		}
+
+		if(!addIndividualEvent(eventname, eventAmount, memberId)){
+			return;
+		}
+		this.finish();
 	}
 	
 	@Override

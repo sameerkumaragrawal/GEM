@@ -55,6 +55,7 @@
     <string name="paid">Paid</string>
     <string name="nextButton">Next</string>
     <string name="eventname">Event Name</string>
+    <string name="eventtype">Type</string>
     <string name="addButton">Add</string>
     <string name="back">Back</string>
     <string name="share">Share</string>

@@ -69,7 +69,7 @@ public class HistoryActivity extends Activity {
 			public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) 
 			{
 				filltable(position);
-			}			
+			}	
 			public void onNothingSelected(AdapterView<?> arg0) {
 				// TODO Auto-generated method stub
 			}

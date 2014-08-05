@@ -195,6 +195,30 @@ public class GroupDatabase extends SQLiteOpenHelper{
 			
 		}            
 	}
+	
+	public void addIndividualEvent(String eventName, float amount, int member){
+		int ID1=1;
+		Cursor count = getDB().rawQuery("SELECT count(*) FROM " + EventTable , null);
+		if(count.getCount()>0){
+			count.moveToLast();
+			ID1=count.getInt(0)+1;
+		}
+
+		ContentValues value1 = new ContentValues();
+		value1.put("ID", ID1);
+		value1.put("Name", eventName);
+		value1.put("Flag", 1);
+		getDB().insert(EventTable,null,value1);
+		
+		ContentValues value2 = new ContentValues();
+		value2.put("MemberId", member+1);
+		value2.put("Paid", amount);
+		value2.put("Consumed", amount);
+		value2.put("EventId", ID1);
+		getDB().insert(TransTable,null,value2);
+		
+		getDB().execSQL("UPDATE "+MemberTable+" SET Paid = Paid+?, Consumed = Consumed+? WHERE ID = ?",new Object[]{amount,amount,member+1});
+	}
 
 	public void clearlog(){
 		getDB().execSQL("DROP TABLE " + EventTable);

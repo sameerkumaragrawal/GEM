@@ -36,8 +36,32 @@
                 android:layout_weight="1"
                 android:inputType="text" />
         </LinearLayout>
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+        	android:paddingTop="20dp"
+        	android:paddingBottom="20dp" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/eventtype"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="bold" />
+
+            <Spinner
+		        android:id="@+id/spinnerEventType"
+		        android:layout_width="0dip"
+		        android:layout_weight="1.8"
+		        android:layout_height="wrap_content" />
+        </LinearLayout>
 
         <TextView
+            android:id="@+id/addGroupExpense1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -47,6 +71,7 @@
             android:textStyle="bold" />
 
         <LinearLayout
+            android:id="@+id/addGroupExpense2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -73,7 +98,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/addEventModLinearLayout1"
+            android:id="@+id/addGroupExpense3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="false"
@@ -83,7 +108,7 @@
         	android:paddingBottom="10dp" />
 
         <Button
-            android:id="@+id/addbuttonAddeventMod1"
+            android:id="@+id/addGroupExpense4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -91,6 +116,7 @@
             android:text="@string/addanother" />
 
         <TextView
+            android:id="@+id/addGroupExpense5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -102,6 +128,7 @@
         	android:paddingBottom="10dp" />
 
         <LinearLayout
+            android:id="@+id/addGroupExpense6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -128,7 +155,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/addEventModLinearLayout2"
+            android:id="@+id/addGroupExpense7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="false"
@@ -138,19 +165,70 @@
         	android:paddingBottom="10dp" />
 
         <Button
-            android:id="@+id/addbuttonAddeventMod2"
+            android:id="@+id/addGroupExpense8"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:onClick="addMember2"
             android:text="@string/addanother" />
         
+        <LinearLayout
+            android:id="@+id/addIndividualExpense1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+        	android:paddingTop="10dp"
+        	android:paddingBottom="10dp"
+            android:visibility="gone" >
+
+            <TextView
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:text="@string/member"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:text="@string/amount"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="bold" />
+        </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/addIndividualExpense2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone" >
+
+            <Spinner
+		        android:id="@+id/spinnerIndividualExpense"
+		        android:layout_width="0dip"
+		        android:layout_weight="1"
+		        android:layout_height="wrap_content" />
+		
+		    <EditText
+		        android:id="@+id/editTextIndividualExpense"
+		        android:layout_width="0dip"
+		        android:layout_weight="1"
+		        android:layout_height="wrap_content"
+		        android:ems="10"
+		        android:inputType="numberDecimal" >
+    		</EditText>
+        </LinearLayout>
+        
         <Button
+            android:id="@+id/doneButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:gravity="center"
-            android:onClick="doneAddEvent"
             android:text="@string/done"
 			android:layout_marginBottom="10dp" />
     </LinearLayout>
