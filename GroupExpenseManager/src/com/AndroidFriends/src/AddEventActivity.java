@@ -33,8 +33,11 @@ public class AddEventActivity extends Activity {
 	private LayoutInflater inflater;
 
 	private LinearLayout plist;
-
+	ArrayList<CustomRemoveListener1> plistListeners;
+	
 	private LinearLayout slist;
+	ArrayList<CustomRemoveListener2> slistRListeners;
+	ArrayList<CustomClickListener> slistCListeners;
 
 	AlertDialog.Builder alertDialogBuilder;
 
@@ -73,6 +76,10 @@ public class AddEventActivity extends Activity {
 
 		gpdb=GroupDatabase.get(this, database);
 
+		plistListeners = new ArrayList<CustomRemoveListener1>();
+		slistRListeners = new ArrayList<CustomRemoveListener2>();
+		slistCListeners = new ArrayList<CustomClickListener>();
+		
 		inflater = LayoutInflater.from(this);
 		plist = (LinearLayout) findViewById(R.id.addEventModLinearLayout1);
 		slist = (LinearLayout) findViewById(R.id.addEventModLinearLayout2);
@@ -122,11 +129,21 @@ public class AddEventActivity extends Activity {
 		ImageButton ib = (ImageButton)convertView.findViewById(R.id.add_event_paid_item_ib);
 		CustomRemoveListener1 removeListener = new CustomRemoveListener1();
 		removeListener.setPosition(nspinners);
+		
+		plistListeners.add(removeListener);
 		ib.setOnClickListener(removeListener);
 
 		return convertView;
 	}
 
+	public void plistNotifyChanged(){
+		int k=0;
+		for (CustomRemoveListener1 lis : plistListeners) {
+			lis.setPosition(k);
+			k++;
+		}
+	}
+	
 	private class CustomRemoveListener1 implements OnClickListener{
 
 		private int position;
@@ -135,8 +152,10 @@ public class AddEventActivity extends Activity {
 			position = pos;
 		}
 		public void onClick(View v) {
+			plistListeners.remove(position);
 			plist.removeViewAt(position);
 			nspinners--;
+			plistNotifyChanged();
 		}
 
 	}
@@ -157,11 +176,13 @@ public class AddEventActivity extends Activity {
 		Button shareb = (Button)convertView.findViewById(R.id.shareButtonAddEventMod);
 		CustomClickListener clickListener = new CustomClickListener();
 		clickListener.setPosition(ndialogs);
+		slistCListeners.add(clickListener);
 		shareb.setOnClickListener(clickListener);
 
 		ImageButton ib = (ImageButton)convertView.findViewById(R.id.add_event_consumed_item_ib);
 		CustomRemoveListener2 removeListener = new CustomRemoveListener2();
 		removeListener.setPosition(ndialogs);
+		slistRListeners.add(removeListener);
 		ib.setOnClickListener(removeListener);
 
 		return convertView;
@@ -222,11 +243,27 @@ public class AddEventActivity extends Activity {
 		}
 
 		public void onClick(View v) {
+			slistCListeners.remove(position);
+			slistRListeners.remove(position);
 			slist.removeViewAt(position);	
 			checkedItems.remove(position);
 			ndialogs--;
+			slistNotifyChanged();
 		}
 
+	}
+	
+	public void slistNotifyChanged(){
+		int k=0;
+		for (CustomRemoveListener2 lis : slistRListeners) {
+			lis.setPosition(k);
+			k++;
+		}
+		k=0;
+		for (CustomClickListener lis : slistCListeners) {
+			lis.setPosition(k);
+			k++;
+		}
 	}
 
 	public void createToast(String message){
