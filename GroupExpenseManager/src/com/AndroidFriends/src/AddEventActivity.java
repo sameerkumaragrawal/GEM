@@ -223,7 +223,12 @@ public class AddEventActivity extends Activity {
 
 	public View getPaidView(){
 		View convertView = inflater.inflate(R.layout.add_event_paid_item, null);
-
+		
+		//setHintText();
+		//View convertView1 = inflater.inflate(R.layout.add_event_consumed_item, null);
+		//EditText et = (EditText) convertView1.findViewById(R.id.editTextAddEventMod2);
+		//et.setHint(getRemainingAmount());
+		
 		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, namearray); 
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		Spinner spin = (Spinner)convertView.findViewById(R.id.spinnerAddEventMod);
@@ -278,9 +283,42 @@ public class AddEventActivity extends Activity {
 		ndialogs = 0;
 	}
 
+	public String getRemainingAmount() {
+		String s="0";
+		float amountpaid = 0;
+		float amountspent = 0;
+		for (int k=0; k<nspinners; k++) {
+			View row = (View) plist.getChildAt(k);
+			EditText et = (EditText) row.findViewById(R.id.editTextAddEventMod1);
+			String amt = et.getText().toString();
+			if(!amt.equals("")){
+				amountpaid += Float.valueOf(amt);
+			}
+		}
+		for (int k=0; k<ndialogs; k++) {
+			View row = (View) slist.getChildAt(k);
+			EditText et = (EditText) row.findViewById(R.id.editTextAddEventMod2);
+			String amt = et.getText().toString();
+			if(!amt.equals("")){
+				amountspent += Float.valueOf(amt);
+			}
+		}
+		s = String.valueOf(amountpaid-amountspent);
+		return s;
+	}
+	
+	public void setHintText() {
+		View convertView = inflater.inflate(R.layout.add_event_consumed_item, null);
+		EditText et = (EditText) convertView.findViewById(R.id.editTextAddEventMod2);
+		et.setHint(getRemainingAmount());
+	}
+	
 	public View getConsumedView(){
 		View convertView = inflater.inflate(R.layout.add_event_consumed_item, null);
-
+		
+		EditText et = (EditText) convertView.findViewById(R.id.editTextAddEventMod2);
+		et.setHint(getRemainingAmount());
+		
 		Button shareb = (Button)convertView.findViewById(R.id.shareButtonAddEventMod);
 		CustomClickListener clickListener = new CustomClickListener();
 		clickListener.setPosition(ndialogs);
