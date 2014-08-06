@@ -4,7 +4,7 @@ Run the project in Eclipse after installing the Android SDK.
 
 Description
 ============
-Difficult to keep track of financial transactions among your friends? Be it a trip around the world or just everyday canteen visits, GEM (Group Expense Manager) will do the all the work for you and help in remembering your transactions hassle free.  
+Difficult to keep track of financial transactions among your friends? Be it a trip around the world or just everyday canteen visits, GEM (Group Expense Manager) will do all the work for you and help in remembering your transactions hassle free.  
 GEM keeps account of all the transactions and expenses within a group and helps you determine how much each person is supposed to pay or receive at the end of all the transactions. You can also keep track of each individual's total personal expense and payment.  
 A simple, fast, user friendly and lightweight application that saves you quite a lot of calculations (and arguments)!
 
