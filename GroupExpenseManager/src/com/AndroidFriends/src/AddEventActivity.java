@@ -14,6 +14,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
@@ -38,6 +39,8 @@ public class AddEventActivity extends Activity {
 	private Spinner eventSpinner, memberSpinner;
 	private Button doneButton;
 
+	private EditText highlightedEditText=null;
+	
 	private LinearLayout plist;
 	ArrayList<CustomRemoveListener1> plistListeners;
 	
@@ -225,11 +228,6 @@ public class AddEventActivity extends Activity {
 	public View getPaidView(){
 		View convertView = inflater.inflate(R.layout.add_event_paid_item, null);
 		
-		//setHintText();
-		//View convertView1 = inflater.inflate(R.layout.add_event_consumed_item, null);
-		//EditText et = (EditText) convertView1.findViewById(R.id.editTextAddEventMod2);
-		//et.setHint(getRemainingAmount());
-		
 		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, namearray); 
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		Spinner spin = (Spinner)convertView.findViewById(R.id.spinnerAddEventMod);
@@ -265,8 +263,8 @@ public class AddEventActivity extends Activity {
 			plist.removeViewAt(position);
 			nspinners--;
 			plistNotifyChanged();
+			if(highlightedEditText != null) highlightedEditText.clearFocus();
 		}
-
 	}
 
 	public void addMember2(View v) {
@@ -304,21 +302,28 @@ public class AddEventActivity extends Activity {
 				amountspent += Float.valueOf(amt);
 			}
 		}
-		s = String.valueOf(amountpaid-amountspent);
+		s = String.valueOf((int) (amountpaid-amountspent));
 		return s;
 	}
 	
-	public void setHintText() {
-		View convertView = inflater.inflate(R.layout.add_event_consumed_item, null);
-		EditText et = (EditText) convertView.findViewById(R.id.editTextAddEventMod2);
-		et.setHint(getRemainingAmount());
-	}
+	/*public void setHintText() {
+		for (int k=0; k<ndialogs; k++) {
+			View row = (View) slist.getChildAt(k);
+			EditText et = (EditText) row.findViewById(R.id.editTextAddEventMod2);
+			String amt = et.getText().toString();
+			if(amt.equals("")){
+				et.setHint(getRemainingAmount());
+			}
+		}
+	}*/
 	
 	public View getConsumedView(){
 		View convertView = inflater.inflate(R.layout.add_event_consumed_item, null);
 		
 		EditText et = (EditText) convertView.findViewById(R.id.editTextAddEventMod2);
+		customFocusListener focusListener = new customFocusListener(); 
 		et.setHint(getRemainingAmount());
+		et.setOnFocusChangeListener(focusListener);
 		
 		Button shareb = (Button)convertView.findViewById(R.id.shareButtonAddEventMod);
 		CustomClickListener clickListener = new CustomClickListener();
@@ -335,6 +340,25 @@ public class AddEventActivity extends Activity {
 		return convertView;
 	}
 
+	private class customFocusListener implements OnFocusChangeListener {
+		
+		public void onFocusChange(View v, boolean hasFocus) {
+			EditText et = ((EditText) v);
+			if(hasFocus) {
+				et.setHint(getRemainingAmount());
+			}
+			else {
+				et.setHint("");
+			}
+			if(hasFocus) {
+				highlightedEditText = et;
+			}
+			else {
+				highlightedEditText = null;
+			}
+		}
+	}
+	
 	private class CustomClickListener implements OnClickListener{
 
 		private int position;
@@ -395,6 +419,7 @@ public class AddEventActivity extends Activity {
 			slist.removeViewAt(position);	
 			checkedItems.remove(position);
 			ndialogs--;
+			if(highlightedEditText != null) highlightedEditText.clearFocus();
 			slistNotifyChanged();
 		}
 
