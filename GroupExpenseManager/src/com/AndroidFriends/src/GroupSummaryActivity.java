@@ -91,7 +91,7 @@ public class GroupSummaryActivity extends Activity {
     		
     	}catch(Exception e) {
     		
-    		Log.e("Sameer", "Table doesn't contain column named Balance", e);
+    		//Log.e("Sameer", "Table doesn't contain column named Balance", e);
         }
         finally{ 
         	if(groupDb!=null)

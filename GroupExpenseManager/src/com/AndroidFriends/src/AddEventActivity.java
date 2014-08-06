@@ -306,17 +306,6 @@ public class AddEventActivity extends Activity {
 		return s;
 	}
 	
-	/*public void setHintText() {
-		for (int k=0; k<ndialogs; k++) {
-			View row = (View) slist.getChildAt(k);
-			EditText et = (EditText) row.findViewById(R.id.editTextAddEventMod2);
-			String amt = et.getText().toString();
-			if(amt.equals("")){
-				et.setHint(getRemainingAmount());
-			}
-		}
-	}*/
-	
 	public View getConsumedView(){
 		View convertView = inflater.inflate(R.layout.add_event_consumed_item, null);
 		
@@ -414,12 +403,12 @@ public class AddEventActivity extends Activity {
 		}
 
 		public void onClick(View v) {
+			if(highlightedEditText != null) highlightedEditText.clearFocus();
 			slistCListeners.remove(position);
 			slistRListeners.remove(position);
-			slist.removeViewAt(position);	
-			checkedItems.remove(position);
 			ndialogs--;
-			if(highlightedEditText != null) highlightedEditText.clearFocus();
+			slist.removeViewAt(position);
+			checkedItems.remove(position);
 			slistNotifyChanged();
 		}
 
