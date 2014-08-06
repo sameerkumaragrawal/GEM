@@ -100,7 +100,7 @@ public class GroupDatabase extends SQLiteOpenHelper{
 		}
 	}
 	
-	public void CashTransfer(int fromMember, int toMember, float amount){
+	public void CashTransfer(int fromMember, int toMember, float amount, String from, String to){
 		int ID1=1;
 
 		Cursor count = getDB().rawQuery("SELECT count(*) FROM "+EventTable, null);
@@ -109,9 +109,10 @@ public class GroupDatabase extends SQLiteOpenHelper{
 			ID1=count.getInt(0)+1;
 		}
 
+		String eventName = "Cash - " + from + " to " + to; 
 		ContentValues value1 = new ContentValues();
 		value1.put("ID", ID1);
-		value1.put("Name", "Cash Transfer");
+		value1.put("Name", eventName);
 		value1.put("Flag", 2);
 		getDB().insert(EventTable,null,value1);
 

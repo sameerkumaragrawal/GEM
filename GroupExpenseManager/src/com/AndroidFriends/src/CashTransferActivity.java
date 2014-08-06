@@ -112,7 +112,7 @@ public class CashTransferActivity extends Activity {
 		}
 		
 		float a = Float.valueOf(temp);
-		gpdb.CashTransfer(fM, tM, a);
+		gpdb.CashTransfer(fM, tM, a, namearray[fM-1], namearray[tM-1]);
 		this.finish();	
 	}
 	@Override
