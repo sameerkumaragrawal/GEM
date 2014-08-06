@@ -35,6 +35,7 @@
         android:layout_weight="1"
         android:clickable="false"
         android:focusable="false"
+        android:descendantFocusability="afterDescendants"
         android:padding="20dp" />
 
     <LinearLayout

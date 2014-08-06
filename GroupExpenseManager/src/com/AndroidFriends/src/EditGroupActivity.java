@@ -77,6 +77,7 @@ public class EditGroupActivity extends Activity {
 	public void addMember(View v){
 		items.add("");
 		adaptor.notifyDataSetChanged();
+		list.setSelection(items.size()-1);
 	}
 
 	private class ListAdaptor extends BaseAdapter{

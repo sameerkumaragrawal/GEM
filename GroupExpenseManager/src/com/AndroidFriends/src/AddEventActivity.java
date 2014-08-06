@@ -126,12 +126,13 @@ public class AddEventActivity extends Activity {
 		plistListeners = new ArrayList<CustomRemoveListener1>();
 		slistRListeners = new ArrayList<CustomRemoveListener2>();
 		slistCListeners = new ArrayList<CustomClickListener>();
+		checkedItems = new ArrayList<boolean[]>();
 		
 		inflater = LayoutInflater.from(this);
-		plist = (LinearLayout) findViewById(R.id.addGroupExpense3);
-		slist = (LinearLayout) findViewById(R.id.addGroupExpense7);
+		plist = groupExpense3;
+		slist = groupExpense7;
 
-		checkedItems = new ArrayList<boolean[]>();
+		
 		popupsize = namearray.length+1;
 		tempCheckedItems = new boolean[popupsize];
 

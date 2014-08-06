@@ -49,6 +49,7 @@ public class NewGroupActivity extends Activity {
 		//Log.e("Sameer", "Here");
 		items.add("");
 		adaptor.notifyDataSetChanged();
+		list.setSelection(items.size()-1);
 		//Log.e("Sameer", "Here2 " + items.size());
 	}
 
