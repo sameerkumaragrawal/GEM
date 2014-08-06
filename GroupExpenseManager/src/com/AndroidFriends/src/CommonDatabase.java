@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class CommonDatabase extends SQLiteOpenHelper{
 	private static String DATABASE_NAME = "GroupNames";
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 	private static final String tableName = "Groups";
 
 	private SQLiteDatabase db=null;

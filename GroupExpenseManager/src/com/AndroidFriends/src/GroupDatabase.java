@@ -39,26 +39,8 @@ public class GroupDatabase extends SQLiteOpenHelper{
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		if(oldVersion<2){
-			Cursor mquery = db.rawQuery("SELECT Balance FROM " + MemberTable+";",null);
-			float[] balancearray = new float[mquery.getCount()];
-			int countmembers=0;
-			mquery.moveToFirst();
-			do{
-				balancearray[countmembers] = mquery.getFloat(2);
-				countmembers++;
-			}while(mquery.moveToNext());
-			
-			db.execSQL("ALTER TABLE "+MemberTable+" DROP COLUMN Balance, ADD COLUMN Paid float NOT NULL, ADD COLUMN Consumed float NOT NULL");
-			for(int i=0;i<balancearray.length;i++){
-				if(balancearray[i]>0){
-					db.execSQL("UPDATE "+MemberTable+" SET Paid = "+balancearray[i]+" WHERE ID = "+(i+1));
-				}else if(balancearray[i]<0){
-					balancearray[i]*=(-1);
-					db.execSQL("UPDATE "+MemberTable+" SET Consumed = "+balancearray[i]+" WHERE ID = "+(i+1));
-				}
-			}
+    	
 		}
-
 	}
 
 	public void onCreateInsert(String[] members){

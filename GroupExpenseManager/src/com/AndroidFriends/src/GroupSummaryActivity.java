@@ -3,12 +3,15 @@ package com.AndroidFriends.src;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -47,6 +50,55 @@ public class GroupSummaryActivity extends Activity {
 		grpName = intent.getStringExtra(GroupsActivity.GROUP_NAME);
 		grpId = intent.getIntExtra(GroupsActivity.GROUP_ID,0);
 		String database="Database_"+grpId;
+		
+		String gdName="Database_"+grpId;
+    	SQLiteDatabase groupDb=null;
+    	countmembers=0;
+    	
+    	try{
+    		groupDb = this.openOrCreateDatabase(gdName, MODE_PRIVATE, null);
+    		Log.e("Sameer",String.valueOf(groupDb.getVersion()));
+    		Cursor mquery = groupDb.rawQuery("SELECT ID, Name, Balance FROM " + GroupDatabase.MemberTable+";",null);
+    		int[] idarray = new int[mquery.getCount()];
+    		float[] balancearray = new float[mquery.getCount()];
+    		String[] namearray = new String[mquery.getCount()];
+			int countmembers=0;
+			mquery.moveToFirst();
+			do{
+				idarray[countmembers] = mquery.getInt(0);
+				namearray[countmembers] = mquery.getString(1);
+				balancearray[countmembers] = mquery.getFloat(2);
+				countmembers++;
+			}while(mquery.moveToNext());
+			
+			
+			groupDb.execSQL("DROP TABLE "+GroupDatabase.MemberTable);
+			groupDb.execSQL("CREATE TABLE IF NOT EXISTS Members ( ID int(11) NOT NULL, Name varchar(255) NOT NULL, Paid float NOT NULL, Consumed float NOT NULL );");
+			for(int i=0;i<balancearray.length;i++){
+				ContentValues values = new ContentValues();
+				values.put("ID", idarray[i]);
+				values.put("Name", namearray[i]);
+				if(balancearray[i]>0){
+					values.put("Paid", balancearray[i]);
+					values.put("Consumed", 0);
+				}else if(balancearray[i]<0){
+					balancearray[i]*=(-1);
+					values.put("Paid", 0);
+					values.put("Consumed", balancearray[i]);
+				}
+				groupDb.insert(GroupDatabase.MemberTable, null, values);
+			}
+    		
+    	}catch(Exception e) {
+    		
+    		Log.e("Sameer", "Table doesn't contain column named Balance", e);
+        }
+        finally{ 
+        	if(groupDb!=null)
+        		groupDb.setVersion(2);
+        		groupDb.close();
+        }
+    	
 		gpdb=GroupDatabase.get(this, database);
 		commondb = CommonDatabase.get(this);
 		String new_title= grpName+" - "+String.valueOf(this.getTitle());
