@@ -1,12 +1,37 @@
 Group Expense Manager Android Application
 =========================================
-
 Run the project in Eclipse after installing the Android SDK.
 
-Done - Sameer
+Description
+============
+Difficult to keep track of financial transactions among your friends? Be it a trip around the world or just everyday canteen visits, GEM (Group Expense Manager) will do the all the work for you and help in remembering your transactions hassle free.  
+GEM keeps account of all the transactions and expenses within a group and helps you determine how much each person is supposed to pay or receive at the end of all the transactions. You can also keep track of each individual's total personal expense and payment.  
+A simple, fast, user friendly and lightweight application that saves you quite a lot of calculations (and arguments)!
 
-Done - Aditya
+<b>Features:</b>  
+★ No ads  
+★ Handle multiple groups  
+★ Add events involving the group, for e.g. in a restaurant where a few individuals pay for all or some, or involving just an individual member in the group  
+★ Add a Cash Transfer transaction (cash return) involving 2 individuals  
+★ Provides a possible solution for settlement  
+★ View and filter history of events and cash transfers for one or all members  
+★ View each individual's total payment and consumption within the group
 
-Done - Nikunj
+Whats New
+==========
+<b>Version 2.0:</b>  
+- Support for all screen sizes and resolutions  
+- Can check Individual's total payment and consumption summary within a group  
+- Dark theme  
+- Faster  
+- Bug fixes
 
-More instructions will be added later.
+<b>Version 2.0.1:</b>
+- Old data restored
+- Reduced APK size
+
+<b>Version 2.1:</b>  
+- Two types of events available - group expense and individual expense
+- Option to filter the history corresponding to each member
+- Hint text displayed in consumption amount field for the amount currently unaccounted for
+- Cash transfer name reflects the members involved in the transaction
