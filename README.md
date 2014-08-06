@@ -12,7 +12,7 @@ A simple, fast, user friendly and lightweight application that saves you quite a
 ★ No ads  
 ★ Handle multiple groups  
 ★ Add events involving the group, for e.g. in a restaurant where a few individuals pay for all or some, or involving just an individual member in the group  
-★ Add a Cash Transfer transaction (cash return) involving 2 individuals  
+★ Add a cash transfer transaction (cash return) involving 2 individuals  
 ★ Provides a possible solution for settlement  
 ★ View and filter history of events and cash transfers for one or all members  
 ★ View each individual's total payment and consumption within the group
@@ -36,3 +36,21 @@ Whats New
 - Option to filter the history corresponding to each member
 - Hint text displayed in consumption amount field for the amount currently unaccounted for while adding an event
 - Cash transfer name reflects the names of the members involved in the transaction
+
+For Google Play
+================
+<b>Short Description:</b>
+Problem managing shared expenses on a trip with friends or during regular canteen visits? Avoid all calculations, hassles (and arguments) with this fast, user friendly and lightweight app for easy management of shared as well as personal expenses in your groups. Add and view transactions and cash transfers easily and also get an efficient settlement solution with just a click.
+
+<b>Whats New:</b>
+Version 2.0:
+- Support for all screen sizes and resolutions
+- Can check a member's total payment and consumption summary within the group
+- Old data (from version 1.0) restored
+
+Version 2.1:
+- Bug fixes
+- Two types of events - group expense and individual expense
+- Filter history corresponding to a member
+- Hint text for filling consumption amount
+- Cash transfer event name modified
