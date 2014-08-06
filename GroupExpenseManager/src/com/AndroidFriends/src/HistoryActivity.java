@@ -33,8 +33,9 @@ public class HistoryActivity extends Activity {
 	private String grpName = "";
 	private int grpid = 0;
 	private String[] namearray=null;
-	private Spinner spin1=null;
+	private Spinner spin1, memberSpin=null;
 	private List<String> listofevents = null;
+	private List<String> listofmembers = null;
 	private int[] idarray = null;
 	private int[] flagarray = null;
 	private TableLayout historytable = null;
@@ -59,7 +60,25 @@ public class HistoryActivity extends Activity {
 		historytable = (TableLayout) findViewById(R.id.HistoryTable);
 		historytablerow1 = (LinearLayout) findViewById(R.id.historyrow1);
 		historytablerow2 = (LinearLayout) findViewById(R.id.historyrow2);
-		EventList();
+
+		MemberList();
+		addItemsOnMemberSpinner();
+		memberSpin.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) 
+			{
+				fillEvents(position);
+			}	
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+			}
+
+		});
+		
+	}
+	
+	public void fillEvents(int member) {
+		EventList(member);
 		addItemsOnSpinner();
 		if(idarray.length>0){
 			filltable(0);
@@ -106,11 +125,21 @@ public class HistoryActivity extends Activity {
 		spin1.setAdapter(dataAdapter);
 		spin1.setPrompt("Select Event");
 	}
+	
+	public void addItemsOnMemberSpinner() {
 
-	public void EventList(){
+		memberSpin = (Spinner) findViewById(R.id.memberDropdown);
+		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_item, listofmembers);
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		memberSpin.setAdapter(dataAdapter);
+		memberSpin.setPrompt("Select Member");
+	}
+
+	public void EventList(int member){
 		listofevents = new ArrayList<String>();
 		try{
-			Cursor mquery = gpdb.eventList();
+			Cursor mquery = gpdb.eventList(member);
 			idarray=new int[mquery.getCount()];
 			flagarray=new int[mquery.getCount()];
 			int temp=0;
@@ -123,6 +152,14 @@ public class HistoryActivity extends Activity {
 			}while(mquery.moveToNext());
 		}catch(Exception e){}
 		
+	}
+	
+	public void MemberList(){
+		listofmembers = new ArrayList<String>();
+		listofmembers.add("All");
+		for (int j=0; j<namearray.length; j++) {
+			listofmembers.add(namearray[j]);
+		}
 	}
 
 	public void filltable(int position){

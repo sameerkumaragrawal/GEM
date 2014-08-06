@@ -86,9 +86,18 @@ public class GroupDatabase extends SQLiteOpenHelper{
 		return c;
 	}
 	
-	public Cursor eventList(){
-		Cursor mquery = getDB().rawQuery("SELECT * FROM " + EventTable+";",null);
-		return mquery;
+	public Cursor eventList(int member){
+		if (member==0) {
+			Cursor mquery = getDB().rawQuery("SELECT * FROM " + EventTable+";",null);
+			return mquery;
+		}
+		else {
+			String transQuery = "SELECT EventId FROM " + TransTable + " WHERE MemberId = " + member + " AND (Paid > 0 OR Consumed > 0)";
+			String cashQuery = "SELECT ID as EventId FROM " + CashTable + " WHERE FromMemberId = " + member + " OR ToMemberId = " + member;
+			String eventIdQuery = "(" + transQuery + " UNION " + cashQuery + ") as T1";
+			Cursor mquery = getDB().rawQuery("SELECT * FROM " + EventTable + " JOIN " + eventIdQuery + " ON Events.ID = T1.EventId",null);
+			return mquery;
+		}
 	}
 	
 	public void CashTransfer(int fromMember, int toMember, float amount){

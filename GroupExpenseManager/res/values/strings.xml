@@ -65,6 +65,7 @@
     <string name="groupsummaryname">Name</string>
     <string name="title_activity_history">History</string>
     <string name="selectevent">Select Event</string>
+    <string name="selectmember">Select Member</string>
     <string name="member">Member</string>
     <string name="paidby">Paid By</string>
     <string name="consumedby">Consumed By</string>
