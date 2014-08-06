@@ -42,7 +42,7 @@ For Google Play
 <b>Short Description:</b>
 Problem managing shared expenses on a trip with friends or during regular canteen visits? Avoid all calculations, hassles (and arguments) with this fast, user friendly and lightweight app for easy management of shared as well as personal expenses in your groups. Add and view transactions and cash transfers easily and also get an efficient settlement solution with just a click.
 
-<b>Whats New:</b>
+<b>Whats New:</b>  
 Version 2.0:
 - Support for all screen sizes and resolutions
 - Can check a member's total payment and consumption summary within the group
