@@ -31,7 +31,8 @@ Whats New
 - Reduced APK size
 
 <b>Version 2.1:</b>  
-- Two types of events available - group expense and individual expense
+- Bug fixes (problem in some devices while adding a new group resolved)
+- Two types of events can be added - group expense and individual expense
 - Option to filter the history corresponding to each member
-- Hint text displayed in consumption amount field for the amount currently unaccounted for
-- Cash transfer name reflects the members involved in the transaction
+- Hint text displayed in consumption amount field for the amount currently unaccounted for while adding an event
+- Cash transfer name reflects the names of the members involved in the transaction
