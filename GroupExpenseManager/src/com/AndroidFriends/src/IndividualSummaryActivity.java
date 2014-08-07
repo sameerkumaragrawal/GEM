@@ -22,7 +22,6 @@ public class IndividualSummaryActivity extends Activity {
 	private int countmembers;
 	private int currencyDecimals = 2;
 	private String groupName="";
-	private GroupSummaryActivity summaryobject = new GroupSummaryActivity();
 	private String decimalFlag;
 	
 	@Override

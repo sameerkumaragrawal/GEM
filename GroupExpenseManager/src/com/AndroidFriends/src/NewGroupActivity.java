@@ -2,7 +2,6 @@ package com.AndroidFriends.src;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
@@ -39,7 +38,7 @@ public class NewGroupActivity extends Activity {
 	private CommonDatabase commondb;
 	private String[] currencyArray=null;
 	private Spinner currencySpinner;
-	private List<String> listofcurrency = null;
+	private ArrayList<String> listofcurrency = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -239,6 +238,7 @@ public class NewGroupActivity extends Activity {
 			return;
 		}
 		
+		currencyId = currencySpinner.getSelectedItemPosition();
 		if(currencyId == 0){
 			createToast("Error! Please select a currency for the group transactions");
 			return;

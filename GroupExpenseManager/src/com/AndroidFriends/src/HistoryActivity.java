@@ -40,7 +40,6 @@ public class HistoryActivity extends Activity {
 	private int[] idarray = null;
 	private int[] flagarray = null;
 	private TableLayout historytable = null;
-	private GroupSummaryActivity summaryobject = new GroupSummaryActivity();
 	private LinearLayout historytablerow1,historytablerow2;
 	private GroupDatabase gpdb;
 	private String decimalFlag;

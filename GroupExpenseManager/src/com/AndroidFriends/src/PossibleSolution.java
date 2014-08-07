@@ -25,7 +25,6 @@ public class PossibleSolution extends Activity {
 	private String[][] solutionarray;
 	private String groupName="";
 	private int ntransactions = 0;
-	private GroupSummaryActivity summaryobject = new GroupSummaryActivity();
 	private float[] tramountarray;
 	private int grpid = 0;
 	private GroupDatabase gpdb;

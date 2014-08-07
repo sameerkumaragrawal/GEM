@@ -1,6 +1,5 @@
 package com.AndroidFriends.src;
 
-import java.util.Currency;
 
 import android.content.ContentValues;
 import android.content.Context;
