@@ -25,6 +25,8 @@ public class GroupSummaryActivity extends Activity {
 
 	private String grpName = "";
 	private int grpId=0;
+	private int grpCurrency=0;
+	private int currencyDecimals=2;
 	private int countmembers=0;
 	public final static String listofmember = "summaryActivity/listmember";
 	public final static String listofbalance = "summaryActivity/listbalance";
@@ -40,6 +42,7 @@ public class GroupSummaryActivity extends Activity {
 	private int[] idarray;
 	private GroupDatabase gpdb;
 	private CommonDatabase commondb;
+	private String decimalFlag;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,8 @@ public class GroupSummaryActivity extends Activity {
 		Intent intent = getIntent();
 		grpName = intent.getStringExtra(GroupsActivity.GROUP_NAME);
 		grpId = intent.getIntExtra(GroupsActivity.GROUP_ID,0);
+//		grpCurrency = intent.getIntExtra(GroupsActivity.GROUP_CURR, 0);
+		decimalFlag = "%." + currencyDecimals + "f";
 		String database="Database_"+grpId;
 		
 		String gdName="Database_"+grpId;
@@ -161,11 +166,11 @@ public class GroupSummaryActivity extends Activity {
 			v1.setText(namearray[j]);
 			float a = balancearray[j];
 			if (a<0) {
-				v2.setText(floatToString(-a));
+				v2.setText(String.format(decimalFlag, -a));
 				v3.setText(null);
 			}
 			else {
-				v3.setText(floatToString(a));
+				v3.setText(String.format(decimalFlag, a));
 				v2.setText(null);
 			}	
 			v1.setLayoutParams(new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1f));
@@ -196,11 +201,11 @@ public class GroupSummaryActivity extends Activity {
 			v1.setText(namearray[k]);
 			float a = balancearray[k];
 			if (a<0) {
-				v2.setText(floatToString(-a));
+				v2.setText(String.format(decimalFlag, -a));
 				v3.setText(null);
 			}
 			else {
-				v3.setText(floatToString(a));
+				v3.setText(String.format(decimalFlag, a));
 				v2.setText(null);
 			}
 		}

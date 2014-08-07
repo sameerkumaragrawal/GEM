@@ -1,5 +1,7 @@
 package com.AndroidFriends.src;
 
+import java.util.Currency;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -69,11 +71,32 @@ public class CommonDatabase extends SQLiteOpenHelper{
 	public int GroupNameToDatabaseId(String GroupName){
 		Cursor idquery = getDB().rawQuery("SELECT ID FROM " + tableName +" WHERE Name = ?",new String[]{GroupName});
 		idquery.moveToFirst();
-		int databaseId = idquery.getInt(0);;
+		int databaseId = idquery.getInt(0);
 
 		return databaseId;
 	}
 
+	public int GroupNameToCurrency(String GroupName){
+		Cursor idquery = getDB().rawQuery("SELECT Currency FROM " + tableName +" WHERE Name = ?",new String[]{GroupName});
+		idquery.moveToFirst();
+		int currencyId = idquery.getInt(0);
+
+		return currencyId;
+	}
+	
+	public String[] getCurrencies() {
+		Cursor mquery = getDB().rawQuery("SELECT Name FROM " + currencyTable + ";", null);
+		mquery.moveToFirst();
+		String[] currencyArray = new String[mquery.getCount()];
+		int i = 0;
+		do{
+			currencyArray[i] = mquery.getString(0);
+			i++;
+		}while(mquery.moveToNext());
+		
+		return currencyArray;
+	}
+	
 	public int insert(String name){
 		int ID=1;
 		Cursor isPresent=getDB().rawQuery("SELECT ID FROM " + tableName + " WHERE Name = ?", new String[]{name});

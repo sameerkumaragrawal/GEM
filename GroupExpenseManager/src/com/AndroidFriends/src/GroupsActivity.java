@@ -44,6 +44,7 @@ public class GroupsActivity extends Activity {
     private ListView list;
     public final static String GROUP_NAME = "GroupSummmary/GroupName";
     public final static String GROUP_ID = "GroupSummmary/GroupID";
+    public final static String GROUP_CURR = "GroupSummmary/GroupCurrency";
     private CommonDatabase commondb;
     
 	@Override
@@ -182,6 +183,7 @@ public class GroupsActivity extends Activity {
     		Intent intent = new Intent(this, GroupSummaryActivity.class);
         	intent.putExtra(GROUP_NAME, GroupName);
         	intent.putExtra(GROUP_ID, commondb.GroupNameToDatabaseId(GroupName));
+//        	intent.putExtra(GROUP_CURR, commondb.GroupNameToCurrency(GroupName));
         	startActivity(intent);
     	}
     	if(option == 1) {

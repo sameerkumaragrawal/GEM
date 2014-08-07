@@ -2,6 +2,7 @@ package com.AndroidFriends.src;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,11 +15,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,9 +34,12 @@ public class NewGroupActivity extends Activity {
 	private ListView list;
 	private ArrayList<String> items;
 	private ListAdaptor adaptor;
-	private int numberMembers, lastItemCount = 0;
+	private int numberMembers, lastItemCount, currencyId = 0;
 	private GroupDatabase gpdb;
 	private CommonDatabase commondb;
+	private String[] currencyArray=null;
+	private Spinner currencySpinner;
+	private List<String> listofcurrency = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +54,38 @@ public class NewGroupActivity extends Activity {
 		list.setAdapter(adaptor);
 		addMember(null);
 
+		currencyList();
+//		addItemsOnCurrencySpinner();
+//		currencySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+//
+//			public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) 
+//			{
+//				currencyId = position;
+//			}	
+//			public void onNothingSelected(AdapterView<?> arg0) {
+//				// TODO Auto-generated method stub
+//			}
+//
+//		});
+	}
+	
+	public void currencyList(){
+		currencyArray = commondb.getCurrencies();
+		
+//		listofcurrency = new ArrayList<String>();
+//		listofcurrency.add("Select Currency");
+//		for (int j=0; j<currencyArray.length; j++) {
+//			listofcurrency.add(currencyArray[j]);
+//		}
+	}
+	
+	public void addItemsOnCurrencySpinner() {
+		currencySpinner = (Spinner) findViewById(R.id.currencyDropdown);
+		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_item, listofcurrency);
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		currencySpinner.setAdapter(dataAdapter);
+		currencySpinner.setPrompt("Select Currency");
 	}
 
 	public void addMember(View v) {
