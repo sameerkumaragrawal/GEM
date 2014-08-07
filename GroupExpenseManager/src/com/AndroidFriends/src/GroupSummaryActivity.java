@@ -11,7 +11,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -57,7 +56,7 @@ public class GroupSummaryActivity extends Activity {
     	
     	try{
     		groupDb = this.openOrCreateDatabase(gdName, MODE_PRIVATE, null);
-    		Log.e("Sameer",String.valueOf(groupDb.getVersion()));
+    		//Log.e("Sameer",String.valueOf(groupDb.getVersion()));
     		Cursor mquery = groupDb.rawQuery("SELECT ID, Name, Balance FROM " + GroupDatabase.MemberTable+";",null);
     		int[] idarray = new int[mquery.getCount()];
     		float[] balancearray = new float[mquery.getCount()];

@@ -1,6 +1,7 @@
 package com.AndroidFriends.src;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import android.app.Activity;
 import android.content.Context;
@@ -53,15 +54,13 @@ public class EditGroupActivity extends Activity {
 		this.setTitle(new_title);
 		setContentView(R.layout.activity_edit_group);
 		
-		EditText edittext = (EditText)findViewById(R.id.editGroupeditText);
-		edittext.setText(groupName);
-		
 		adaptor = new ListAdaptor(this);
 		items = new ArrayList<String>();
 
 		list = (ListView) findViewById(R.id.editGroupListView);
 
 		list.setAdapter(adaptor);
+		items.add(groupName);
 
 		numbermembers=namearray.length;
 
@@ -117,14 +116,21 @@ public class EditGroupActivity extends Activity {
 				holder = (Holder) convertView.getTag();
 			}
 			holder.removeListener.setPosition(position);
-			holder.memberText.setText("Member "+(position+1));
 			holder.watcher.setPosition(position);
 			holder.name.setText(items.get(position));
-			if(position < numbermembers){
+			
+			if(position==0){
 				holder.removeButton.setVisibility(View.INVISIBLE);
+				holder.memberText.setText("Group Name");
 			}else{
-				holder.removeButton.setVisibility(View.VISIBLE);
+				if(position <= numbermembers){
+					holder.removeButton.setVisibility(View.INVISIBLE);
+				}else{
+					holder.removeButton.setVisibility(View.VISIBLE);
+				}
+				holder.memberText.setText("Member "+(position));
 			}
+			
 			return convertView;
 		}
 
@@ -189,7 +195,11 @@ public class EditGroupActivity extends Activity {
 			createToast("Error! Cannot leave a member name empty");
 			return false;
 		}
-		else if(items.indexOf(name) != items.lastIndexOf(name)){
+		int occurrences = Collections.frequency(items, name);
+		if(items.indexOf(name) == 0 && occurrences > 2){
+			createToast("Error! Member "+name+" already exists");
+			return false;
+		}else if(items.indexOf(name) > 0 && occurrences > 1){
 			createToast("Error! Member "+name+" already exists");
 			return false;
 		}
@@ -197,15 +207,14 @@ public class EditGroupActivity extends Activity {
 	}
 
 	public void doneEditGroup(View v){
-		int itemsize = items.size();
+		int itemsize = items.size() - 1;
 
 		if(itemsize<1){
 			createToast("Error! Group cannot be empty");
 			return;
 		}
 
-		EditText editText = (EditText) (findViewById(R.id.editGroupeditText));
-		String group_name = editText.getText().toString();
+		String group_name = items.get(0);
 
 		if(group_name.equals("")){
 			createToast("Error! Cannot leave the group name empty");
@@ -219,7 +228,7 @@ public class EditGroupActivity extends Activity {
 		}
 
 		for (int k=0; k<itemsize; k++) {
-			String temp = items.get(k);
+			String temp = items.get(k+1);
 
 			if (!checkMemberName(temp)){
 				return;
