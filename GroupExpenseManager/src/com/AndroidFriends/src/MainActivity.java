@@ -1,8 +1,11 @@
 package com.AndroidFriends.src;
 
+import java.io.File;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 
@@ -18,7 +21,20 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
+        SQLiteDatabase myDB= null;
+        try{
+        	File dbFile = this.getDatabasePath("GroupNames");
+            if (dbFile.exists()){
+            	myDB = this.openOrCreateDatabase("GroupNames", MODE_PRIVATE, null);
+            	myDB.rawQuery("SELECT Currency FROM " + CommonDatabase.tableName +";",null);
+            }
+        }catch(Exception e){
+        	myDB.setVersion(2);
+        }finally{
+        	if (myDB != null){
+        		myDB.close();
+        	}
+        }
         Intent intent = new Intent(this, GroupsActivity.class);
         startActivity(intent);
         this.finish();
