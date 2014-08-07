@@ -3,7 +3,6 @@ package com.AndroidFriends.src;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -57,36 +56,8 @@ public class GroupSummaryActivity extends Activity {
     	try{
     		groupDb = this.openOrCreateDatabase(gdName, MODE_PRIVATE, null);
     		//Log.e("Sameer",String.valueOf(groupDb.getVersion()));
-    		Cursor mquery = groupDb.rawQuery("SELECT ID, Name, Balance FROM " + GroupDatabase.MemberTable+";",null);
-    		int[] idarray = new int[mquery.getCount()];
-    		float[] balancearray = new float[mquery.getCount()];
-    		String[] namearray = new String[mquery.getCount()];
-			int countmembers=0;
-			mquery.moveToFirst();
-			do{
-				idarray[countmembers] = mquery.getInt(0);
-				namearray[countmembers] = mquery.getString(1);
-				balancearray[countmembers] = mquery.getFloat(2);
-				countmembers++;
-			}while(mquery.moveToNext());
-			
-			
-			groupDb.execSQL("DROP TABLE "+GroupDatabase.MemberTable);
-			groupDb.execSQL(GroupDatabase.createMember);
-			for(int i=0;i<balancearray.length;i++){
-				ContentValues values = new ContentValues();
-				values.put("ID", idarray[i]);
-				values.put("Name", namearray[i]);
-				if(balancearray[i]>0){
-					values.put("Paid", balancearray[i]);
-					values.put("Consumed", 0);
-				}else if(balancearray[i]<0){
-					balancearray[i]*=(-1);
-					values.put("Paid", 0);
-					values.put("Consumed", balancearray[i]);
-				}
-				groupDb.insert(GroupDatabase.MemberTable, null, values);
-			}
+    		groupDb.rawQuery("SELECT Balance FROM " + GroupDatabase.MemberTable+";",null);
+    		groupDb.setVersion(1);
     		
     	}catch(Exception e) {
     		
@@ -94,7 +65,6 @@ public class GroupSummaryActivity extends Activity {
         }
         finally{ 
         	if(groupDb!=null)
-        		groupDb.setVersion(2);
         		groupDb.close();
         }
     	

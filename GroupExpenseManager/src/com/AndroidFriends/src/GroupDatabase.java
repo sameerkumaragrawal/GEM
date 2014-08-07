@@ -39,7 +39,36 @@ public class GroupDatabase extends SQLiteOpenHelper{
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		if(oldVersion<2){
-    	
+			Cursor mquery = db.rawQuery("SELECT ID, Name, Balance FROM " + GroupDatabase.MemberTable+";",null);
+			int[] idarray = new int[mquery.getCount()];
+    		float[] balancearray = new float[mquery.getCount()];
+    		String[] namearray = new String[mquery.getCount()];
+			int countmembers=0;
+			mquery.moveToFirst();
+			do{
+				idarray[countmembers] = mquery.getInt(0);
+				namearray[countmembers] = mquery.getString(1);
+				balancearray[countmembers] = mquery.getFloat(2);
+				countmembers++;
+			}while(mquery.moveToNext());
+			
+			
+			db.execSQL("DROP TABLE "+GroupDatabase.MemberTable);
+			db.execSQL(GroupDatabase.createMember);
+			for(int i=0;i<balancearray.length;i++){
+				ContentValues values = new ContentValues();
+				values.put("ID", idarray[i]);
+				values.put("Name", namearray[i]);
+				if(balancearray[i]>0){
+					values.put("Paid", balancearray[i]);
+					values.put("Consumed", 0);
+				}else if(balancearray[i]<0){
+					balancearray[i]*=(-1);
+					values.put("Paid", 0);
+					values.put("Consumed", balancearray[i]);
+				}
+				db.insert(GroupDatabase.MemberTable, null, values);
+			}
 		}
 	}
 
