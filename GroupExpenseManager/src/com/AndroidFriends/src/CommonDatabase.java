@@ -10,6 +10,7 @@ public class CommonDatabase extends SQLiteOpenHelper{
 	private static String DATABASE_NAME = "GroupNames";
 	private static final int DATABASE_VERSION = 2;
 	private static final String tableName = "Groups";
+	private static final String currencyTable = "Currencies";
 
 	private SQLiteDatabase db=null;
 
@@ -21,7 +22,18 @@ public class CommonDatabase extends SQLiteOpenHelper{
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL("CREATE TABLE IF NOT EXISTS "
 				+ tableName
-				+ " ( ID int(11) NOT NULL, Name varchar(255) NOT NULL );");         
+				+ " ( ID int(11) NOT NULL, Name varchar(255) NOT NULL, Currency int(1) );");
+		db.execSQL("CREATE TABLE IF NOT EXISTS "
+				+ currencyTable
+				+ " ( ID int(1) NOT NULL, Name varchar(255) NOT NULL, Symbol varchar(3) NOT NULL, Decimals int(1) NOT NULL);");
+		db.execSQL("INSERT INTO " + currencyTable + " VALUES (1, 'Indian Rupee', 'INR', 0)");
+		db.execSQL("INSERT INTO " + currencyTable + " VALUES (2, 'US Dollar', 'USD', 2)");
+		db.execSQL("INSERT INTO " + currencyTable + " VALUES (3, 'Euro', 'EUR', 2)");
+		db.execSQL("INSERT INTO " + currencyTable + " VALUES (4, 'Japanese Yen', 'JPY', 0)");
+		db.execSQL("INSERT INTO " + currencyTable + " VALUES (5, 'South Korean Won', 'KRW', 0)");
+		db.execSQL("INSERT INTO " + currencyTable + " VALUES (6, 'British Pound', 'GBP', 2)");
+		db.execSQL("INSERT INTO " + currencyTable + " VALUES (7, 'Hong Kong Dollar', 'HKD', 1)");
+		db.execSQL("INSERT INTO " + currencyTable + " VALUES (8, 'Canadian Dollar', 'CAD', 2)");
 	}		
 
 
