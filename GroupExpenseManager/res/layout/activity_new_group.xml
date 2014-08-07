@@ -15,23 +15,17 @@
         android:descendantFocusability="afterDescendants"
         android:padding="20dp" >
     </ListView>
-    
-   <LinearLayout
+    	    
+   	<Spinner
+        android:id="@+id/currencyDropdown"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:orientation="horizontal"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp" >
-	    
-	   	<Spinner
-	        android:id="@+id/currencyDropdown"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:gravity="center" />
-   	</LinearLayout>
+        android:gravity="center"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp" />
 
     <LinearLayout
         android:layout_width="match_parent"

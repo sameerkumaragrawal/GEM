@@ -16,11 +16,15 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,9 +35,13 @@ public class EditGroupActivity extends Activity {
 	private ListView list;
 	private ArrayList<String> items;
 	private ListAdaptor adaptor;
+	private Spinner currencySpinner;
+	private ArrayList<String> listofcurrency = null;
+	private String[] currencyArray=null;
 
 	private String[] namearray;
 	private String groupName="";
+	private int initialGrpCurrency;
 	private int groupid = 0;
 	private int grpCurrency = 0;
 	private int numbermembers = 0, lastItemCount = 0;
@@ -51,11 +59,23 @@ public class EditGroupActivity extends Activity {
 		groupid = intent.getIntExtra(GroupsActivity.GROUP_ID,0);
 		namearray = intent.getStringArrayExtra(GroupSummaryActivity.listofmember);
 		grpCurrency = intent.getIntExtra(GroupSummaryActivity.groupCurrencyId,0);
+		initialGrpCurrency = grpCurrency;
 		String database="Database_"+groupid;
 		gpdb=GroupDatabase.get(this, database);
 		String new_title= groupName+" - "+String.valueOf(this.getTitle());
 		this.setTitle(new_title);
 		setContentView(R.layout.activity_edit_group);
+		
+		currencyList();
+		addItemsOnCurrencySpinner();
+		currencySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+			public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+				grpCurrency = position+1;
+			}	
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+			}
+		});
 		
 		adaptor = new ListAdaptor(this);
 		items = new ArrayList<String>();
@@ -73,6 +93,24 @@ public class EditGroupActivity extends Activity {
 		adaptor.notifyDataSetChanged();
 
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+	}
+	
+	public void currencyList(){
+		currencyArray = commondb.getCurrencies();
+		listofcurrency = new ArrayList<String>();
+		for (int j=0; j<currencyArray.length; j++) {
+			listofcurrency.add(currencyArray[j]);
+		}
+	}
+	
+	public void addItemsOnCurrencySpinner() {
+		currencySpinner = (Spinner) findViewById(R.id.editCurrencyDropdown);
+		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_item, listofcurrency);
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		currencySpinner.setAdapter(dataAdapter);
+		currencySpinner.setPrompt("Select Currency");
+		currencySpinner.setSelection(grpCurrency-1);
 	}
 
 
@@ -252,18 +290,23 @@ public class EditGroupActivity extends Activity {
 			}
 			members[k] = temp;
 		}
-		if(!updatedatabase(group_name,members)){
+		if(!updatedatabase(group_name,members,grpCurrency)){
 			return;
 		}
 		finishedit();
 	}
 
-	public boolean updatedatabase(String grpname,String[] members){
+	public boolean updatedatabase(String grpname,String[] members,int currencyId){
 		if(!grpname.equals(groupName)){
 			if(!updategroupname(grpname)){
 				return false;
 			}
 		}
+		
+		if(currencyId != initialGrpCurrency){
+			commondb.updateGroupCurrency(currencyId, groupid);
+		}
+		
 		groupName=grpname;
 		gpdb.updateMembers(members,namearray);
 		return true;

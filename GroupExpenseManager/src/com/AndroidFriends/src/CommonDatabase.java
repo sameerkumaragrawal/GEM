@@ -131,6 +131,11 @@ public class CommonDatabase extends SQLiteOpenHelper{
 		getDB().execSQL("UPDATE "+tableName+" SET Name = ? WHERE ID = ?",new Object[]{grpname,id});
 		return true;
 	}
+	
+	public boolean updateGroupCurrency(int grpCurrency,int id){
+		getDB().execSQL("UPDATE "+tableName+" SET Currency = ? WHERE ID = ?",new Object[]{grpCurrency,id});
+		return true;
+	}
 
 	public void deleteID(int id){
 		getDB().execSQL("DELETE FROM "+ tableName+" WHERE ID = ?",new Object[]{id});

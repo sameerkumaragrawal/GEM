@@ -56,21 +56,17 @@ public class NewGroupActivity extends Activity {
 		currencyList();
 		addItemsOnCurrencySpinner();
 		currencySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-			public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) 
-			{
+			public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 				currencyId = position;
 			}	
 			public void onNothingSelected(AdapterView<?> arg0) {
 				// TODO Auto-generated method stub
 			}
-
 		});
 	}
 	
 	public void currencyList(){
 		currencyArray = commondb.getCurrencies();
-		
 		listofcurrency = new ArrayList<String>();
 		listofcurrency.add("Select Currency");
 		for (int j=0; j<currencyArray.length; j++) {
@@ -238,15 +234,15 @@ public class NewGroupActivity extends Activity {
 			return;
 		}
 		
-		currencyId = currencySpinner.getSelectedItemPosition();
-		if(currencyId == 0){
-			createToast("Error! Please select a currency for the group transactions");
-			return;
-		}
-		
 		String group_name = items.get(0);
 		if(group_name.equals("")){
 			createToast("Error! Cannot leave the group name empty");
+			return;
+		}
+		
+		currencyId = currencySpinner.getSelectedItemPosition();
+		if(currencyId == 0){
+			createToast("Error! Please select a currency for the group transactions");
 			return;
 		}
 
