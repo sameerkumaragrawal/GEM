@@ -22,7 +22,6 @@
         android:ems="10"
         android:inputType="text" >
 
-        <requestFocus />
     </EditText>
 
     <ImageButton

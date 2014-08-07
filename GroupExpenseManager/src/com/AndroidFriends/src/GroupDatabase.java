@@ -17,10 +17,10 @@ public class GroupDatabase extends SQLiteOpenHelper{
 	public final static String TransTable = "Transactions";
 	public final static String CashTable = "CashTransfer";
 
-	public final static String createMember = "CREATE TABLE IF NOT EXISTS Members ( ID int(11) NOT NULL, Name varchar(255) NOT NULL, Paid float NOT NULL, Consumed float NOT NULL );";
-	public final static String createEvent = "CREATE TABLE IF NOT EXISTS Events ( ID int(11) NOT NULL, Name varchar(255) NOT NULL, Flag int(1) );";
-	public final static String createTrans = "CREATE TABLE IF NOT EXISTS Transactions ( MemberId int(11) NOT NULL, Paid float, Consumed float, EventId int(11) NOT NULL );";
-	public final static String createCash = "CREATE TABLE IF NOT EXISTS CashTransfer ( FromMemberId int(11) NOT NULL, ToMemberId int(11) NOT NULL, Amount float NOT NULL, ID int(11) NOT NULL);";
+	public final static String createMember = "CREATE TABLE IF NOT EXISTS "+GroupDatabase.MemberTable+" ( ID int(11) NOT NULL, Name varchar(255) NOT NULL, Paid float NOT NULL, Consumed float NOT NULL );";
+	public final static String createEvent = "CREATE TABLE IF NOT EXISTS "+GroupDatabase.EventTable+" ( ID int(11) NOT NULL, Name varchar(255) NOT NULL, Flag int(1) );";
+	public final static String createTrans = "CREATE TABLE IF NOT EXISTS "+GroupDatabase.TransTable+" ( MemberId int(11) NOT NULL, Paid float, Consumed float, EventId int(11) NOT NULL );";
+	public final static String createCash = "CREATE TABLE IF NOT EXISTS "+GroupDatabase.CashTable+" ( FromMemberId int(11) NOT NULL, ToMemberId int(11) NOT NULL, Amount float NOT NULL, ID int(11) NOT NULL);";
 
 	private SQLiteDatabase db=null;
 

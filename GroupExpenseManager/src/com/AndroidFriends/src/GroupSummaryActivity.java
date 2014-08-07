@@ -72,7 +72,7 @@ public class GroupSummaryActivity extends Activity {
 			
 			
 			groupDb.execSQL("DROP TABLE "+GroupDatabase.MemberTable);
-			groupDb.execSQL("CREATE TABLE IF NOT EXISTS Members ( ID int(11) NOT NULL, Name varchar(255) NOT NULL, Paid float NOT NULL, Consumed float NOT NULL );");
+			groupDb.execSQL(GroupDatabase.createMember);
 			for(int i=0;i<balancearray.length;i++){
 				ContentValues values = new ContentValues();
 				values.put("ID", idarray[i]);

@@ -19,6 +19,7 @@ import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,7 +35,7 @@ public class EditGroupActivity extends Activity {
 	private String[] namearray;
 	private String groupName="";
 	private int groupid = 0;
-	private int numbermembers = 0;
+	private int numbermembers = 0, lastItemCount = 0;
 
 	private GroupDatabase gpdb;
 	private CommonDatabase commondb;
@@ -119,14 +120,22 @@ public class EditGroupActivity extends Activity {
 			holder.watcher.setPosition(position);
 			holder.name.setText(items.get(position));
 			
+			if((position == getCount()-1) && (lastItemCount < getCount())){
+				holder.name.requestFocus();
+				lastItemCount++;
+			}
+			
 			if(position==0){
 				holder.removeButton.setVisibility(View.INVISIBLE);
+				holder.setWeight(0);
 				holder.memberText.setText("Group Name");
 			}else{
 				if(position <= numbermembers){
 					holder.removeButton.setVisibility(View.INVISIBLE);
+					holder.setWeight(0);
 				}else{
 					holder.removeButton.setVisibility(View.VISIBLE);
+					holder.setWeight(MainActivity.imagebuttonweight);
 				}
 				holder.memberText.setText("Member "+(position));
 			}
@@ -142,6 +151,11 @@ public class EditGroupActivity extends Activity {
 		CustomTextWatcher watcher;
 		ImageButton removeButton;
 		CustomRemoveClickListener removeListener;
+		public void setWeight(float d){
+			LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) removeButton.getLayoutParams();
+			params.weight = d;
+			removeButton.setLayoutParams(params);
+		}
 	}
 
 	private class CustomRemoveClickListener implements OnClickListener{
@@ -154,6 +168,7 @@ public class EditGroupActivity extends Activity {
 		public void onClick(View v) {
 			items.remove(position);
 			adaptor.notifyDataSetChanged();
+			lastItemCount--;
 		}
 
 	}

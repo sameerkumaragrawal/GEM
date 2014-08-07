@@ -10,8 +10,9 @@ import com.AndroidFriends.R;
 
 public class MainActivity extends Activity {
 
-	public final static String GroupName = "com.example.gem.groupname";
-	public final static String MEMBERS = "com.example.gem.members";
+	//public final static String GroupName = "com.example.gem.groupname";
+	//public final static String MEMBERS = "com.example.gem.members";
+	public final static float imagebuttonweight = 0.3f;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
