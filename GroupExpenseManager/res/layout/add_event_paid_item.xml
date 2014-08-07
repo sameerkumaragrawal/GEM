@@ -17,6 +17,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="numberDecimal" >
+        <requestFocus />
     </EditText>
     <ImageButton
         android:id="@+id/add_event_paid_item_ib"
