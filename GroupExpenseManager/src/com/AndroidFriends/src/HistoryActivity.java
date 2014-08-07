@@ -20,7 +20,6 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.AndroidFriends.R;
@@ -37,7 +36,7 @@ public class HistoryActivity extends Activity {
 	private List<String> listofmembers = null;
 	private int[] idarray = null;
 	private int[] flagarray = null;
-	private TableLayout historytable = null;
+	private LinearLayout historytable = null;
 	private LinearLayout historytablerow1,historytablerow2;
 	private LayoutInflater inflater;
 	private GroupDatabase gpdb;
@@ -62,7 +61,7 @@ public class HistoryActivity extends Activity {
 		currencyDecimals = intent.getIntExtra(GroupSummaryActivity.stringDecimals, 0);
 		decimalFlag = "%." + currencyDecimals + "f";
 		
-		historytable = (TableLayout) findViewById(R.id.HistoryTable);
+		historytable = (LinearLayout) findViewById(R.id.HistoryTable);
 		historytablerow1 = (LinearLayout) findViewById(R.id.historyrow1);
 		historytablerow2 = (LinearLayout) findViewById(R.id.historyrow2);
 

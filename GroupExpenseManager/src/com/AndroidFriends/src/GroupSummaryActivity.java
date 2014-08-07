@@ -15,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.AndroidFriends.R;
@@ -160,7 +159,7 @@ public class GroupSummaryActivity extends Activity {
 	}
 
 	public void fillEntryInTable(){
-		TableLayout tl = (TableLayout)findViewById(R.id.groupSummaryTableLayout);
+		LinearLayout tl = (LinearLayout)findViewById(R.id.groupSummaryTableLayout);
 		for(int j=0;j<countmembers;j++){
 			View convertView = inflater.inflate(R.layout.table_item, null);
 			TextView v1 = (TextView)convertView.findViewById(R.id.table_item_tv1);
@@ -186,7 +185,7 @@ public class GroupSummaryActivity extends Activity {
 	}
 
 	public void correctEntryInTable(){
-		TableLayout table = (TableLayout) findViewById(R.id.groupSummaryTableLayout);
+		LinearLayout table = (LinearLayout) findViewById(R.id.groupSummaryTableLayout);
 		for (int k=0; k<countmembers; k++) {
 			LinearLayout tr2 = (LinearLayout)table.getChildAt(k);
 			TextView v1 = (TextView) (tr2.getChildAt(0));

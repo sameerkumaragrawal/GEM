@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TableLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.AndroidFriends.R;
@@ -59,7 +59,7 @@ public class IndividualSummaryActivity extends Activity {
 	}
 
 	public void filltable(){
-		TableLayout tl = (TableLayout)findViewById(R.id.IndividualSummaryTable);
+		LinearLayout tl = (LinearLayout)findViewById(R.id.IndividualSummaryTable);
 		for(int i=0;i<countmembers;i++){
 			View convertView = inflater.inflate(R.layout.table_item, null);
 			TextView v1 = (TextView)convertView.findViewById(R.id.table_item_tv1);
