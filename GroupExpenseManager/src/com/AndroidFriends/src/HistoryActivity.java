@@ -11,7 +11,7 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,8 +21,6 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TableLayout;
-import android.widget.TableLayout.LayoutParams;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.AndroidFriends.R;
@@ -41,6 +39,7 @@ public class HistoryActivity extends Activity {
 	private int[] flagarray = null;
 	private TableLayout historytable = null;
 	private LinearLayout historytablerow1,historytablerow2;
+	private LayoutInflater inflater;
 	private GroupDatabase gpdb;
 	private String decimalFlag;
 
@@ -56,6 +55,8 @@ public class HistoryActivity extends Activity {
 		grpid = intent.getIntExtra(GroupsActivity.GROUP_ID,0);
 		String database="Database_"+grpid;
 		gpdb=GroupDatabase.get(this, database);
+		
+		inflater = LayoutInflater.from(this);
 
 		namearray = intent.getStringArrayExtra(GroupSummaryActivity.listofmember);
 		currencyDecimals = intent.getIntExtra(GroupSummaryActivity.stringDecimals, 0);
@@ -206,32 +207,19 @@ public class HistoryActivity extends Activity {
 	}
 
 	public void addEntry(String str1,String str2,String str3){
-		TableRow tr = new TableRow(this);
-		tr.setLayoutParams(new LayoutParams(
-				LayoutParams.MATCH_PARENT,
-				LayoutParams.WRAP_CONTENT));
-		TextView v1= new TextView(this);
-		TextView v2= new TextView(this);
-		TextView v3= new TextView(this);
+		View convertView = inflater.inflate(R.layout.table_item, null);
+		TextView v1 = (TextView)convertView.findViewById(R.id.table_item_tv1);
+		TextView v2 = (TextView)convertView.findViewById(R.id.table_item_tv2);
+		TextView v3 = (TextView)convertView.findViewById(R.id.table_item_tv3);
 		v1.setText(str1);
 		v2.setText(str2);
 		v3.setText(str3);
 		
-		v1.setLayoutParams(new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1.1f));
-		v2.setLayoutParams(new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1.2f));
-		v3.setLayoutParams(new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1f));
-
-		v1.setGravity(Gravity.CENTER);
-		v2.setGravity(Gravity.CENTER);
-		v3.setGravity(Gravity.CENTER);
-		v1.setPadding(0, 20, 0, 20);
-		v2.setPadding(0, 20, 0, 20);
-		v3.setPadding(0, 20, 0, 20);
-
-		tr.addView(v1);
-		tr.addView(v2);
-		tr.addView(v3);
-		historytable.addView(tr);
+		MainActivity.setWeight(v1,1.1f);
+		MainActivity.setWeight(v2,1.2f);
+		MainActivity.setWeight(v3,1f);
+		
+		historytable.addView(convertView);
 	}
 
 	public void clearAlert(View v) {

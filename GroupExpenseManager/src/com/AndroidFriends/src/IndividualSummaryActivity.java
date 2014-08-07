@@ -5,12 +5,11 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TableLayout;
-import android.widget.TableLayout.LayoutParams;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.AndroidFriends.R;
@@ -21,6 +20,7 @@ public class IndividualSummaryActivity extends Activity {
 	private float[] consumedarray;
 	private int countmembers;
 	private int currencyDecimals = 2;
+	private LayoutInflater inflater;
 	private String groupName="";
 	private String decimalFlag;
 	
@@ -38,7 +38,7 @@ public class IndividualSummaryActivity extends Activity {
 		currencyDecimals = intent.getIntExtra(GroupSummaryActivity.stringDecimals, 0);
 		decimalFlag = "%." + currencyDecimals + "f";
 		setContentView(R.layout.activity_individual_summary);
-		
+		inflater = LayoutInflater.from(this);
 		filltable();
 	}
 	
@@ -61,32 +61,19 @@ public class IndividualSummaryActivity extends Activity {
 	public void filltable(){
 		TableLayout tl = (TableLayout)findViewById(R.id.IndividualSummaryTable);
 		for(int i=0;i<countmembers;i++){
-			TableRow tr = new TableRow(this);
-			tr.setLayoutParams(new LayoutParams(
-					LayoutParams.MATCH_PARENT,
-					LayoutParams.WRAP_CONTENT));
-			TextView v1= new TextView(this);
+			View convertView = inflater.inflate(R.layout.table_item, null);
+			TextView v1 = (TextView)convertView.findViewById(R.id.table_item_tv1);
+			TextView v2 = (TextView)convertView.findViewById(R.id.table_item_tv2);
+			TextView v3 = (TextView)convertView.findViewById(R.id.table_item_tv3);
 			v1.setText(namearray[i]);
-			TextView v2= new TextView(this);
 			v2.setText(String.format(decimalFlag, consumedarray[i]));
-			TextView v3= new TextView(this);
 			v3.setText(String.format(decimalFlag, paidarray[i]));
 			
-			v1.setLayoutParams(new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1.1f));
-			v2.setLayoutParams(new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1.2f));
-			v3.setLayoutParams(new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 0.8f));
+			MainActivity.setWeight(v1,1.1f);
+			MainActivity.setWeight(v2,1.2f);
+			MainActivity.setWeight(v3,0.8f);
 			
-			v1.setGravity(Gravity.CENTER);
-			v2.setGravity(Gravity.CENTER);
-			v3.setGravity(Gravity.CENTER);
-			v1.setPadding(0, 20, 0, 20);
-			v2.setPadding(0, 20, 0, 20);
-			v3.setPadding(0, 20, 0, 20);
-
-			tr.addView(v1);
-			tr.addView(v2);
-			tr.addView(v3);
-			tl.addView(tr);
+			tl.addView(convertView);
 		}
 	}
 

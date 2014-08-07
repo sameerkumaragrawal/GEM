@@ -10,13 +10,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
-import android.widget.TableLayout.LayoutParams;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.AndroidFriends.R;
@@ -42,6 +41,7 @@ public class GroupSummaryActivity extends Activity {
 	private float[] paidarray;
 	private float[] consumedarray;
 	private int[] idarray;
+	private LayoutInflater inflater;
 	private GroupDatabase gpdb;
 	private CommonDatabase commondb;
 	private String decimalFlag;
@@ -81,6 +81,8 @@ public class GroupSummaryActivity extends Activity {
 		setContentView(R.layout.activity_group_summary);
 		TextView header = (TextView) findViewById(R.id.groupNametextView);
 		header.setText(grpName);
+		
+		inflater = LayoutInflater.from(this);
 		
 		currencyDecimals = commondb.getCurrencyDecimals(grpCurrency);
 		decimalFlag = "%." + currencyDecimals + "f";
@@ -160,13 +162,10 @@ public class GroupSummaryActivity extends Activity {
 	public void fillEntryInTable(){
 		TableLayout tl = (TableLayout)findViewById(R.id.groupSummaryTableLayout);
 		for(int j=0;j<countmembers;j++){
-			TableRow tr = new TableRow(this);
-			tr.setLayoutParams(new LayoutParams(
-					LayoutParams.MATCH_PARENT,
-					LayoutParams.WRAP_CONTENT));
-			TextView v1= new TextView(this);
-			TextView v2= new TextView(this);
-			TextView v3= new TextView(this);
+			View convertView = inflater.inflate(R.layout.table_item, null);
+			TextView v1 = (TextView)convertView.findViewById(R.id.table_item_tv1);
+			TextView v2 = (TextView)convertView.findViewById(R.id.table_item_tv2);
+			TextView v3 = (TextView)convertView.findViewById(R.id.table_item_tv3);
 			v1.setText(namearray[j]);
 			float a = balancearray[j];
 			if (a<0) {
@@ -177,28 +176,19 @@ public class GroupSummaryActivity extends Activity {
 				v3.setText(String.format(decimalFlag, a));
 				v2.setText(null);
 			}	
-			v1.setLayoutParams(new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1f));
-			v2.setLayoutParams(new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 0.7f));
-			v3.setLayoutParams(new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 0.7f));
-
-			v1.setGravity(Gravity.CENTER);
-			v2.setGravity(Gravity.CENTER);
-			v3.setGravity(Gravity.CENTER);
-			v1.setPadding(0, 20, 0, 20);
-			v2.setPadding(0, 20, 0, 20);
-			v3.setPadding(0, 20, 0, 20);
-
-			tr.addView(v1);
-			tr.addView(v2);
-			tr.addView(v3);
-			tl.addView(tr);
+			
+			MainActivity.setWeight(v1,1);
+			MainActivity.setWeight(v2,0.7f);
+			MainActivity.setWeight(v3,0.7f);
+			
+			tl.addView(convertView);
 		}
 	}
 
 	public void correctEntryInTable(){
 		TableLayout table = (TableLayout) findViewById(R.id.groupSummaryTableLayout);
 		for (int k=0; k<countmembers; k++) {
-			TableRow tr2 = (TableRow)table.getChildAt(k);
+			LinearLayout tr2 = (LinearLayout)table.getChildAt(k);
 			TextView v1 = (TextView) (tr2.getChildAt(0));
 			TextView v2 = (TextView) (tr2.getChildAt(1));
 			TextView v3 = (TextView) (tr2.getChildAt(2));

@@ -140,8 +140,7 @@
             android:id="@+id/HistoryTable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:stretchColumns="0,1,2" />
+            android:padding="10dp" />
 
         <Button
             android:id="@+id/clearButton"

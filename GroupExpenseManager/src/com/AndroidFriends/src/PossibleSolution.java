@@ -5,12 +5,11 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TableLayout;
-import android.widget.TableLayout.LayoutParams;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.AndroidFriends.R;
@@ -27,6 +26,7 @@ public class PossibleSolution extends Activity {
 	private int ntransactions = 0;
 	private float[] tramountarray;
 	private int grpid = 0;
+	private LayoutInflater inflater;
 	private GroupDatabase gpdb;
 	private String decimalFlag;
 
@@ -37,6 +37,9 @@ public class PossibleSolution extends Activity {
 		groupName=intent.getStringExtra(GroupsActivity.GROUP_NAME);
 		String new_title= groupName+" - "+String.valueOf(this.getTitle());
 		this.setTitle(new_title);
+		
+		inflater = LayoutInflater.from(this);
+		
 		idarray = intent.getIntArrayExtra(GroupSummaryActivity.listofid);
 		balancearray = intent.getFloatArrayExtra(GroupSummaryActivity.listofbalance);
 		namearray = intent.getStringArrayExtra(GroupSummaryActivity.listofmember);
@@ -76,32 +79,15 @@ public class PossibleSolution extends Activity {
 	public void filltable(){
 		TableLayout tl = (TableLayout)findViewById(R.id.PossibleSolutionTable);
 		for(int i=0;i<ntransactions;i++){
-			TableRow tr = new TableRow(this);
-			tr.setLayoutParams(new LayoutParams(
-					LayoutParams.MATCH_PARENT,
-					LayoutParams.WRAP_CONTENT));
-			TextView v1= new TextView(this);
+			View convertView = inflater.inflate(R.layout.table_item, null);
+			TextView v1 = (TextView)convertView.findViewById(R.id.table_item_tv1);
+			TextView v2 = (TextView)convertView.findViewById(R.id.table_item_tv2);
+			TextView v3 = (TextView)convertView.findViewById(R.id.table_item_tv3);
 			v1.setText(solutionarray[i][0]);
-			TextView v2= new TextView(this);
 			v2.setText(solutionarray[i][2]);
-			TextView v3= new TextView(this);
 			v3.setText(solutionarray[i][4]);
 			
-			v1.setLayoutParams(new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1f));
-			v2.setLayoutParams(new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1f));
-			v3.setLayoutParams(new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1f));
-			
-			v1.setGravity(Gravity.CENTER);
-			v2.setGravity(Gravity.CENTER);
-			v3.setGravity(Gravity.CENTER);
-			v1.setPadding(0, 20, 0, 20);
-			v2.setPadding(0, 20, 0, 20);
-			v3.setPadding(0, 20, 0, 20);
-
-			tr.addView(v1);
-			tr.addView(v2);
-			tr.addView(v3);
-			tl.addView(tr);
+			tl.addView(convertView);
 		}
 	}
 	public void compute(){
