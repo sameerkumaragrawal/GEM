@@ -35,6 +35,8 @@ public class GroupSummaryActivity extends Activity {
 	public final static String listofid = "summaryActivity/listid";
 	public final static String stringcount = "summaryActivity/count";
 	public final static String clearflag = "summaryActivity/clearflag";
+	public final static String stringDecimals = "summaryActivity/stringDecimals";
+	public final static String groupCurrencyId = "summaryActivity/groupCurrencyId";
 	private String[] namearray;
 	private float[] balancearray;
 	private float[] paidarray;
@@ -50,8 +52,7 @@ public class GroupSummaryActivity extends Activity {
 		Intent intent = getIntent();
 		grpName = intent.getStringExtra(GroupsActivity.GROUP_NAME);
 		grpId = intent.getIntExtra(GroupsActivity.GROUP_ID,0);
-//		grpCurrency = intent.getIntExtra(GroupsActivity.GROUP_CURR, 0);
-		decimalFlag = "%." + currencyDecimals + "f";
+		grpCurrency = intent.getIntExtra(GroupsActivity.GROUP_CURR_ID, 0);
 		String database="Database_"+grpId;
 		
 		String gdName="Database_"+grpId;
@@ -80,6 +81,9 @@ public class GroupSummaryActivity extends Activity {
 		setContentView(R.layout.activity_group_summary);
 		TextView header = (TextView) findViewById(R.id.groupNametextView);
 		header.setText(grpName);
+		
+		currencyDecimals = commondb.getCurrencyDecimals(grpCurrency);
+		decimalFlag = "%." + currencyDecimals + "f";
 		MemberListWithBalance();
 		fillEntryInTable();
 	}
@@ -226,6 +230,7 @@ public class GroupSummaryActivity extends Activity {
 		intent.putExtra(listofmember, namearray);
 		intent.putExtra(listofbalance, balancearray);
 		intent.putExtra(stringcount, countmembers);
+		intent.putExtra(stringDecimals, currencyDecimals);
 		startActivity(intent);
 	}
 	
@@ -237,6 +242,7 @@ public class GroupSummaryActivity extends Activity {
 		intent.putExtra(listofpaid, paidarray);
 		intent.putExtra(listofconsumed, consumedarray);
 		intent.putExtra(stringcount, countmembers);
+		intent.putExtra(stringDecimals, currencyDecimals);
 		startActivity(intent);
 	}
 
@@ -245,6 +251,7 @@ public class GroupSummaryActivity extends Activity {
 		intent.putExtra(GroupsActivity.GROUP_NAME, grpName);
 		intent.putExtra(GroupsActivity.GROUP_ID, grpId);
 		intent.putExtra(listofmember, namearray);
+		intent.putExtra(stringDecimals, currencyDecimals);
 		startActivity(intent);
 	}
 	@Override
@@ -305,6 +312,7 @@ public class GroupSummaryActivity extends Activity {
 		intent.putExtra(GroupsActivity.GROUP_NAME, grpName);
 		intent.putExtra(GroupsActivity.GROUP_ID, grpId);
 		intent.putExtra(listofmember, namearray);
+		intent.putExtra(groupCurrencyId, grpCurrency);
 		startActivity(intent);
 	}
 
@@ -325,6 +333,7 @@ public class GroupSummaryActivity extends Activity {
 		intent.putExtra(GroupsActivity.GROUP_NAME, grpName);
 		intent.putExtra(GroupsActivity.GROUP_ID, grpId);
 		intent.putExtra(listofmember, namearray);
+		intent.putExtra(stringDecimals, currencyDecimals);
 		startActivity(intent);
 	}
 	public String floatToString(float v){

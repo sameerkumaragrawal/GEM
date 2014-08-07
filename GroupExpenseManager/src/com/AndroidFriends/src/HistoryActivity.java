@@ -32,6 +32,7 @@ public class HistoryActivity extends Activity {
 
 	private String grpName = "";
 	private int grpid = 0;
+	private int currencyDecimals = 2;
 	private String[] namearray=null;
 	private Spinner spin1, memberSpin=null;
 	private List<String> listofevents = null;
@@ -42,6 +43,7 @@ public class HistoryActivity extends Activity {
 	private GroupSummaryActivity summaryobject = new GroupSummaryActivity();
 	private LinearLayout historytablerow1,historytablerow2;
 	private GroupDatabase gpdb;
+	private String decimalFlag;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,9 @@ public class HistoryActivity extends Activity {
 		gpdb=GroupDatabase.get(this, database);
 
 		namearray = intent.getStringArrayExtra(GroupSummaryActivity.listofmember);
+		currencyDecimals = intent.getIntExtra(GroupSummaryActivity.stringDecimals, 0);
+		decimalFlag = "%." + currencyDecimals + "f";
+		
 		historytable = (TableLayout) findViewById(R.id.HistoryTable);
 		historytablerow1 = (LinearLayout) findViewById(R.id.historyrow1);
 		historytablerow2 = (LinearLayout) findViewById(R.id.historyrow2);
@@ -179,8 +184,8 @@ public class HistoryActivity extends Activity {
 					str1=namearray[mquery.getInt(0)-1];
 					paid= mquery.getFloat(1);
 					consumed = mquery.getFloat(2);
-					str2=(consumed >0) ? summaryobject.floatToString(consumed) : null;
-					str3=(paid >0) ? summaryobject.floatToString(paid) : null;
+					str2=(consumed >0) ? String.format(decimalFlag, consumed) : null;
+					str3=(paid >0) ? String.format(decimalFlag, paid) : null;
 					addEntry(str1,str2,str3);
 				}while(mquery.moveToNext());
 			}
@@ -193,7 +198,7 @@ public class HistoryActivity extends Activity {
 					str1=namearray[mquery.getInt(0)-1];
 					paid= mquery.getFloat(2);
 					str2=namearray[mquery.getInt(1)-1];
-					str3=summaryobject.floatToString(paid);
+					str3=String.format(decimalFlag, paid);
 					addEntry(str1,str2,str3);
 				}while(mquery.moveToNext());
 			}

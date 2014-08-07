@@ -55,28 +55,28 @@ public class NewGroupActivity extends Activity {
 		addMember(null);
 
 		currencyList();
-//		addItemsOnCurrencySpinner();
-//		currencySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-//
-//			public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) 
-//			{
-//				currencyId = position;
-//			}	
-//			public void onNothingSelected(AdapterView<?> arg0) {
-//				// TODO Auto-generated method stub
-//			}
-//
-//		});
+		addItemsOnCurrencySpinner();
+		currencySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) 
+			{
+				currencyId = position;
+			}	
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+			}
+
+		});
 	}
 	
 	public void currencyList(){
 		currencyArray = commondb.getCurrencies();
 		
-//		listofcurrency = new ArrayList<String>();
-//		listofcurrency.add("Select Currency");
-//		for (int j=0; j<currencyArray.length; j++) {
-//			listofcurrency.add(currencyArray[j]);
-//		}
+		listofcurrency = new ArrayList<String>();
+		listofcurrency.add("Select Currency");
+		for (int j=0; j<currencyArray.length; j++) {
+			listofcurrency.add(currencyArray[j]);
+		}
 	}
 	
 	public void addItemsOnCurrencySpinner() {
@@ -235,7 +235,12 @@ public class NewGroupActivity extends Activity {
 		numberMembers = items.size() - 1;
 		
 		if(numberMembers<1){
-			createToast("Error! Group cannot be empty");
+			createToast("Error! Group cannot be empty. Please insert a member");
+			return;
+		}
+		
+		if(currencyId == 0){
+			createToast("Error! Please select a currency for the group transactions");
 			return;
 		}
 		
@@ -259,11 +264,11 @@ public class NewGroupActivity extends Activity {
 			}
 			members[k] = temp;
 		}
-		insertToDatabase(group_name, members);
+		insertToDatabase(group_name, members, currencyId);
 	}
 
-	public void insertToDatabase(String groupName, String[] members) {
-		int ID = commondb.insert(groupName);
+	public void insertToDatabase(String groupName, String[] members, int currencyId) {
+		int ID = commondb.insert(groupName, currencyId);
 		if(ID<0){
 			createToast("Error! Group "+groupName+" already exists");
 			return;

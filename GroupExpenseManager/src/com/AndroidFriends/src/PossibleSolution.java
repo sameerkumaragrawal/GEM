@@ -21,6 +21,7 @@ public class PossibleSolution extends Activity {
 	private float[] balancearray;
 	private int[] idarray;
 	private int countmembers;
+	private int currencyDecimals = 2;
 	private String[][] solutionarray;
 	private String groupName="";
 	private int ntransactions = 0;
@@ -28,6 +29,7 @@ public class PossibleSolution extends Activity {
 	private float[] tramountarray;
 	private int grpid = 0;
 	private GroupDatabase gpdb;
+	private String decimalFlag;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,9 @@ public class PossibleSolution extends Activity {
 		balancearray = intent.getFloatArrayExtra(GroupSummaryActivity.listofbalance);
 		namearray = intent.getStringArrayExtra(GroupSummaryActivity.listofmember);
 		countmembers = intent.getIntExtra(GroupSummaryActivity.stringcount, 0);
+		currencyDecimals = intent.getIntExtra(GroupSummaryActivity.stringDecimals, 0);
+		decimalFlag = "%." + currencyDecimals + "f";
+		
 		String database="Database_"+grpid;
 		gpdb=GroupDatabase.get(this, database);
 		compute();
@@ -128,13 +133,13 @@ public class PossibleSolution extends Activity {
 				tramount = - balancearray[minindex];
 				balancearray[minindex]=0;
 				balancearray[maxindex]=net;
-				solutionarray[ntransactions][4] = summaryobject.floatToString(tramount); 
+				solutionarray[ntransactions][4] = String.format(decimalFlag, tramount); 
 			}
 			else{
 				tramount = balancearray[maxindex];
 				balancearray[minindex]=net;
 				balancearray[maxindex]=0;
-				solutionarray[ntransactions][4] = summaryobject.floatToString(tramount); 
+				solutionarray[ntransactions][4] = String.format(decimalFlag, tramount); 
 			}
 			tramountarray[ntransactions]=tramount;
 			solutionarray[ntransactions][0] = namearray[minindex];

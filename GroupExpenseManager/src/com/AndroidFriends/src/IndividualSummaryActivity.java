@@ -20,8 +20,10 @@ public class IndividualSummaryActivity extends Activity {
 	private float[] paidarray;
 	private float[] consumedarray;
 	private int countmembers;
+	private int currencyDecimals = 2;
 	private String groupName="";
 	private GroupSummaryActivity summaryobject = new GroupSummaryActivity();
+	private String decimalFlag;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -34,7 +36,10 @@ public class IndividualSummaryActivity extends Activity {
 		consumedarray = intent.getFloatArrayExtra(GroupSummaryActivity.listofconsumed);
 		namearray = intent.getStringArrayExtra(GroupSummaryActivity.listofmember);
 		countmembers = intent.getIntExtra(GroupSummaryActivity.stringcount, 0);
+		currencyDecimals = intent.getIntExtra(GroupSummaryActivity.stringDecimals, 0);
+		decimalFlag = "%." + currencyDecimals + "f";
 		setContentView(R.layout.activity_individual_summary);
+		
 		filltable();
 	}
 	
@@ -64,9 +69,9 @@ public class IndividualSummaryActivity extends Activity {
 			TextView v1= new TextView(this);
 			v1.setText(namearray[i]);
 			TextView v2= new TextView(this);
-			v2.setText(summaryobject.floatToString(consumedarray[i]));
+			v2.setText(String.format(decimalFlag, consumedarray[i]));
 			TextView v3= new TextView(this);
-			v3.setText(summaryobject.floatToString(paidarray[i]));
+			v3.setText(String.format(decimalFlag, paidarray[i]));
 			
 			v1.setLayoutParams(new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1.1f));
 			v2.setLayoutParams(new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1.2f));

@@ -35,6 +35,7 @@ public class EditGroupActivity extends Activity {
 	private String[] namearray;
 	private String groupName="";
 	private int groupid = 0;
+	private int grpCurrency = 0;
 	private int numbermembers = 0, lastItemCount = 0;
 
 	private GroupDatabase gpdb;
@@ -49,6 +50,7 @@ public class EditGroupActivity extends Activity {
 		groupName=intent.getStringExtra(GroupsActivity.GROUP_NAME);
 		groupid = intent.getIntExtra(GroupsActivity.GROUP_ID,0);
 		namearray = intent.getStringArrayExtra(GroupSummaryActivity.listofmember);
+		grpCurrency = intent.getIntExtra(GroupSummaryActivity.groupCurrencyId,0);
 		String database="Database_"+groupid;
 		gpdb=GroupDatabase.get(this, database);
 		String new_title= groupName+" - "+String.valueOf(this.getTitle());
@@ -280,6 +282,7 @@ public class EditGroupActivity extends Activity {
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		intent.putExtra(GroupsActivity.GROUP_NAME, groupName);
 		intent.putExtra(GroupsActivity.GROUP_ID, groupid);
+		intent.putExtra(GroupsActivity.GROUP_CURR_ID, grpCurrency);
 		startActivity(intent);
 	}
 	@Override

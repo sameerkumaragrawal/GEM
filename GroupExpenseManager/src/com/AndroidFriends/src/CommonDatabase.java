@@ -84,20 +84,28 @@ public class CommonDatabase extends SQLiteOpenHelper{
 		return currencyId;
 	}
 	
+	public int getCurrencyDecimals(int grpCurrency){
+		Cursor idquery = getDB().rawQuery("SELECT Decimals FROM " + currencyTable +" WHERE ID = ?",new String[]{String.valueOf(grpCurrency)});
+		idquery.moveToFirst();
+		int currencyId = idquery.getInt(0);
+
+		return currencyId;
+	}
+	
 	public String[] getCurrencies() {
-		Cursor mquery = getDB().rawQuery("SELECT Name FROM " + currencyTable + ";", null);
+		Cursor mquery = getDB().rawQuery("SELECT * FROM " + currencyTable + ";", null);
 		mquery.moveToFirst();
 		String[] currencyArray = new String[mquery.getCount()];
 		int i = 0;
 		do{
-			currencyArray[i] = mquery.getString(0);
+			currencyArray[i] = mquery.getString(1) + " (" + mquery.getString(2) + ")";
 			i++;
 		}while(mquery.moveToNext());
 		
 		return currencyArray;
 	}
 	
-	public int insert(String name){
+	public int insert(String name, int currencyId){
 		int ID=1;
 		Cursor isPresent=getDB().rawQuery("SELECT ID FROM " + tableName + " WHERE Name = ?", new String[]{name});
 		if(isPresent.getCount()>0){
@@ -110,6 +118,7 @@ public class CommonDatabase extends SQLiteOpenHelper{
 		ContentValues values = new ContentValues();
 		values.put("ID", ID);
 		values.put("Name", name);
+		values.put("Currency", currencyId);
 		getDB().insert(tableName,null,values);
 
 		return ID;

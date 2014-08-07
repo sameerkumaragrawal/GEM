@@ -34,30 +34,25 @@ public class AddEventActivity extends Activity {
 	private int ndialogs = 0;
 	private String grpName = "";
 	private int grpid = 0;
+	private int currencyDecimals = 2;
 	private String[] namearray =null;
 	private LayoutInflater inflater;
 	private Spinner eventSpinner, memberSpinner;
 	private Button doneButton;
-
 	private EditText highlightedEditText=null;
-	
 	private LinearLayout plist;
 	ArrayList<CustomRemoveListener1> plistListeners;
-	
 	private LinearLayout slist;
 	ArrayList<CustomRemoveListener2> slistRListeners;
 	ArrayList<CustomClickListener> slistCListeners;
-
 	AlertDialog.Builder alertDialogBuilder;
-
 	private List<boolean[]> checkedItems = null;
 	private boolean[] tempCheckedItems = null;
-
 	private CharSequence[] items;
-
 	private int popupsize = 0;
-
 	private GroupDatabase gpdb;
+	private String decimalFlag;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -67,6 +62,9 @@ public class AddEventActivity extends Activity {
 		grpid = intent.getIntExtra(GroupsActivity.GROUP_ID,0);
 		String database="Database_"+grpid;
 		namearray = intent.getStringArrayExtra(GroupSummaryActivity.listofmember);
+		currencyDecimals = intent.getIntExtra(GroupSummaryActivity.stringDecimals, 0);
+		decimalFlag = "%." + currencyDecimals + "f";
+		
 		String new_title= grpName+" - "+String.valueOf(this.getTitle());
 		this.setTitle(new_title);
 		setContentView(R.layout.activity_add_event);
@@ -302,7 +300,8 @@ public class AddEventActivity extends Activity {
 				amountspent += Float.valueOf(amt);
 			}
 		}
-		s = String.valueOf((int) (amountpaid-amountspent));
+		float hintAmount = amountpaid-amountspent;
+		s = String.format(decimalFlag, hintAmount);
 		return s;
 	}
 	
