@@ -8,8 +8,8 @@ import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.AndroidFriends.R;
 
@@ -53,7 +53,7 @@ public class MainActivity extends Activity {
 		super.onConfigurationChanged(newConfig);
 	}
     
-    public static void setWeight(TextView v, float w){
+    public static void setWeight(View v, float w){
 		LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) v.getLayoutParams();
 		params.weight = w;
 		v.setLayoutParams(params);

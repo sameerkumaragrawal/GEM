@@ -177,8 +177,8 @@ public class AddEventActivity extends Activity {
 		LinearLayout individualExpense2 = (LinearLayout) findViewById(R.id.addIndividualExpense2);
 		individualExpense2.setVisibility(View.VISIBLE);
 		
-		removeMember1(null);
-		removeMember2(null);
+		removeAllMember1(null);
+		removeAllMember2(null);
 		
 		addItemsOnMemberSpinner();
 	}
@@ -218,7 +218,7 @@ public class AddEventActivity extends Activity {
 		nspinners++;
 	}
 	
-	public void removeMember1(View v) {
+	public void removeAllMember1(View v) {
 		plist.removeAllViews();
 		nspinners = 0;
 	}
@@ -275,7 +275,7 @@ public class AddEventActivity extends Activity {
 		ndialogs++;
 	}
 	
-	public void removeMember2(View v) {
+	public void removeAllMember2(View v) {
 		slist.removeAllViews();
 		ndialogs = 0;
 	}

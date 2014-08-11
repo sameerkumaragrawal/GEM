@@ -1,27 +1,19 @@
 package com.AndroidFriends.src;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,9 +22,11 @@ import com.AndroidFriends.R;
 
 public class EditGroupActivity extends Activity {
 
-	private ListView list;
-	private ArrayList<String> items;
-	private ListAdaptor adaptor;
+	private LinearLayout list;
+	private LayoutInflater inflater;
+	String[] members = null;
+	ArrayList<CustomRemoveClickListener> listListeners;
+	
 	private Spinner currencySpinner;
 	private ArrayList<String> listofcurrency = null;
 	private String[] currencyArray=null;
@@ -42,7 +36,7 @@ public class EditGroupActivity extends Activity {
 	private int initialGrpCurrency;
 	private int groupid = 0;
 	private int grpCurrency = 0;
-	private int numbermembers = 0, lastItemCount = 0;
+	private int numbermembers = 0, numberItems = 0;
 
 	private GroupDatabase gpdb;
 	private CommonDatabase commondb;
@@ -67,25 +61,25 @@ public class EditGroupActivity extends Activity {
 		currencyList();
 		addItemsOnCurrencySpinner();
 		
-		adaptor = new ListAdaptor(this);
-		items = new ArrayList<String>();
-
-		list = (ListView) findViewById(R.id.newGroupListView);
-
-		list.setAdapter(adaptor);
-		items.add(groupName);
+		inflater = LayoutInflater.from(this);
+		list = (LinearLayout) findViewById(R.id.newGroupListView);
+		listListeners = new ArrayList<CustomRemoveClickListener>();
 		
-
 		numbermembers=namearray.length;
-
+		
+		addInitialMember(groupName);
+		
 		for(int j=0; j<numbermembers; j++){
-			items.add(namearray[j]);
+			addInitialMember(namearray[j]);
 		}
-		lastItemCount = items.size();
-		adaptor.notifyDataSetChanged();
 		
-		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-		
+	}
+	
+	public void addInitialMember(String txt){
+		addMember(null);
+		View row = (View)list.getChildAt(numberItems-1);
+		EditText et = (EditText) row.findViewById(R.id.new_group_item_et);
+		et.setText(txt);
 	}
 	
 	public void currencyList(){
@@ -108,87 +102,33 @@ public class EditGroupActivity extends Activity {
 
 
 	public void addMember(View v){
-		items.add("");
-		adaptor.notifyDataSetChanged();
-		list.setSelection(items.size()-1);
-	}
-
-	private class ListAdaptor extends BaseAdapter{
-
-		private LayoutInflater inflater;
-
-		public ListAdaptor(Context context){
-			inflater = LayoutInflater.from(context);
-		}
-
-		public int getCount() {
-			return items.size();
-		}
-
-		public String getItem(int position) {
-			return items.get(position);
-		}
-
-		public long getItemId(int position) {
-			return position;
-		}
-
-		public View getView(int position, View convertView, ViewGroup parent) {
-			Holder holder;
-			if(convertView == null){
-				convertView = inflater.inflate(R.layout.new_group_item, null);
-				holder = new Holder();
-				holder.memberText = (TextView)convertView.findViewById(R.id.new_group_item_tv);
-				holder.name = (EditText)convertView.findViewById(R.id.new_group_item_et);
-				holder.removeButton = (ImageButton)convertView.findViewById(R.id.new_group_item_ib);
-				holder.watcher = new CustomTextWatcher();
-				holder.name.addTextChangedListener(holder.watcher);
-				holder.removeListener= new CustomRemoveClickListener(); 
-				holder.removeButton.setOnClickListener(holder.removeListener);
-				convertView.setTag(holder);
-			}else{
-				holder = (Holder) convertView.getTag();
+		int position = numberItems;
+		View convertView = inflater.inflate(R.layout.new_group_item, null);
+		ImageButton removeButton = (ImageButton)convertView.findViewById(R.id.new_group_item_ib);
+		CustomRemoveClickListener removeListener = new CustomRemoveClickListener(); 
+		removeListener.setPosition(position);
+		removeButton.setOnClickListener(removeListener);
+		
+		listListeners.add(removeListener);
+		TextView memberText = (TextView)convertView.findViewById(R.id.new_group_item_tv);
+	
+		if(position==0){
+			removeButton.setVisibility(View.INVISIBLE);
+			MainActivity.setWeight(removeButton, 0);
+			memberText.setText("Group Name");
+		}else{
+			if(position <= numbermembers){
+				removeButton.setVisibility(View.INVISIBLE);
+				MainActivity.setWeight(removeButton, 0);
 			}
-			holder.removeListener.setPosition(position);
-			holder.watcher.setPosition(position);
-			holder.name.setText(items.get(position));
-			
-			if((position == getCount()-1) && (lastItemCount < getCount())){
-				holder.name.requestFocus();
-				lastItemCount++;
+			else{
+				removeButton.setVisibility(View.VISIBLE);
+				MainActivity.setWeight(removeButton, MainActivity.imagebuttonweight);
 			}
-			
-			if(position==0){
-				holder.removeButton.setVisibility(View.INVISIBLE);
-				holder.setWeight(0);
-				holder.memberText.setText("Group Name");
-			}else{
-				if(position <= numbermembers){
-					holder.removeButton.setVisibility(View.INVISIBLE);
-					holder.setWeight(0);
-				}else{
-					holder.removeButton.setVisibility(View.VISIBLE);
-					holder.setWeight(MainActivity.imagebuttonweight);
-				}
-				holder.memberText.setText("Member "+(position));
-			}
-			
-			return convertView;
+			memberText.setText("Member "+(position));
 		}
-
-	}
-
-	private class Holder{
-		TextView memberText;
-		EditText name;
-		CustomTextWatcher watcher;
-		ImageButton removeButton;
-		CustomRemoveClickListener removeListener;
-		public void setWeight(float d){
-			LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) removeButton.getLayoutParams();
-			params.weight = d;
-			removeButton.setLayoutParams(params);
-		}
+		list.addView(convertView);
+		numberItems++;
 	}
 
 	private class CustomRemoveClickListener implements OnClickListener{
@@ -198,92 +138,78 @@ public class EditGroupActivity extends Activity {
 		public void setPosition(int pos){
 			position = pos;
 		}
+		
 		public void onClick(View v) {
-			items.remove(position);
-			adaptor.notifyDataSetChanged();
-			lastItemCount--;
+			listListeners.remove(position);
+			list.removeViewAt(position);
+			listNotifyDataSetChanged();
+			numberItems--;
 			
 		}
 
 	}
 
-	private class CustomTextWatcher implements TextWatcher{
-
-		private int position;
-
-		public void setPosition(int pos){
-			position = pos;
+	public void listNotifyDataSetChanged(){
+		int k=0;
+		for (CustomRemoveClickListener lis : listListeners) {
+			lis.setPosition(k);
+			k++;
 		}
-
-		public void beforeTextChanged(CharSequence s, int start, int count,
-				int after) {
-			// TODO Auto-generated method stub
-
-		}
-
-		public void onTextChanged(CharSequence s, int start, int before,
-				int count) {
-			// TODO Auto-generated method stub
-
-		}
-
-		public void afterTextChanged(Editable s) {
-			items.set(position, s.toString());
-		}
-
 	}
-
+	
 	public void createToast(String message){
 		Toast n = Toast.makeText(EditGroupActivity.this,message, Toast.LENGTH_SHORT);
 		n.setGravity(Gravity.CENTER_VERTICAL,0,0);
 		n.show();
 	}
 
-	public boolean checkMemberName(String name){
+	public boolean checkMemberName(String name, int pos){
 		if (name.equals("")){
 			createToast("Error! Cannot leave a member name empty");
 			return false;
 		}
-		int occurrences = Collections.frequency(items, name);
-		if(items.indexOf(name) == 0 && occurrences > 2){
-			createToast("Error! Member "+name+" already exists");
-			return false;
-		}else if(items.indexOf(name) > 0 && occurrences > 1){
-			createToast("Error! Member "+name+" already exists");
-			return false;
+		
+		for(int i=0;i<pos;i++){
+			if(members[i].equals(name)){
+				createToast("Error! Member "+name+" already exists");
+				return false;
+			}
 		}
 		return true;
 	}
 
 	public void done(View v){
-		int itemsize = items.size() - 1;
 
-		if(itemsize<1){
+		if(numberItems<1){
 			createToast("Error! Group cannot be empty");
 			return;
 		}
 
-		String group_name = items.get(0);
+		View group_row = (View) list.getChildAt(0);
+		EditText group_et = (EditText) group_row.findViewById(R.id.new_group_item_et);
+		String group_name = group_et.getText().toString();
 
 		if(group_name.equals("")){
 			createToast("Error! Cannot leave the group name empty");
 			return;
 		}
 
-		String[] members = new String[itemsize];
+		int numberOfMembers = numberItems - 1;
+		members = new String[numberOfMembers];
 
-		for(int j=0;j<itemsize;j++){
+		for(int j=0;j<numberOfMembers;j++){
 			members[j]="";
 		}
 
-		for (int k=0; k<itemsize; k++) {
-			String temp = items.get(k+1);
-
-			if (!checkMemberName(temp)){
+		for (int k=0; k<numberOfMembers; k++) {
+			View row = (View) list.getChildAt(k+1);
+			EditText et = (EditText) row.findViewById(R.id.new_group_item_et);
+			members[k] = et.getText().toString();
+			if (!checkMemberName(members[k],k)){
 				return;
 			}
-			members[k] = temp;
 		}
+		
 		grpCurrency = currencySpinner.getSelectedItemPosition() + 1;
 		if(!updatedatabase(group_name,members,grpCurrency)){
 			return;

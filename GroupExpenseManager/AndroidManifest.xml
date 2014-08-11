@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.AndroidFriends"
-    android:versionCode="23"
-    android:versionName="2.1.1" >
+    android:versionCode="24"
+    android:versionName="2.2" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -87,6 +87,7 @@
         </activity>
         <activity
             android:name="com.AndroidFriends.src.EditGroupActivity"
+            android:windowSoftInputMode="stateHidden"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:label="@string/title_activity_edit_group" >
         </activity>
