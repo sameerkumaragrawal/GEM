@@ -14,8 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
@@ -55,14 +53,6 @@ public class NewGroupActivity extends Activity {
 
 		currencyList();
 		addItemsOnCurrencySpinner();
-		currencySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-			public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-				currencyId = position;
-			}	
-			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
-			}
-		});
 	}
 	
 	public void currencyList(){
@@ -84,12 +74,9 @@ public class NewGroupActivity extends Activity {
 	}
 
 	public void addMember(View v) {
-		//Log.e("Sameer", "Here");
-		//list.setSelection(items.size()-1);
 		items.add("");
 		adaptor.notifyDataSetChanged();
 		list.setSelection(items.size()-1);
-		//Log.e("Sameer", "Here2 " + items.size());
 	}
 
 	private class ListAdaptor extends BaseAdapter{

@@ -16,8 +16,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
@@ -64,35 +62,30 @@ public class EditGroupActivity extends Activity {
 		gpdb=GroupDatabase.get(this, database);
 		String new_title= groupName+" - "+String.valueOf(this.getTitle());
 		this.setTitle(new_title);
-		setContentView(R.layout.activity_edit_group);
+		setContentView(R.layout.activity_new_group);
 		
 		currencyList();
 		addItemsOnCurrencySpinner();
-		currencySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-			public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-				grpCurrency = position+1;
-			}	
-			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
-			}
-		});
 		
 		adaptor = new ListAdaptor(this);
 		items = new ArrayList<String>();
 
-		list = (ListView) findViewById(R.id.editGroupListView);
+		list = (ListView) findViewById(R.id.newGroupListView);
 
 		list.setAdapter(adaptor);
 		items.add(groupName);
+		
 
 		numbermembers=namearray.length;
 
 		for(int j=0; j<numbermembers; j++){
 			items.add(namearray[j]);
 		}
+		lastItemCount = items.size();
 		adaptor.notifyDataSetChanged();
-
+		
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+		
 	}
 	
 	public void currencyList(){
@@ -104,7 +97,7 @@ public class EditGroupActivity extends Activity {
 	}
 	
 	public void addItemsOnCurrencySpinner() {
-		currencySpinner = (Spinner) findViewById(R.id.editCurrencyDropdown);
+		currencySpinner = (Spinner) findViewById(R.id.currencyDropdown);
 		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_item, listofcurrency);
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -143,11 +136,11 @@ public class EditGroupActivity extends Activity {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			Holder holder;
 			if(convertView == null){
-				convertView = inflater.inflate(R.layout.edit_group_item, null);
+				convertView = inflater.inflate(R.layout.new_group_item, null);
 				holder = new Holder();
-				holder.memberText = (TextView)convertView.findViewById(R.id.edit_group_item_tv);
-				holder.name = (EditText)convertView.findViewById(R.id.edit_group_item_et);
-				holder.removeButton = (ImageButton)convertView.findViewById(R.id.edit_group_item_ib);
+				holder.memberText = (TextView)convertView.findViewById(R.id.new_group_item_tv);
+				holder.name = (EditText)convertView.findViewById(R.id.new_group_item_et);
+				holder.removeButton = (ImageButton)convertView.findViewById(R.id.new_group_item_ib);
 				holder.watcher = new CustomTextWatcher();
 				holder.name.addTextChangedListener(holder.watcher);
 				holder.removeListener= new CustomRemoveClickListener(); 
@@ -209,6 +202,7 @@ public class EditGroupActivity extends Activity {
 			items.remove(position);
 			adaptor.notifyDataSetChanged();
 			lastItemCount--;
+			
 		}
 
 	}
@@ -261,7 +255,7 @@ public class EditGroupActivity extends Activity {
 		return true;
 	}
 
-	public void doneEditGroup(View v){
+	public void done(View v){
 		int itemsize = items.size() - 1;
 
 		if(itemsize<1){
@@ -290,6 +284,7 @@ public class EditGroupActivity extends Activity {
 			}
 			members[k] = temp;
 		}
+		grpCurrency = currencySpinner.getSelectedItemPosition() + 1;
 		if(!updatedatabase(group_name,members,grpCurrency)){
 			return;
 		}
