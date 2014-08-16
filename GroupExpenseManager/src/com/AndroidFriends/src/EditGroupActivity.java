@@ -3,6 +3,8 @@ package com.AndroidFriends.src;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -214,7 +216,32 @@ public class EditGroupActivity extends Activity {
 		if(!updatedatabase(group_name,members,grpCurrency)){
 			return;
 		}
-		finishedit();
+		if (initialGrpCurrency != grpCurrency) {
+			currencyAlert(null);
+		}
+		else {
+			finishedit();
+		}
+	}
+	
+	public void currencyAlert(View v) {
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+		alertDialogBuilder.setTitle("Change Currency");
+		alertDialogBuilder
+		.setMessage("Please note that changing the currency only changes the unit and not the actual values")
+		.setCancelable(true)
+		.setPositiveButton("Ok",new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				finishedit();
+			}
+		})
+		.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		});
+		AlertDialog alertDialog = alertDialogBuilder.create();
+		alertDialog.show();
 	}
 
 	public boolean updatedatabase(String grpname,String[] members,int currencyId){
