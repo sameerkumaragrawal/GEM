@@ -108,6 +108,16 @@
             android:orientation="vertical"
             android:padding="10dp" >
         </LinearLayout>
+        
+        <TextView 
+            android:id="@+id/currencyDisplayText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+			android:textStyle="bold"
+            android:padding="10dp" >
+        </TextView>
 
         <LinearLayout
             android:id="@+id/groupSummaryBottomLinearLayout"

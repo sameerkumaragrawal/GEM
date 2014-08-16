@@ -87,6 +87,7 @@ public class GroupSummaryActivity extends Activity {
 		decimalFlag = "%." + currencyDecimals + "f";
 		MemberListWithBalance();
 		fillEntryInTable();
+		displayCurrency();
 	}
 
 	@Override
@@ -94,6 +95,7 @@ public class GroupSummaryActivity extends Activity {
 		super.onRestart();
 		MemberListWithBalance();
 		correctEntryInTable();
+		displayCurrency();
 	}
 
 	@Override
@@ -202,6 +204,15 @@ public class GroupSummaryActivity extends Activity {
 				v2.setText(null);
 			}
 		}
+	}
+	
+	public void displayCurrency() {
+		TextView currencyText = (TextView) findViewById(R.id.currencyDisplayText);
+		String text = "(All amounts displayed are in ";
+		String currencyAbbr = commondb.getCurrencySymbol(grpCurrency);
+		text += currencyAbbr;
+		text += ")";
+		currencyText.setText(text);
 	}
 
 	public void cashTransfer(View v) {

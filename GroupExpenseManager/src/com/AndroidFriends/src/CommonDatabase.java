@@ -91,6 +91,13 @@ public class CommonDatabase extends SQLiteOpenHelper{
 		return currencyId;
 	}
 	
+	public String getCurrencySymbol(int grpCurrency) {
+		Cursor idquery = getDB().rawQuery("SELECT Symbol FROM " + currencyTable +" WHERE ID = ?",new String[]{String.valueOf(grpCurrency)});
+		idquery.moveToFirst();
+		String currencySymbol = idquery.getString(0);
+		return currencySymbol;
+	}
+	
 	public String[] getCurrencies() {
 		Cursor mquery = getDB().rawQuery("SELECT * FROM " + currencyTable + ";", null);
 		mquery.moveToFirst();
