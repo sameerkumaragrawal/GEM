@@ -213,7 +213,7 @@ public class EditGroupActivity extends Activity {
 		}
 		
 		grpCurrency = currencySpinner.getSelectedItemPosition() + 1;
-		if(!updatedatabase(group_name,members,grpCurrency)){
+		if(!updatedatabase(group_name,members)){
 			return;
 		}
 		if (initialGrpCurrency != grpCurrency) {
@@ -232,6 +232,7 @@ public class EditGroupActivity extends Activity {
 		.setCancelable(true)
 		.setPositiveButton("Ok",new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
+				commondb.updateGroupCurrency(grpCurrency, groupid);
 				finishedit();
 			}
 		})
@@ -244,15 +245,11 @@ public class EditGroupActivity extends Activity {
 		alertDialog.show();
 	}
 
-	public boolean updatedatabase(String grpname,String[] members,int currencyId){
+	public boolean updatedatabase(String grpname,String[] members){
 		if(!grpname.equals(groupName)){
 			if(!updategroupname(grpname)){
 				return false;
 			}
-		}
-		
-		if(currencyId != initialGrpCurrency){
-			commondb.updateGroupCurrency(currencyId, groupid);
 		}
 		
 		groupName=grpname;
