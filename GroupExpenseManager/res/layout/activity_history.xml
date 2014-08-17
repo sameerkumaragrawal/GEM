@@ -73,7 +73,7 @@
             
             <Button
 	            android:id="@+id/previousButton"
-	            android:layout_width="match_parent"
+	            android:layout_width="0dp"
 	            android:layout_height="wrap_content"
 	            android:layout_weight="1"
 	            android:layout_gravity="center"
@@ -82,7 +82,7 @@
             
             <Button
 	            android:id="@+id/nextButton"
-	            android:layout_width="match_parent"
+	            android:layout_width="0dp"
 	            android:layout_height="wrap_content"
 	            android:layout_weight="1"
 	            android:layout_gravity="center"
@@ -178,7 +178,7 @@
             
             <Button
 	            android:id="@+id/editButton"
-	            android:layout_width="match_parent"
+	            android:layout_width="0dp"
 	            android:layout_height="wrap_content"
 	            android:layout_weight="1"
 	            android:layout_gravity="center"
@@ -187,7 +187,7 @@
             
             <Button
 	            android:id="@+id/deleteButton"
-	            android:layout_width="match_parent"
+	            android:layout_width="0dp"
 	            android:layout_height="wrap_content"
 	            android:layout_weight="1"
 	            android:layout_gravity="center"

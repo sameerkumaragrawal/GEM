@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -30,10 +31,10 @@ public class HistoryActivity extends Activity {
 	private String grpName = "";
 	private int grpid = 0;
 	private int currencyDecimals = 2;
-	private int eventId = 0;
+	private int eventIdArrayPosition = 0;
 	private int memberId = 0;
 	private String[] namearray=null;
-	private Spinner spin1, memberSpin=null;
+	private Spinner eventSpin, memberSpin=null;
 	private List<String> listofevents = null;
 	private List<String> listofmembers = null;
 	private int[] idarray = null;
@@ -87,14 +88,17 @@ public class HistoryActivity extends Activity {
 	public void fillEvents(int member) {
 		EventList(member);
 		addItemsOnSpinner();
+		
+		//below condition not required
 		if(idarray.length>0){
 			filltable(0);
 		}
-		spin1.setOnItemSelectedListener(new OnItemSelectedListener() {
+		
+		eventSpin.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) 
 			{
-				eventId = position;
+				eventIdArrayPosition = position;
 				filltable(position);
 			}	
 			public void onNothingSelected(AdapterView<?> arg0) {
@@ -126,12 +130,12 @@ public class HistoryActivity extends Activity {
 
 	public void addItemsOnSpinner() {
 
-		spin1 = (Spinner) findViewById(R.id.historyDropdown);
+		eventSpin = (Spinner) findViewById(R.id.historyDropdown);
 		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_item, listofevents);
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spin1.setAdapter(dataAdapter);
-		spin1.setPrompt("Select Event");
+		eventSpin.setAdapter(dataAdapter);
+		eventSpin.setPrompt("Select Event");
 	}
 	
 	public void addItemsOnMemberSpinner() {
@@ -176,6 +180,26 @@ public class HistoryActivity extends Activity {
 		int tempflag = flagarray[position];
 		LinearLayout editLayout = (LinearLayout) findViewById(R.id.editLayout);
 		
+		//Prev Next Button Visibility
+		LinearLayout prevNext = (LinearLayout)findViewById(R.id.previousNextLayout);
+		Button prev = (Button)prevNext.findViewById(R.id.previousButton);
+		Button next = (Button)prevNext.findViewById(R.id.nextButton);
+		
+		if(eventIdArrayPosition == 0){
+			prev.setVisibility(View.INVISIBLE);
+		}else{
+			prev.setVisibility(View.VISIBLE);
+		}
+		
+		int lastEventPosition = idarray.length - 1;
+		
+		if(eventIdArrayPosition == lastEventPosition){
+			next.setVisibility(View.INVISIBLE);
+		}else{
+			next.setVisibility(View.VISIBLE);
+		}
+		
+		//Edit delete button Visibility
 		if (tempflag == GroupDatabase.deletedEventFlag || tempflag == GroupDatabase.deletedCashTransferFlag) {
 			editLayout.setVisibility(View.GONE);
 		}
@@ -234,15 +258,15 @@ public class HistoryActivity extends Activity {
 	}
 	
 	public void previousEvent(View v) {
-
+		eventSpin.setSelection(eventIdArrayPosition - 1);
 	}
 	
 	public void nextEvent(View v) {
-
+		eventSpin.setSelection(eventIdArrayPosition + 1);
 	}
 	
 	public void editEvent(View v) {
-
+		
 	}
 	
 	public void deleteEvent(View v) {
@@ -253,7 +277,7 @@ public class HistoryActivity extends Activity {
 		.setCancelable(true)
 		.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
-				deleteEventFromDatabase(eventId);
+				deleteEventFromDatabase(eventIdArrayPosition);
 			}
 		})
 		.setNegativeButton("No",new DialogInterface.OnClickListener() {
@@ -304,7 +328,7 @@ public class HistoryActivity extends Activity {
 		}catch(Exception e){}
 		
 		fillEvents(memberId);
-		spin1.setSelection(eventId);
+		eventSpin.setSelection(eventIdArrayPosition);
 	}
 	
 	@Override
