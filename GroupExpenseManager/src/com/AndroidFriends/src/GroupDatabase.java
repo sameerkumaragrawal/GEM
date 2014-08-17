@@ -1,24 +1,38 @@
+/* Event table -
+ * Flag column has:
+ * 1 if event
+ * 2 if cash transfer
+ * 8 if deleted event
+ * 9 if deleted cash transfer
+ */
+
 package com.AndroidFriends.src;
 
 import java.util.List;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
 
 public class GroupDatabase extends SQLiteOpenHelper{
 	private static String DATABASE_NAME = null;
 	private static final int DATABASE_VERSION = 2;
-
+	
+	public final static int eventFlag = 1;
+	public final static int cashTransferFlag = 2;
+	public final static int deletedEventFlag = 8;
+	public final static int deletedCashTransferFlag = 9;
+	
 	public final static String MemberTable = "Members";
 	public final static String EventTable = "Events";
 	public final static String TransTable = "Transactions";
 	public final static String CashTable = "CashTransfer";
 
 	public final static String createMember = "CREATE TABLE IF NOT EXISTS "+GroupDatabase.MemberTable+" ( ID int(11) NOT NULL, Name varchar(255) NOT NULL, Paid float NOT NULL, Consumed float NOT NULL );";
-	public final static String createEvent = "CREATE TABLE IF NOT EXISTS "+GroupDatabase.EventTable+" ( ID int(11) NOT NULL, Name varchar(255) NOT NULL, Flag int(1) );";
+	public final static String createEvent = "CREATE TABLE IF NOT EXISTS "+GroupDatabase.EventTable+" ( ID int(11) NOT NULL, Name varchar(255) NOT NULL, Flag int(1));";
 	public final static String createTrans = "CREATE TABLE IF NOT EXISTS "+GroupDatabase.TransTable+" ( MemberId int(11) NOT NULL, Paid float, Consumed float, EventId int(11) NOT NULL );";
 	public final static String createCash = "CREATE TABLE IF NOT EXISTS "+GroupDatabase.CashTable+" ( FromMemberId int(11) NOT NULL, ToMemberId int(11) NOT NULL, Amount float NOT NULL, ID int(11) NOT NULL);";
 
@@ -110,9 +124,56 @@ public class GroupDatabase extends SQLiteOpenHelper{
 		return c;
 	}
 	
+	public void DeleteFromTransList(int id){
+		String newName = "Deleted event - ";
+		Cursor eventQuery = getDB().rawQuery("SELECT Name from " + EventTable + " WHERE ID = " + id, null);
+		eventQuery.moveToFirst();
+		String previousName = eventQuery.getString(0);
+		newName += previousName;
+		getDB().execSQL("UPDATE " + EventTable + " SET Name = ?, Flag = ? WHERE ID = " + id,new Object[]{newName, deletedEventFlag});
+		
+		int memberId;
+		float paid, consumed;
+		Cursor mquery = getDB().rawQuery("SELECT * FROM " + TransTable + " WHERE EventId = " + id, null);
+		mquery.moveToFirst();
+		do{
+			memberId = mquery.getInt(0);
+			paid= mquery.getFloat(1);
+			consumed = mquery.getFloat(2);
+			getDB().execSQL("UPDATE " + MemberTable + " SET Paid = Paid - ?, Consumed = Consumed - ? WHERE ID = " + memberId, new Object[]{paid, consumed});
+		}while(mquery.moveToNext());
+	}
+		
 	public Cursor CashList(int id){
 		Cursor c = getDB().rawQuery("SELECT * FROM " + CashTable+" WHERE ID = " + id,null);
 		return c;
+	}
+	
+	public void DeleteFromCashList(int id){
+		String newName = "Deleted event - ";
+		Cursor eventQuery = getDB().rawQuery("SELECT Name from " + EventTable + " WHERE ID = " + id, null);
+		eventQuery.moveToFirst();
+		String previousName = eventQuery.getString(0);
+		newName += previousName;
+		getDB().execSQL("UPDATE " + EventTable + " SET Name = ?, Flag = ? WHERE ID = " + id,new Object[]{newName, deletedCashTransferFlag});
+		
+		int fromMemberId, toMemberId;
+		float amount;
+		Cursor mquery = getDB().rawQuery("SELECT * FROM " + CashTable + " WHERE ID = " + id, null);
+		mquery.moveToFirst();
+		do{
+			fromMemberId = mquery.getInt(0);
+			toMemberId= mquery.getInt(1);
+			amount = mquery.getFloat(2);
+			getDB().execSQL("UPDATE " + MemberTable + " SET Paid = Paid - ? WHERE ID = " + fromMemberId, new Object[]{amount});
+			getDB().execSQL("UPDATE " + MemberTable + " SET Paid = Paid + ? WHERE ID = " + toMemberId, new Object[]{amount});
+		}while(mquery.moveToNext());
+	}
+	
+	public int getEventFlag(int id) {
+		Cursor mquery = getDB().rawQuery("SELECT Flag FROM " + EventTable + " WHERE ID = " + id, null);
+		mquery.moveToFirst();
+		return mquery.getInt(0);
 	}
 	
 	public Cursor eventList(int member){
@@ -142,7 +203,7 @@ public class GroupDatabase extends SQLiteOpenHelper{
 		ContentValues value1 = new ContentValues();
 		value1.put("ID", ID1);
 		value1.put("Name", eventName);
-		value1.put("Flag", 2);
+		value1.put("Flag", cashTransferFlag);
 		getDB().insert(EventTable,null,value1);
 
 		ContentValues value2 = new ContentValues();
@@ -167,7 +228,7 @@ public class GroupDatabase extends SQLiteOpenHelper{
 		ContentValues value1 = new ContentValues();
 		value1.put("ID", ID1);
 		value1.put("Name", eventName);
-		value1.put("Flag", 1);
+		value1.put("Flag", eventFlag);
 		getDB().insert(EventTable,null,value1);
 
 		float[] memberBalance;

@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -30,6 +32,8 @@ public class HistoryActivity extends Activity {
 	private String grpName = "";
 	private int grpid = 0;
 	private int currencyDecimals = 2;
+	private int eventId = 0;
+	private int memberId = 0;
 	private String[] namearray=null;
 	private Spinner spin1, memberSpin=null;
 	private List<String> listofevents = null;
@@ -71,6 +75,7 @@ public class HistoryActivity extends Activity {
 
 			public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) 
 			{
+				memberId = position;
 				fillEvents(position);
 			}	
 			public void onNothingSelected(AdapterView<?> arg0) {
@@ -91,6 +96,7 @@ public class HistoryActivity extends Activity {
 
 			public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) 
 			{
+				eventId = position;
 				filltable(position);
 			}	
 			public void onNothingSelected(AdapterView<?> arg0) {
@@ -170,11 +176,19 @@ public class HistoryActivity extends Activity {
 		historytable.removeAllViews();
 		int tempid = idarray[position];
 		int tempflag = flagarray[position];
-
+		LinearLayout editLayout = (LinearLayout) findViewById(R.id.editLayout);
+		
+		if (tempflag == GroupDatabase.deletedEventFlag || tempflag == GroupDatabase.deletedCashTransferFlag) {
+			editLayout.setVisibility(View.GONE);
+		}
+		else {
+			editLayout.setVisibility(View.VISIBLE);
+		}
+		
 		String str1,str2,str3;
 		float paid,consumed;
 		try{
-			if(tempflag==1){
+			if(tempflag==GroupDatabase.eventFlag || tempflag==GroupDatabase.deletedEventFlag){
 				historytablerow2.setVisibility(View.GONE);
 				historytablerow1.setVisibility(View.VISIBLE);
 				Cursor mquery = gpdb.TransList(tempid);
@@ -188,7 +202,7 @@ public class HistoryActivity extends Activity {
 					addEntry(str1,str2,str3);
 				}while(mquery.moveToNext());
 			}
-			else if(tempflag==2){
+			else if(tempflag==GroupDatabase.cashTransferFlag || tempflag==GroupDatabase.deletedCashTransferFlag){
 				historytablerow1.setVisibility(View.GONE);
 				historytablerow2.setVisibility(View.VISIBLE);
 				Cursor mquery = gpdb.CashList(tempid);
@@ -220,6 +234,38 @@ public class HistoryActivity extends Activity {
 		
 		historytable.addView(convertView);
 	}
+	
+	public void previousEvent(View v) {
+
+	}
+	
+	public void nextEvent(View v) {
+
+	}
+	
+	public void editEvent(View v) {
+
+	}
+	
+	public void deleteEvent(View v) {
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+		alertDialogBuilder.setTitle("Delete Event");
+		alertDialogBuilder
+		.setMessage("Are you sure you want to delete this event?")
+		.setCancelable(true)
+		.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				deleteEventFromDatabase(eventId);
+			}
+		})
+		.setNegativeButton("No",new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		});
+		AlertDialog alertDialog = alertDialogBuilder.create();
+		alertDialog.show();
+	}
 
 	public void clearAlert(View v) {
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -245,6 +291,24 @@ public class HistoryActivity extends Activity {
 		gpdb.clearlog();
 		this.finish();
 	}
+	
+	public void deleteEventFromDatabase(int position) {
+		int tempid = idarray[position];
+		int tempflag = flagarray[position];
+
+		try{
+			if(tempflag==GroupDatabase.eventFlag){
+				gpdb.DeleteFromTransList(tempid);
+			}
+			else if(tempflag==GroupDatabase.cashTransferFlag){
+				gpdb.DeleteFromCashList(tempid);
+			}
+		}catch(Exception e){}
+		
+		fillEvents(memberId);
+		spin1.setSelection(eventId);
+	}
+	
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		// TODO Auto-generated method stub

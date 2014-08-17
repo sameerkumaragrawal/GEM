@@ -16,7 +16,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingTop="20dp"
-            android:paddingBottom="20dp" >
+            android:paddingBottom="10dp" >
 
             <TextView
                 android:id="@+id/memberHistory"
@@ -43,7 +43,7 @@
             android:orientation="horizontal"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:paddingTop="20dp"
+            android:paddingTop="10dp"
             android:paddingBottom="20dp" >
 
             <TextView
@@ -62,6 +62,32 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1.7"
                 android:gravity="center" />
+        </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/previousNextLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp" >
+            
+            <Button
+	            android:id="@+id/previousButton"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="1"
+	            android:layout_gravity="center"
+	            android:onClick="previousEvent"
+	            android:text="@string/previousEvent" />
+            
+            <Button
+	            android:id="@+id/nextButton"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="1"
+	            android:layout_gravity="center"
+	            android:onClick="nextEvent"
+	            android:text="@string/nextEvent" />
         </LinearLayout>
 
         <LinearLayout
@@ -99,7 +125,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textStyle="bold" />
         </LinearLayout>
-
+        
         <LinearLayout
             android:id="@+id/historyrow2"
             android:layout_width="match_parent"
@@ -142,15 +168,42 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="10dp" />
-
-        <Button
-            android:id="@+id/clearButton"
-            android:layout_width="180dp"
+                    
+        <LinearLayout
+            android:id="@+id/editLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="20dp"
-            android:onClick="clearAlert"
-            android:text="@string/clearhistory" />
+            android:orientation="horizontal"
+            android:padding="10dp" >
+            
+            <Button
+	            android:id="@+id/editButton"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="1"
+	            android:layout_gravity="center"
+	            android:onClick="editEvent"
+	            android:text="@string/editEvent" />
+            
+            <Button
+	            android:id="@+id/deleteButton"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="1"
+	            android:layout_gravity="center"
+	            android:onClick="deleteEvent"
+	            android:text="@string/deleteEvent" />
+        </LinearLayout>
+            
+        <Button
+	         android:id="@+id/clearButton"
+	         android:layout_width="match_parent"
+	         android:layout_height="wrap_content"
+	         android:layout_gravity="center"
+	         android:layout_margin="20dp"
+	         android:onClick="clearAlert"
+	         android:text="@string/clearhistory" />
+
     </LinearLayout>
 
 </ScrollView>
