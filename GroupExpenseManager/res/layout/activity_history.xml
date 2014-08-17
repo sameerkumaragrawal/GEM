@@ -64,31 +64,31 @@
                 android:gravity="center" />
         </LinearLayout>
         
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/previousNextLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="10dp" >
             
-            <Button
+            <ImageButton
 	            android:id="@+id/previousButton"
-	            android:layout_width="match_parent"
+	            android:layout_width="80dp"
 	            android:layout_height="wrap_content"
-	            android:layout_weight="1"
-	            android:layout_gravity="center"
+	            android:layout_alignParentLeft="true"
 	            android:onClick="previousEvent"
-	            android:text="@string/previousEvent" />
+                android:contentDescription="@string/previousEvent"
+	            android:src="@android:drawable/ic_media_previous" />
             
-            <Button
+            <ImageButton
 	            android:id="@+id/nextButton"
-	            android:layout_width="match_parent"
+	            android:layout_width="80dp"
 	            android:layout_height="wrap_content"
-	            android:layout_weight="1"
-	            android:layout_gravity="center"
+	            android:layout_alignParentRight="true"
 	            android:onClick="nextEvent"
-	            android:text="@string/nextEvent" />
-        </LinearLayout>
+                android:contentDescription="@string/nextEvent"
+	            android:src="@android:drawable/ic_media_next"/>
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/historyrow1"
