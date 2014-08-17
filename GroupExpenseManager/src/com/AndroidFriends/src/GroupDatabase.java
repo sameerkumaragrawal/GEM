@@ -31,10 +31,10 @@ public class GroupDatabase extends SQLiteOpenHelper{
 	public final static String TransTable = "Transactions";
 	public final static String CashTable = "CashTransfer";
 
-	public final static String createMember = "CREATE TABLE IF NOT EXISTS "+GroupDatabase.MemberTable+" ( ID int(11) NOT NULL, Name varchar(255) NOT NULL, Paid float NOT NULL, Consumed float NOT NULL );";
-	public final static String createEvent = "CREATE TABLE IF NOT EXISTS "+GroupDatabase.EventTable+" ( ID int(11) NOT NULL, Name varchar(255) NOT NULL, Flag int(1));";
-	public final static String createTrans = "CREATE TABLE IF NOT EXISTS "+GroupDatabase.TransTable+" ( MemberId int(11) NOT NULL, Paid float, Consumed float, EventId int(11) NOT NULL );";
-	public final static String createCash = "CREATE TABLE IF NOT EXISTS "+GroupDatabase.CashTable+" ( FromMemberId int(11) NOT NULL, ToMemberId int(11) NOT NULL, Amount float NOT NULL, ID int(11) NOT NULL);";
+	public final static String createMember = "CREATE TABLE IF NOT EXISTS "+GroupDatabase.MemberTable+" ( ID int(11) NOT NULL, Name varchar(255) NOT NULL, Paid float NOT NULL, Consumed float NOT NULL )";
+	public final static String createEvent = "CREATE TABLE IF NOT EXISTS "+GroupDatabase.EventTable+" ( ID int(11) NOT NULL, Name varchar(255) NOT NULL, Flag int(1))";
+	public final static String createTrans = "CREATE TABLE IF NOT EXISTS "+GroupDatabase.TransTable+" ( MemberId int(11) NOT NULL, Paid float, Consumed float, EventId int(11) NOT NULL )";
+	public final static String createCash = "CREATE TABLE IF NOT EXISTS "+GroupDatabase.CashTable+" ( FromMemberId int(11) NOT NULL, ToMemberId int(11) NOT NULL, Amount float NOT NULL, ID int(11) NOT NULL)";
 
 	private SQLiteDatabase db=null;
 
@@ -53,7 +53,7 @@ public class GroupDatabase extends SQLiteOpenHelper{
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		if(oldVersion<2){
-			Cursor mquery = db.rawQuery("SELECT ID, Name, Balance FROM " + GroupDatabase.MemberTable+";",null);
+			Cursor mquery = db.rawQuery("SELECT ID, Name, Balance FROM " + GroupDatabase.MemberTable,null);
 			int[] idarray = new int[mquery.getCount()];
     		float[] balancearray = new float[mquery.getCount()];
     		String[] namearray = new String[mquery.getCount()];
@@ -115,7 +115,7 @@ public class GroupDatabase extends SQLiteOpenHelper{
 	}
 
 	public Cursor MemberListWithBalance(){
-		Cursor mquery = getDB().rawQuery("SELECT * FROM " + MemberTable+";",null);
+		Cursor mquery = getDB().rawQuery("SELECT * FROM " + MemberTable,null);
 		return mquery;
 	}
 	
@@ -170,14 +170,14 @@ public class GroupDatabase extends SQLiteOpenHelper{
 	
 	public Cursor eventList(int member){
 		if (member==0) {
-			Cursor mquery = getDB().rawQuery("SELECT * FROM " + EventTable+";",null);
+			Cursor mquery = getDB().rawQuery("SELECT * FROM " + EventTable+" ORDER BY ID DESC",null);
 			return mquery;
 		}
 		else {
 			String transQuery = "SELECT EventId FROM " + TransTable + " WHERE MemberId = " + member + " AND (Paid > 0 OR Consumed > 0)";
 			String cashQuery = "SELECT ID as EventId FROM " + CashTable + " WHERE FromMemberId = " + member + " OR ToMemberId = " + member;
 			String eventIdQuery = "(" + transQuery + " UNION " + cashQuery + ") as T1";
-			Cursor mquery = getDB().rawQuery("SELECT * FROM " + EventTable + " JOIN " + eventIdQuery + " ON Events.ID = T1.EventId",null);
+			Cursor mquery = getDB().rawQuery("SELECT * FROM " + EventTable + " JOIN " + eventIdQuery + " ON Events.ID = T1.EventId ORDER BY ID DESC",null);
 			return mquery;
 		}
 	}
@@ -281,7 +281,7 @@ public class GroupDatabase extends SQLiteOpenHelper{
 		ContentValues value1 = new ContentValues();
 		value1.put("ID", ID1);
 		value1.put("Name", eventName);
-		value1.put("Flag", 1);
+		value1.put("Flag", eventFlag);
 		getDB().insert(EventTable,null,value1);
 		
 		ContentValues value2 = new ContentValues();
@@ -311,9 +311,20 @@ public class GroupDatabase extends SQLiteOpenHelper{
 			count.moveToLast();
 			ID1=count.getInt(0)+1;
 		}
-		getDB().execSQL("INSERT INTO " + EventTable + " ( ID, Name, Flag ) VALUES ( '" + ID1+"', 'Balance Settle', '2' );" );
+		
+		ContentValues value1 = new ContentValues();
+		value1.put("ID", ID1);
+		value1.put("Name", "Balance Settle");
+		value1.put("Flag", cashTransferFlag);
+		getDB().insert(EventTable,null,value1);
+		
 		for(int i=0;i<ntransactions;i++){
-			getDB().execSQL("INSERT INTO "+ CashTable + " ( ID, FromMemberId, ToMemberId, Amount ) VALUES ( '"+ID1+"', '"+solutionarray[i][1]+"', '"+solutionarray[i][3]+"', '"+tramountarray[i]+"');" );
+			ContentValues value2 = new ContentValues();
+			value2.put("ID", ID1);
+			value2.put("FromMemberId", solutionarray[i][1]);
+			value2.put("ToMemberId", solutionarray[i][3]);
+			value2.put("Amount",tramountarray[i]);
+			getDB().insert(CashTable,null,value2);
 		}
 		getDB().execSQL("UPDATE "+MemberTable+" SET Paid = 0, Consumed = 0;");
 

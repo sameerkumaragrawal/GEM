@@ -14,8 +14,8 @@ public class CommonDatabase extends SQLiteOpenHelper{
 	public static final String tableName = "Groups";
 	public static final String currencyTable = "Currencies";
 	
-	public final static String createMainTable = "CREATE TABLE IF NOT EXISTS " + tableName + " ( ID int(11) NOT NULL, Name varchar(255) NOT NULL, Currency int(2) NOT NULL DEFAULT 1);";
-	public final static String createCurrencyTable = "CREATE TABLE IF NOT EXISTS " + currencyTable + " ( ID int(2) NOT NULL, Name varchar(255) NOT NULL, Symbol varchar(3) NOT NULL, Decimals int(1) NOT NULL);";
+	public final static String createMainTable = "CREATE TABLE IF NOT EXISTS " + tableName + " ( ID int(11) NOT NULL, Name varchar(255) NOT NULL, Currency int(2) NOT NULL DEFAULT 1)";
+	public final static String createCurrencyTable = "CREATE TABLE IF NOT EXISTS " + currencyTable + " ( ID int(2) NOT NULL, Name varchar(255) NOT NULL, Symbol varchar(3) NOT NULL, Decimals int(1) NOT NULL)";
 	
 	private SQLiteDatabase db=null;
 
@@ -51,7 +51,7 @@ public class CommonDatabase extends SQLiteOpenHelper{
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		try{
 			if(oldVersion < 3){
-				db.execSQL("ALTER TABLE " + tableName +" ADD COLUMN Currency int(2) NOT NULL DEFAULT 1;");
+				db.execSQL("ALTER TABLE " + tableName +" ADD COLUMN Currency int(2) NOT NULL DEFAULT 1");
 				createCurrencyTable(db);
 			}
 		}catch(Exception e){
@@ -61,7 +61,7 @@ public class CommonDatabase extends SQLiteOpenHelper{
 	}
 
 	public Cursor groupList(){
-		Cursor gquery = getDB().rawQuery("SELECT Name FROM " + tableName+";",null);
+		Cursor gquery = getDB().rawQuery("SELECT Name FROM " + tableName,null);
 		return gquery;
 	}
 
@@ -97,7 +97,7 @@ public class CommonDatabase extends SQLiteOpenHelper{
 	}
 	
 	public String[] getCurrencies() {
-		Cursor mquery = getDB().rawQuery("SELECT * FROM " + currencyTable + ";", null);
+		Cursor mquery = getDB().rawQuery("SELECT * FROM " + currencyTable, null);
 		mquery.moveToFirst();
 		String[] currencyArray = new String[mquery.getCount()];
 		int i = 0;
