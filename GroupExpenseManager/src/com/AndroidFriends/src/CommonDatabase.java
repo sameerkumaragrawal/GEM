@@ -59,7 +59,6 @@ public class CommonDatabase extends SQLiteOpenHelper{
 			Log.e("Sameer","msg",e);
 		}
 		
-
 	}
 
 	public Cursor groupList(){
