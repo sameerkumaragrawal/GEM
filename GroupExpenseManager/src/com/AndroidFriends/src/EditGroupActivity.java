@@ -217,14 +217,14 @@ public class EditGroupActivity extends Activity {
 			return;
 		}
 		if (initialGrpCurrency != grpCurrency) {
-			currencyAlert(null);
+			currencyAlert();
 		}
 		else {
 			finishedit();
 		}
 	}
 	
-	public void currencyAlert(View v) {
+	public void currencyAlert() {
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 		alertDialogBuilder.setTitle("Change Currency");
 		alertDialogBuilder

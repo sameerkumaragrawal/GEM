@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.LayoutInflater;
@@ -32,16 +31,16 @@ public class HistoryActivity extends Activity {
 	private String grpName = "";
 	private int grpid = 0;
 	private int currencyDecimals = 2;
-	private int eventId = 0;
+	private int eventIdArrayPosition = 0;
 	private int memberId = 0;
 	private String[] namearray=null;
-	private Spinner spin1, memberSpin=null;
+	private Spinner eventSpin, memberSpin=null;
 	private List<String> listofevents = null;
 	private List<String> listofmembers = null;
 	private int[] idarray = null;
 	private int[] flagarray = null;
 	private LinearLayout historytable = null;
-	private LinearLayout historytablerow1,historytablerow2;
+	private LinearLayout historytablerow1,historytablerow2, prevNext, editLayout;
 	private LayoutInflater inflater;
 	private GroupDatabase gpdb;
 	private String decimalFlag;
@@ -68,7 +67,9 @@ public class HistoryActivity extends Activity {
 		historytable = (LinearLayout) findViewById(R.id.HistoryTable);
 		historytablerow1 = (LinearLayout) findViewById(R.id.historyrow1);
 		historytablerow2 = (LinearLayout) findViewById(R.id.historyrow2);
-
+		prevNext = (LinearLayout)findViewById(R.id.previousNextLayout);
+		editLayout = (LinearLayout) findViewById(R.id.editLayout);
+		
 		MemberList();
 		addItemsOnMemberSpinner();
 		memberSpin.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -89,14 +90,14 @@ public class HistoryActivity extends Activity {
 	public void fillEvents(int member) {
 		EventList(member);
 		addItemsOnSpinner();
-		if(idarray.length>0){
-			filltable(0);
-		}
-		spin1.setOnItemSelectedListener(new OnItemSelectedListener() {
+		
+		filltable(0);
+		
+		eventSpin.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) 
 			{
-				eventId = position;
+				eventIdArrayPosition = position;
 				filltable(position);
 			}	
 			public void onNothingSelected(AdapterView<?> arg0) {
@@ -128,12 +129,12 @@ public class HistoryActivity extends Activity {
 
 	public void addItemsOnSpinner() {
 
-		spin1 = (Spinner) findViewById(R.id.historyDropdown);
+		eventSpin = (Spinner) findViewById(R.id.historyDropdown);
 		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_item, listofevents);
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spin1.setAdapter(dataAdapter);
-		spin1.setPrompt("Select Event");
+		eventSpin.setAdapter(dataAdapter);
+		eventSpin.setPrompt("Select Event");
 	}
 	
 	public void addItemsOnMemberSpinner() {
@@ -174,10 +175,44 @@ public class HistoryActivity extends Activity {
 
 	public void filltable(int position){
 		historytable.removeAllViews();
+		
+		if(idarray.length == 0){
+			prevNext.setVisibility(View.GONE);
+			editLayout.setVisibility(View.GONE);
+			historytablerow1.setVisibility(View.GONE);
+			historytablerow2.setVisibility(View.GONE);
+			return;
+		}
+		
 		int tempid = idarray[position];
 		int tempflag = flagarray[position];
-		LinearLayout editLayout = (LinearLayout) findViewById(R.id.editLayout);
 		
+		//Prev Next Button Visibility
+		Button prev = (Button)prevNext.findViewById(R.id.previousButton);
+		Button next = (Button)prevNext.findViewById(R.id.nextButton);
+		
+		if(idarray.length == 1){
+			prevNext.setVisibility(View.GONE);
+		}
+		else{
+			prevNext.setVisibility(View.VISIBLE);
+			
+			if(eventIdArrayPosition == 0){
+				prev.setVisibility(View.INVISIBLE);
+			}else{
+				prev.setVisibility(View.VISIBLE);
+			}
+			
+			int lastEventPosition = idarray.length - 1;
+			
+			if(eventIdArrayPosition == lastEventPosition){
+				next.setVisibility(View.INVISIBLE);
+			}else{
+				next.setVisibility(View.VISIBLE);
+			}
+		}
+		
+		//Edit delete button Visibility
 		if (tempflag == GroupDatabase.deletedEventFlag || tempflag == GroupDatabase.deletedCashTransferFlag) {
 			editLayout.setVisibility(View.GONE);
 		}
@@ -236,15 +271,15 @@ public class HistoryActivity extends Activity {
 	}
 	
 	public void previousEvent(View v) {
-
+		eventSpin.setSelection(eventIdArrayPosition - 1);
 	}
 	
 	public void nextEvent(View v) {
-
+		eventSpin.setSelection(eventIdArrayPosition + 1);
 	}
 	
 	public void editEvent(View v) {
-
+		
 	}
 	
 	public void deleteEvent(View v) {
@@ -255,7 +290,7 @@ public class HistoryActivity extends Activity {
 		.setCancelable(true)
 		.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
-				deleteEventFromDatabase(eventId);
+				deleteEventFromDatabase(eventIdArrayPosition);
 			}
 		})
 		.setNegativeButton("No",new DialogInterface.OnClickListener() {
@@ -306,7 +341,7 @@ public class HistoryActivity extends Activity {
 		}catch(Exception e){}
 		
 		fillEvents(memberId);
-		spin1.setSelection(eventId);
+		eventSpin.setSelection(eventIdArrayPosition);
 	}
 	
 	@Override
