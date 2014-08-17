@@ -228,15 +228,15 @@ public class EditGroupActivity extends Activity {
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 		alertDialogBuilder.setTitle("Change Currency");
 		alertDialogBuilder
-		.setMessage("Please note that changing the currency only changes the unit and not the actual values")
+		.setMessage("Changing the currency will only change the unit and not the actual values. Do you wish to continue?")
 		.setCancelable(true)
-		.setPositiveButton("Ok",new DialogInterface.OnClickListener() {
+		.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				commondb.updateGroupCurrency(grpCurrency, groupid);
 				finishedit();
 			}
 		})
-		.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
+		.setNegativeButton("No",new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				dialog.cancel();
 			}

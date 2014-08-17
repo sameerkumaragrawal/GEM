@@ -18,8 +18,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -40,7 +41,8 @@ public class HistoryActivity extends Activity {
 	private int[] idarray = null;
 	private int[] flagarray = null;
 	private LinearLayout historytable = null;
-	private LinearLayout historytablerow1,historytablerow2, prevNext, editLayout;
+	private LinearLayout historytablerow1,historytablerow2, editLayout;
+	private RelativeLayout prevNext;
 	private LayoutInflater inflater;
 	private GroupDatabase gpdb;
 	private String decimalFlag;
@@ -67,7 +69,7 @@ public class HistoryActivity extends Activity {
 		historytable = (LinearLayout) findViewById(R.id.HistoryTable);
 		historytablerow1 = (LinearLayout) findViewById(R.id.historyrow1);
 		historytablerow2 = (LinearLayout) findViewById(R.id.historyrow2);
-		prevNext = (LinearLayout)findViewById(R.id.previousNextLayout);
+		prevNext = (RelativeLayout)findViewById(R.id.previousNextLayout);
 		editLayout = (LinearLayout) findViewById(R.id.editLayout);
 		
 		MemberList();
@@ -174,6 +176,11 @@ public class HistoryActivity extends Activity {
 	}
 
 	public void filltable(int position){
+//		TextView dtTextView = (TextView) findViewById(R.id.dateTimeText);
+//		String dt = "Time of event : ";
+//		dt += "00:00 1/1/2014";		// change this
+//		dtTextView.setText(dt);
+		
 		historytable.removeAllViews();
 		
 		if(idarray.length == 0){
@@ -188,8 +195,8 @@ public class HistoryActivity extends Activity {
 		int tempflag = flagarray[position];
 		
 		//Prev Next Button Visibility
-		Button prev = (Button)prevNext.findViewById(R.id.previousButton);
-		Button next = (Button)prevNext.findViewById(R.id.nextButton);
+		ImageButton prev = (ImageButton)prevNext.findViewById(R.id.previousButton);
+		ImageButton next = (ImageButton)prevNext.findViewById(R.id.nextButton);
 		
 		if(idarray.length == 1){
 			prevNext.setVisibility(View.GONE);
@@ -199,7 +206,8 @@ public class HistoryActivity extends Activity {
 			
 			if(eventIdArrayPosition == 0){
 				prev.setVisibility(View.INVISIBLE);
-			}else{
+			}
+			else{
 				prev.setVisibility(View.VISIBLE);
 			}
 			
@@ -207,7 +215,8 @@ public class HistoryActivity extends Activity {
 			
 			if(eventIdArrayPosition == lastEventPosition){
 				next.setVisibility(View.INVISIBLE);
-			}else{
+			}
+			else{
 				next.setVisibility(View.VISIBLE);
 			}
 		}
@@ -286,7 +295,7 @@ public class HistoryActivity extends Activity {
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 		alertDialogBuilder.setTitle("Delete Event");
 		alertDialogBuilder
-		.setMessage("Are you sure you want to delete this event?")
+		.setMessage("Deleting an event will change the balance of the involved members. Are you sure you want to delete this event?")
 		.setCancelable(true)
 		.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
@@ -306,7 +315,7 @@ public class HistoryActivity extends Activity {
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 		alertDialogBuilder.setTitle("Clear History");
 		alertDialogBuilder
-		.setMessage("Are you sure you want to clear the event history?")
+		.setMessage("Clearing the history will delete all the events from history but will not affect the balance of any member. Are you sure you want to continue?")
 		.setCancelable(true)
 		.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {

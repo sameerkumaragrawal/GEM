@@ -69,7 +69,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="10dp" >
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp" >
             
             <ImageButton
 	            android:id="@+id/previousButton"
@@ -89,6 +92,22 @@
                 android:contentDescription="@string/nextEvent"
 	            android:src="@android:drawable/ic_media_next"/>
         </RelativeLayout>
+        
+        <!-- <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp" >
+
+            <TextView
+                android:id="@+id/dateTimeText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/member"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textStyle="bold" />
+        </LinearLayout> -->
 
         <LinearLayout
             android:id="@+id/historyrow1"
