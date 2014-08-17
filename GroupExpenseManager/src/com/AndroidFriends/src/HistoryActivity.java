@@ -176,10 +176,10 @@ public class HistoryActivity extends Activity {
 	}
 
 	public void filltable(int position){
-//		TextView dtTextView = (TextView) findViewById(R.id.dateTimeText);
-//		String dt = "Time of event : ";
-//		dt += "00:00 1/1/2014";		// change this
-//		dtTextView.setText(dt);
+		TextView dtTextView = (TextView) findViewById(R.id.dateTimeText);
+		String dt = "Time of event : ";
+		dt += "00:00 1/1/2014";		// change this
+		dtTextView.setText(dt);
 		
 		historytable.removeAllViews();
 		
