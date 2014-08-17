@@ -40,7 +40,7 @@ public class HistoryActivity extends Activity {
 	private int[] idarray = null;
 	private int[] flagarray = null;
 	private LinearLayout historytable = null;
-	private LinearLayout historytablerow1,historytablerow2;
+	private LinearLayout historytablerow1,historytablerow2, prevNext, editLayout;
 	private LayoutInflater inflater;
 	private GroupDatabase gpdb;
 	private String decimalFlag;
@@ -67,7 +67,9 @@ public class HistoryActivity extends Activity {
 		historytable = (LinearLayout) findViewById(R.id.HistoryTable);
 		historytablerow1 = (LinearLayout) findViewById(R.id.historyrow1);
 		historytablerow2 = (LinearLayout) findViewById(R.id.historyrow2);
-
+		prevNext = (LinearLayout)findViewById(R.id.previousNextLayout);
+		editLayout = (LinearLayout) findViewById(R.id.editLayout);
+		
 		MemberList();
 		addItemsOnMemberSpinner();
 		memberSpin.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -89,10 +91,7 @@ public class HistoryActivity extends Activity {
 		EventList(member);
 		addItemsOnSpinner();
 		
-		//below condition not required
-		if(idarray.length>0){
-			filltable(0);
-		}
+		filltable(0);
 		
 		eventSpin.setOnItemSelectedListener(new OnItemSelectedListener() {
 
@@ -176,27 +175,41 @@ public class HistoryActivity extends Activity {
 
 	public void filltable(int position){
 		historytable.removeAllViews();
+		
+		if(idarray.length == 0){
+			prevNext.setVisibility(View.GONE);
+			editLayout.setVisibility(View.GONE);
+			historytablerow1.setVisibility(View.GONE);
+			historytablerow2.setVisibility(View.GONE);
+			return;
+		}
+		
 		int tempid = idarray[position];
 		int tempflag = flagarray[position];
-		LinearLayout editLayout = (LinearLayout) findViewById(R.id.editLayout);
 		
 		//Prev Next Button Visibility
-		LinearLayout prevNext = (LinearLayout)findViewById(R.id.previousNextLayout);
 		Button prev = (Button)prevNext.findViewById(R.id.previousButton);
 		Button next = (Button)prevNext.findViewById(R.id.nextButton);
 		
-		if(eventIdArrayPosition == 0){
-			prev.setVisibility(View.INVISIBLE);
-		}else{
-			prev.setVisibility(View.VISIBLE);
+		if(idarray.length == 1){
+			prevNext.setVisibility(View.GONE);
 		}
-		
-		int lastEventPosition = idarray.length - 1;
-		
-		if(eventIdArrayPosition == lastEventPosition){
-			next.setVisibility(View.INVISIBLE);
-		}else{
-			next.setVisibility(View.VISIBLE);
+		else{
+			prevNext.setVisibility(View.VISIBLE);
+			
+			if(eventIdArrayPosition == 0){
+				prev.setVisibility(View.INVISIBLE);
+			}else{
+				prev.setVisibility(View.VISIBLE);
+			}
+			
+			int lastEventPosition = idarray.length - 1;
+			
+			if(eventIdArrayPosition == lastEventPosition){
+				next.setVisibility(View.INVISIBLE);
+			}else{
+				next.setVisibility(View.VISIBLE);
+			}
 		}
 		
 		//Edit delete button Visibility
