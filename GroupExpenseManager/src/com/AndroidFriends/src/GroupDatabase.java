@@ -9,12 +9,12 @@
 package com.AndroidFriends.src;
 
 import java.util.List;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 
 public class GroupDatabase extends SQLiteOpenHelper{
@@ -126,11 +126,7 @@ public class GroupDatabase extends SQLiteOpenHelper{
 	
 	public void DeleteFromTransList(int id){
 		String newName = "Deleted event - ";
-		Cursor eventQuery = getDB().rawQuery("SELECT Name from " + EventTable + " WHERE ID = " + id, null);
-		eventQuery.moveToFirst();
-		String previousName = eventQuery.getString(0);
-		newName += previousName;
-		getDB().execSQL("UPDATE " + EventTable + " SET Name = ?, Flag = ? WHERE ID = " + id,new Object[]{newName, deletedEventFlag});
+		getDB().execSQL("UPDATE " + EventTable + " SET Name = ? || Name, Flag = ? WHERE ID = " + id,new Object[]{newName, deletedEventFlag});
 		
 		int memberId;
 		float paid, consumed;
@@ -151,11 +147,7 @@ public class GroupDatabase extends SQLiteOpenHelper{
 	
 	public void DeleteFromCashList(int id){
 		String newName = "Deleted event - ";
-		Cursor eventQuery = getDB().rawQuery("SELECT Name from " + EventTable + " WHERE ID = " + id, null);
-		eventQuery.moveToFirst();
-		String previousName = eventQuery.getString(0);
-		newName += previousName;
-		getDB().execSQL("UPDATE " + EventTable + " SET Name = ?, Flag = ? WHERE ID = " + id,new Object[]{newName, deletedCashTransferFlag});
+		getDB().execSQL("UPDATE " + EventTable + " SET Name = ? || Name, Flag = ? WHERE ID = " + id,new Object[]{newName, deletedCashTransferFlag});
 		
 		int fromMemberId, toMemberId;
 		float amount;
