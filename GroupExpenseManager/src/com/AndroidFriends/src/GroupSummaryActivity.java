@@ -1,5 +1,7 @@
 package com.AndroidFriends.src;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -44,6 +46,7 @@ public class GroupSummaryActivity extends Activity {
 	private GroupDatabase gpdb;
 	private CommonDatabase commondb;
 	private String decimalFlag;
+	private ArrayList<String> contactNames ;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -51,6 +54,7 @@ public class GroupSummaryActivity extends Activity {
 		Intent intent = getIntent();
 		grpName = intent.getStringExtra(GroupsActivity.GROUP_NAME);
 		grpId = intent.getIntExtra(GroupsActivity.GROUP_ID,0);
+		contactNames = intent.getStringArrayListExtra(GroupsActivity.CONTACTS_LIST);
 		grpCurrency = intent.getIntExtra(GroupsActivity.GROUP_CURR_ID, 0);
 		String database="Database_"+grpId;
 		
@@ -313,6 +317,7 @@ public class GroupSummaryActivity extends Activity {
 		intent.putExtra(GroupsActivity.GROUP_ID, grpId);
 		intent.putExtra(listofmember, namearray);
 		intent.putExtra(groupCurrencyId, grpCurrency);
+		intent.putExtra(GroupsActivity.CONTACTS_LIST, contactNames);
 		startActivity(intent);
 	}
 

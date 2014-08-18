@@ -3,6 +3,7 @@ package com.AndroidFriends.src;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -25,12 +26,15 @@ public class NewGroupActivity extends Activity {
 	private LayoutInflater inflater;
 	String[] members = null;
 	ArrayList<CustomRemoveClickListener> listListeners;
+	ArrayList<TextView> listTextViews;
 	private int numberItems = 0, currencyId = 0;
 	private GroupDatabase gpdb;
 	private CommonDatabase commondb;
 	private String[] currencyArray=null;
 	private Spinner currencySpinner;
 	private ArrayList<String> listofcurrency = null;
+	private ArrayList<String> contactNames ;
+
 	public static final String[] groupNames = new String[] {
 		"Friends", "Family", "College", "School", "Office", "Colleagues", "Hostel", "Students"
 	};
@@ -41,15 +45,18 @@ public class NewGroupActivity extends Activity {
 		setContentView(R.layout.activity_new_group);
 		commondb = CommonDatabase.get(this);
 
+		Intent intent = getIntent();
+		contactNames = intent.getStringArrayListExtra(GroupsActivity.CONTACTS_LIST);
 		inflater = LayoutInflater.from(this);
 		list = (LinearLayout) findViewById(R.id.newGroupListView);
 		listListeners = new ArrayList<CustomRemoveClickListener>();
+		listTextViews = new ArrayList<TextView>();
 		addMember(null);
 
 		currencyList();
 		addItemsOnCurrencySpinner();
 	}
-	
+
 	public void currencyList(){
 		currencyArray = commondb.getCurrencies();
 		listofcurrency = new ArrayList<String>();
@@ -58,7 +65,7 @@ public class NewGroupActivity extends Activity {
 			listofcurrency.add(currencyArray[j]);
 		}
 	}
-	
+
 	public void addItemsOnCurrencySpinner() {
 		currencySpinner = (Spinner) findViewById(R.id.currencyDropdown);
 		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
@@ -75,15 +82,16 @@ public class NewGroupActivity extends Activity {
 		CustomRemoveClickListener removeListener = new CustomRemoveClickListener(); 
 		removeListener.setPosition(position);
 		removeButton.setOnClickListener(removeListener);
-		
+
 		listListeners.add(removeListener);
 		TextView memberText = (TextView)convertView.findViewById(R.id.new_group_item_tv);
-	
+		listTextViews.add(memberText);
+
 		if(position==0){
 			removeButton.setVisibility(View.INVISIBLE);
 			MainActivity.setWeight(removeButton, 0);
 			memberText.setText("Group Name");
-			
+
 			// Add auto complete to the group name
 			AutoCompleteTextView groupNameEditText = (AutoCompleteTextView) convertView.findViewById(R.id.new_group_item_et);
 			groupNameEditText.setThreshold(1);
@@ -93,40 +101,49 @@ public class NewGroupActivity extends Activity {
 			removeButton.setVisibility(View.VISIBLE);
 			MainActivity.setWeight(removeButton, MainActivity.imagebuttonweight);
 			memberText.setText("Member "+(position));
-			
+
 			// Add auto complete to member name
 			AutoCompleteTextView memberNameEditText = (AutoCompleteTextView) convertView.findViewById(R.id.new_group_item_et);
 			memberNameEditText.setThreshold(2);
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, GroupsActivity.contactNamesArray);
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, contactNames);
 			memberNameEditText.setAdapter(adapter);
 		}
 		list.addView(convertView);
 		numberItems++;
-		
+
+
 	}
 
 	private class CustomRemoveClickListener implements OnClickListener{
 
 		private int position;
-		
+
 		public void setPosition(int pos){
 			position = pos;
 		}
 		public void onClick(View v) {
 			listListeners.remove(position);
+			listTextViews.remove(position);
 			list.removeViewAt(position);
 			listNotifyDataSetChanged();
 			numberItems--;
 		}
-		
+
 	}
-	
+
 	public void listNotifyDataSetChanged(){
 		int k=0;
 		for (CustomRemoveClickListener lis : listListeners) {
 			lis.setPosition(k);
 			k++;
 		}
+		k=0;
+		for (TextView tv : listTextViews) {
+			if(k!=0)
+				tv.setText("Member "+k);
+			k++;
+		}
+
 	}
 
 	public void createToast(String message){
@@ -140,7 +157,7 @@ public class NewGroupActivity extends Activity {
 			createToast("Error! Cannot leave a member name empty");
 			return false;
 		}
-		
+
 		for(int i=0;i<pos;i++){
 			if(members[i].equals(name)){
 				createToast("Error! Member "+name+" already exists");
@@ -151,21 +168,21 @@ public class NewGroupActivity extends Activity {
 	}
 
 	public void done(View v) {
-		
+
 		if(numberItems<1){
 			createToast("Error! Group cannot be empty. Please insert a member");
 			return;
 		}
-		
+
 		View group_row = (View) list.getChildAt(0);
 		AutoCompleteTextView group_et = (AutoCompleteTextView) group_row.findViewById(R.id.new_group_item_et);
 		String group_name = group_et.getText().toString();
-		
+
 		if(group_name.equals("")){
 			createToast("Error! Cannot leave the group name empty");
 			return;
 		}
-		
+
 		currencyId = currencySpinner.getSelectedItemPosition();
 		if(currencyId == 0){
 			createToast("Error! Please select a currency for the group transactions");
@@ -187,7 +204,7 @@ public class NewGroupActivity extends Activity {
 				return;
 			}
 		}
-		
+
 		insertToDatabase(group_name, members, currencyId);
 	}
 

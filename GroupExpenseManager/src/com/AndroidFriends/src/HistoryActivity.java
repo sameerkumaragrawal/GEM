@@ -94,6 +94,13 @@ public class HistoryActivity extends Activity {
 		
 	}
 	
+	@Override
+	public void onRestart() {
+		super.onRestart();
+		fillEvents(memberId);
+		eventSpin.setSelection(eventIdArrayPosition);
+	}
+	
 	public void fillEvents(int member) {
 		EventList(member);
 		addItemsOnSpinner();

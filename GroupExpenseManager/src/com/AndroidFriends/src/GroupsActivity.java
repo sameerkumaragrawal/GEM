@@ -45,14 +45,14 @@ public class GroupsActivity extends Activity {
     //DEFINING STRING ADAPTER WHICH WILL HANDLE DATA OF LISTVIEW
 	private ListAdaptor adaptor;
     private ListView list;
+    
+    public final static String CONTACTS_LIST = "GroupSummmary/Contacts";
     public final static String GROUP_NAME = "GroupSummmary/GroupName";
     public final static String GROUP_ID = "GroupSummmary/GroupID";
     public final static String GROUP_CURR_ID = "GroupSummmary/GroupCurrency";
     private CommonDatabase commondb;
 
-    public static ArrayList<String> contactNames = new ArrayList<String>();
-	public static String[] contactNamesArray=null;
-
+    public ArrayList<String> contactNames = new ArrayList<String>();
     
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -90,7 +90,6 @@ public class GroupsActivity extends Activity {
 				}
 			}
 		    cur.close();
-		    contactNamesArray = (String[]) contactNames.toArray(new String[contactNames.size()]);
 		} catch (Exception e) {
 		     Log.i("getContacts","Exception : "+ e);
 		}
@@ -203,6 +202,7 @@ public class GroupsActivity extends Activity {
     
     public void newGroup(View v) {
     	Intent intent = new Intent(this, NewGroupActivity.class);
+    	intent.putExtra(CONTACTS_LIST, contactNames);
     	startActivity(intent);
     }
     
@@ -213,6 +213,7 @@ public class GroupsActivity extends Activity {
         	intent.putExtra(GROUP_NAME, GroupName);
         	intent.putExtra(GROUP_ID, commondb.GroupNameToDatabaseId(GroupName));
         	intent.putExtra(GROUP_CURR_ID, commondb.GroupNameToCurrency(GroupName));
+        	intent.putExtra(CONTACTS_LIST, contactNames);
         	startActivity(intent);
     	}
     	if(option == 1) {

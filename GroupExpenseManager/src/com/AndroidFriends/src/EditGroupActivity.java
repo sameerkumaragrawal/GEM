@@ -28,6 +28,7 @@ public class EditGroupActivity extends Activity {
 	private LayoutInflater inflater;
 	String[] members = null;
 	ArrayList<CustomRemoveClickListener> listListeners;
+	ArrayList<TextView> listTextViews;
 	
 	private Spinner currencySpinner;
 	private ArrayList<String> listofcurrency = null;
@@ -40,6 +41,7 @@ public class EditGroupActivity extends Activity {
 	private int grpCurrency = 0;
 	private int numbermembers = 0, numberItems = 0;
 
+	private ArrayList<String> contactNames ;
 	private GroupDatabase gpdb;
 	private CommonDatabase commondb;
 //	private NewGroupActivity newGroup = new NewGroupActivity();
@@ -61,12 +63,14 @@ public class EditGroupActivity extends Activity {
 		this.setTitle(new_title);
 		setContentView(R.layout.activity_new_group);
 		
+		contactNames = intent.getStringArrayListExtra(GroupsActivity.CONTACTS_LIST);
 		currencyList();
 		addItemsOnCurrencySpinner();
 		
 		inflater = LayoutInflater.from(this);
 		list = (LinearLayout) findViewById(R.id.newGroupListView);
 		listListeners = new ArrayList<CustomRemoveClickListener>();
+		listTextViews = new ArrayList<TextView>();
 		
 		numbermembers=namearray.length;
 		
@@ -99,7 +103,7 @@ public class EditGroupActivity extends Activity {
 		
 		// Add auto complete to member name
 		et.setThreshold(2);
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, GroupsActivity.contactNamesArray);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, contactNames);
 		et.setAdapter(adapter);
 	}
 	
@@ -132,6 +136,7 @@ public class EditGroupActivity extends Activity {
 		
 		listListeners.add(removeListener);
 		TextView memberText = (TextView)convertView.findViewById(R.id.new_group_item_tv);
+		listTextViews.add(memberText);
 	
 		if(position==0){
 			removeButton.setVisibility(View.INVISIBLE);
@@ -162,6 +167,7 @@ public class EditGroupActivity extends Activity {
 		
 		public void onClick(View v) {
 			listListeners.remove(position);
+			listTextViews.remove(position);
 			list.removeViewAt(position);
 			listNotifyDataSetChanged();
 			numberItems--;
@@ -174,6 +180,12 @@ public class EditGroupActivity extends Activity {
 		int k=0;
 		for (CustomRemoveClickListener lis : listListeners) {
 			lis.setPosition(k);
+			k++;
+		}
+		k=0;
+		for (TextView tv : listTextViews) {
+			if(k!=0)
+				tv.setText("Member "+k);
 			k++;
 		}
 	}
