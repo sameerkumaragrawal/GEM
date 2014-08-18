@@ -7,16 +7,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
-        
+
         <LinearLayout
             android:id="@+id/memberHistoryLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:paddingBottom="10dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:paddingTop="20dp"
-            android:paddingBottom="10dp" >
+            android:paddingTop="20dp" >
 
             <TextView
                 android:id="@+id/memberHistory"
@@ -41,10 +41,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:paddingBottom="20dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="20dp" >
+            android:paddingTop="10dp" >
 
             <TextView
                 android:id="@+id/historyEvent"
@@ -63,37 +63,42 @@
                 android:layout_weight="1.7"
                 android:gravity="center" />
         </LinearLayout>
-        
-        <RelativeLayout
+
+        <LinearLayout
             android:id="@+id/previousNextLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingTop="10dp"
             android:paddingBottom="10dp"
             android:paddingLeft="20dp"
-            android:paddingRight="20dp" >
-            
+            android:paddingRight="20dp"
+            android:paddingTop="10dp" >
+
             <ImageButton
-	            android:id="@+id/previousButton"
-	            android:layout_width="80dp"
-	            android:layout_height="wrap_content"
-	            android:layout_alignParentLeft="true"
-	            android:onClick="previousEvent"
+                android:id="@+id/previousButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:contentDescription="@string/previousEvent"
-	            android:src="@android:drawable/ic_media_previous" />
-            
+                android:onClick="previousEvent"
+                android:src="@android:drawable/ic_media_previous" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2" />
+
             <ImageButton
-	            android:id="@+id/nextButton"
-	            android:layout_width="80dp"
-	            android:layout_height="wrap_content"
-	            android:layout_alignParentRight="true"
-	            android:onClick="nextEvent"
+                android:id="@+id/nextButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:contentDescription="@string/nextEvent"
-	            android:src="@android:drawable/ic_media_next"/>
-        </RelativeLayout>
-        
-      	<LinearLayout
+                android:onClick="nextEvent"
+                android:src="@android:drawable/ic_media_next" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -144,7 +149,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textStyle="bold" />
         </LinearLayout>
-        
+
         <LinearLayout
             android:id="@+id/historyrow2"
             android:layout_width="match_parent"
@@ -187,42 +192,38 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="10dp" />
-                    
+
         <LinearLayout
             android:id="@+id/editLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="10dp" >
-            
-            <Button
-	            android:id="@+id/editButton"
-	            android:layout_width="0dp"
-	            android:layout_height="wrap_content"
-	            android:layout_weight="1"
-	            android:layout_gravity="center"
-	            android:onClick="editEvent"
-	            android:text="@string/editEvent" />
-            
-            <Button
-	            android:id="@+id/deleteButton"
-	            android:layout_width="0dp"
-	            android:layout_height="wrap_content"
-	            android:layout_weight="1"
-	            android:layout_gravity="center"
-	            android:onClick="deleteEvent"
-	            android:text="@string/deleteEvent" />
-        </LinearLayout>
-            
-        <Button
-	         android:id="@+id/clearButton"
-	         android:layout_width="match_parent"
-	         android:layout_height="wrap_content"
-	         android:layout_gravity="center"
-	         android:layout_margin="20dp"
-	         android:onClick="clearAlert"
-	         android:text="@string/clearhistory" />
 
+            <Button
+                android:id="@+id/editButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="editEvent"
+                android:text="@string/editEvent" />
+
+            <Button
+                android:id="@+id/deleteButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="deleteEvent"
+                android:text="@string/deleteEvent" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/clearButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:onClick="clearAlert"
+            android:text="@string/clearhistory" />
     </LinearLayout>
 
 </ScrollView>

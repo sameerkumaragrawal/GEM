@@ -11,6 +11,7 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,7 +21,6 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -41,8 +41,7 @@ public class HistoryActivity extends Activity {
 	private int[] idarray = null;
 	private int[] flagarray = null;
 	private LinearLayout historytable = null;
-	private LinearLayout historytablerow1,historytablerow2, editLayout;
-	private RelativeLayout prevNext;
+	private LinearLayout historytablerow1,historytablerow2, editLayout, prevNext;
 	private LayoutInflater inflater;
 	private GroupDatabase gpdb;
 	private String decimalFlag;
@@ -54,7 +53,13 @@ public class HistoryActivity extends Activity {
 		grpName = intent.getStringExtra(GroupsActivity.GROUP_NAME);
 		String new_title= grpName+" - "+String.valueOf(this.getTitle());
 		this.setTitle(new_title);
-		setContentView(R.layout.activity_history);
+		Log.e("Sameer","hre");
+		try{
+			setContentView(R.layout.activity_history);
+		}catch(Exception e){
+			Log.e("Sameer","hre2",e);
+		}
+		
 
 		grpid = intent.getIntExtra(GroupsActivity.GROUP_ID,0);
 		String database="Database_"+grpid;
@@ -69,7 +74,7 @@ public class HistoryActivity extends Activity {
 		historytable = (LinearLayout) findViewById(R.id.HistoryTable);
 		historytablerow1 = (LinearLayout) findViewById(R.id.historyrow1);
 		historytablerow2 = (LinearLayout) findViewById(R.id.historyrow2);
-		prevNext = (RelativeLayout)findViewById(R.id.previousNextLayout);
+		prevNext = (LinearLayout)findViewById(R.id.previousNextLayout);
 		editLayout = (LinearLayout) findViewById(R.id.editLayout);
 		
 		MemberList();
