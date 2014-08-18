@@ -81,6 +81,7 @@
                 android:layout_weight="1"
                 android:contentDescription="@string/previousEvent"
                 android:onClick="previousEvent"
+                android:visibility="invisible"
                 android:src="@android:drawable/ic_media_previous" />
 
             <TextView
@@ -221,7 +222,6 @@
 	         android:id="@+id/restoreButton"
 	         android:layout_width="match_parent"
 	         android:layout_height="wrap_content"
-	         android:layout_gravity="center"
 	         android:layout_marginLeft="20dp"
 	         android:layout_marginRight="20dp"
 	         android:layout_marginTop="10dp"

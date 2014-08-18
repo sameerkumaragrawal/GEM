@@ -20,7 +20,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -186,6 +185,7 @@ public class HistoryActivity extends Activity {
 			editLayout.setVisibility(View.GONE);
 			historytablerow1.setVisibility(View.GONE);
 			historytablerow2.setVisibility(View.GONE);
+			restoreButton.setVisibility(View.GONE);
 			dtTextView.setVisibility(View.GONE);
 			return;
 		}
@@ -205,8 +205,8 @@ public class HistoryActivity extends Activity {
 		dtTextView.setText(dt);
 		
 		//Prev Next Button Visibility
-		ImageButton prev = (ImageButton)prevNext.findViewById(R.id.previousButton);
-		ImageButton next = (ImageButton)prevNext.findViewById(R.id.nextButton);
+		View prev = (View)prevNext.findViewById(R.id.previousButton);
+		View next = (View)prevNext.findViewById(R.id.nextButton);
 		
 		if(idarray.length == 1){
 			prevNext.setVisibility(View.GONE);
