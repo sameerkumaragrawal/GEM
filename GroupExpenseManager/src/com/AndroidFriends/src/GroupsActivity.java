@@ -6,13 +6,16 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -46,6 +49,10 @@ public class GroupsActivity extends Activity {
     public final static String GROUP_ID = "GroupSummmary/GroupID";
     public final static String GROUP_CURR_ID = "GroupSummmary/GroupCurrency";
     private CommonDatabase commondb;
+
+    public static ArrayList<String> contactNames = new ArrayList<String>();
+	public static String[] contactNamesArray=null;
+
     
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,6 +72,29 @@ public class GroupsActivity extends Activity {
 		list.setAdapter(adaptor);
 		
 		groupList();
+		getContacts();
+	}
+	
+	// Get the phone contacts in the contactNames array list
+	public void getContacts() {
+		try {
+			ContentResolver cr = getBaseContext().getContentResolver();
+			Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+			 
+			// If data found in contacts 
+			if (cur.getCount() > 0) {
+				String name = "";
+				while (cur.moveToNext()) {			     
+				    String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
+				    name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+				    contactNames.add(name.toString());
+				}
+			}
+		    cur.close();
+		    contactNamesArray = (String[]) contactNames.toArray(new String[contactNames.size()]);
+		} catch (Exception e) {
+		     Log.i("getContacts","Exception : "+ e);
+		}
 	}
 	
 	private class ListAdaptor extends BaseAdapter{

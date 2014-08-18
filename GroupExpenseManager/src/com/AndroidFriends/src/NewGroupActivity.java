@@ -83,6 +83,8 @@ public class NewGroupActivity extends Activity {
 			removeButton.setVisibility(View.INVISIBLE);
 			MainActivity.setWeight(removeButton, 0);
 			memberText.setText("Group Name");
+			
+			// Add auto complete to the group name
 			AutoCompleteTextView groupNameEditText = (AutoCompleteTextView) convertView.findViewById(R.id.new_group_item_et);
 			groupNameEditText.setThreshold(1);
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, groupNames);
@@ -91,6 +93,12 @@ public class NewGroupActivity extends Activity {
 			removeButton.setVisibility(View.VISIBLE);
 			MainActivity.setWeight(removeButton, MainActivity.imagebuttonweight);
 			memberText.setText("Member "+(position));
+			
+			// Add auto complete to member name
+			AutoCompleteTextView memberNameEditText = (AutoCompleteTextView) convertView.findViewById(R.id.new_group_item_et);
+			memberNameEditText.setThreshold(2);
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, GroupsActivity.contactNamesArray);
+			memberNameEditText.setAdapter(adapter);
 		}
 		list.addView(convertView);
 		numberItems++;

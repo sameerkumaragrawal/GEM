@@ -42,6 +42,7 @@ public class EditGroupActivity extends Activity {
 
 	private GroupDatabase gpdb;
 	private CommonDatabase commondb;
+//	private NewGroupActivity newGroup = new NewGroupActivity();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -69,12 +70,25 @@ public class EditGroupActivity extends Activity {
 		
 		numbermembers=namearray.length;
 		
-		addInitialMember(groupName);
+		addInitialGroupName(groupName);
 		
+//		newGroup.getContacts();
 		for(int j=0; j<numbermembers; j++){
 			addInitialMember(namearray[j]);
 		}
 		
+	}
+	
+	public void addInitialGroupName(String txt){
+		addMember(null);
+		View row = (View)list.getChildAt(numberItems-1);
+		AutoCompleteTextView et = (AutoCompleteTextView) row.findViewById(R.id.new_group_item_et);
+		et.setText(txt);
+		
+		// Add auto complete to group name
+		et.setThreshold(1);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, NewGroupActivity.groupNames);
+		et.setAdapter(adapter);
 	}
 	
 	public void addInitialMember(String txt){
@@ -82,8 +96,10 @@ public class EditGroupActivity extends Activity {
 		View row = (View)list.getChildAt(numberItems-1);
 		AutoCompleteTextView et = (AutoCompleteTextView) row.findViewById(R.id.new_group_item_et);
 		et.setText(txt);
-		et.setThreshold(1);
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, NewGroupActivity.groupNames);
+		
+		// Add auto complete to member name
+		et.setThreshold(2);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, GroupsActivity.contactNamesArray);
 		et.setAdapter(adapter);
 	}
 	
