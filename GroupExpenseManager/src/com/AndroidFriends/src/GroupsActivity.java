@@ -85,7 +85,6 @@ public class GroupsActivity extends Activity {
 			if (cur.getCount() > 0) {
 				String name = "";
 				while (cur.moveToNext()) {			     
-				    String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
 				    name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
 				    contactNames.add(name.toString());
 				}
