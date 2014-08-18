@@ -1,4 +1,4 @@
-Group Expense Manager Android Application
+﻿Group Expense Manager Android Application
 =========================================
 Run the project in Eclipse after installing the Android SDK.
 
@@ -10,13 +10,14 @@ A simple, fast, user friendly and lightweight application that saves you quite a
 
 <b>Features:</b>  
 ★ No ads  
-★ Handle multiple groups  
+★ Handle multiple groups with members imported from phone contacts  
 ★ Add events involving the group, for e.g. in a restaurant where a few individuals pay for all or some, or involving just an individual member in the group  
 ★ Add a cash transfer transaction (cash return) involving 2 individuals  
-★ Provides a possible solution for settlement  
+★ Edit, delete and restore previous events  
+★ Possible solution for easy settlement  
 ★ View and filter history of events and cash transfers for one or all members  
 ★ View each individual's total payment and consumption within the group  
-★ Edit, delete and restore previous events
+★ Multiple currency support
 
 Whats New
 ==========
@@ -39,14 +40,15 @@ Whats New
 - Cash transfer name reflects the names of the members involved in the transaction
 
 <b>Version 2.2:</b>  
-- Bug Fix (Focus handling)
-- Currency added
+- Bug fix (focus handling)
+- Multiple currency support
 
 <b>Version 3.0:</b>  
 - Edit and delete/restore previous events
 - Date and time stored for each event
 - Improved viewing of event history
-- Auto complete suggestions for event names
+- Auto complete member names imported from phone contacts
+- Auto complete suggestions for event and group names
 
 For Google Play
 ================
@@ -54,24 +56,17 @@ For Google Play
 A group expense manager for managing shared transactions and expenses in a group
 
 <b>Whats New:</b>  
-Version 2.0:
-- Support for all screen sizes and resolutions
-- Can check a member's total payment and consumption summary within the group
-- Old data (from version 1.0) restored
+Version 3.0:
+- Edit and delete/restore previous events
+- Date and time stored and displayed for each event
+- Improved viewing of event history
+- Auto complete member names imported from phone contacts
+- Auto complete suggestions for event and group names
 
-Version 2.1:
-- Bug fixes
+Version 2.x:
+- Support for all screen sizes and resolutions
+- Check a member's total payment and consumption summary within the group
 - Two types of events - group expense and individual expense
 - Filter history corresponding to a member
 - Hint text for filling consumption amount
-- Cash transfer event name modified
-
-Version 2.2:
-- Bug Fix (Focus handling)
-- Currency added
-
-Version 3.0:
-- Edit and delete/restore previous events
-- Date and time stored for each event
-- Improved viewing of event history
-- Auto complete suggestions for event names
+- Multiple currency support

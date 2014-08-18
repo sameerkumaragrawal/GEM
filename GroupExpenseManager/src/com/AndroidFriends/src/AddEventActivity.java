@@ -56,7 +56,7 @@ public class AddEventActivity extends Activity {
 	public static final String[] eventNames = new String[] {
 		"Food", "Lunch", "Dinner", "Breakfast", "Restaurant", "Hotel", "Canteen", "Drinks",
 		"Transport", "Petrol", "Gas", "Car", "Bus", "Train", "Flight",
-		"Health", "Medicines", "Hospital", "Dentist",
+		"Healthcare", "Medicines", "Hospital", "Dentist",
 		"Rent", "Accommodatation", "Electricity", "Phone bill",
 		"Movie", "Sports", "Shopping", "Entertainment", "Party"
 	};
