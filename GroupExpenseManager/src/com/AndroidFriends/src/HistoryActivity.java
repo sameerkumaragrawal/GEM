@@ -11,7 +11,7 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.util.Log;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -53,13 +53,7 @@ public class HistoryActivity extends Activity {
 		grpName = intent.getStringExtra(GroupsActivity.GROUP_NAME);
 		String new_title= grpName+" - "+String.valueOf(this.getTitle());
 		this.setTitle(new_title);
-		Log.e("Sameer","hre");
-		try{
-			setContentView(R.layout.activity_history);
-		}catch(Exception e){
-			Log.e("Sameer","hre2",e);
-		}
-		
+		setContentView(R.layout.activity_history);
 
 		grpid = intent.getIntExtra(GroupsActivity.GROUP_ID,0);
 		String database="Database_"+grpid;
@@ -181,23 +175,31 @@ public class HistoryActivity extends Activity {
 	}
 
 	public void filltable(int position){
-		TextView dtTextView = (TextView) findViewById(R.id.dateTimeText);
-		String dt = "Time of event : ";
-		dt += "00:00 1/1/2014";		// change this
-		dtTextView.setText(dt);
-		
 		historytable.removeAllViews();
+		TextView dtTextView = (TextView) findViewById(R.id.dateTimeText);
 		
 		if(idarray.length == 0){
 			prevNext.setVisibility(View.GONE);
 			editLayout.setVisibility(View.GONE);
 			historytablerow1.setVisibility(View.GONE);
 			historytablerow2.setVisibility(View.GONE);
+			dtTextView.setVisibility(View.GONE);
 			return;
 		}
 		
 		int tempid = idarray[position];
 		int tempflag = flagarray[position];
+		
+		
+		dtTextView.setVisibility(View.VISIBLE);
+		String dt = "Time of event : ";
+		long timeinmillis = gpdb.getEventDate(tempid);
+		if(timeinmillis == 0){
+			dt += "Not Specified";
+		}else{
+			dt += DateUtils.formatDateTime(this, timeinmillis, DateUtils.FORMAT_ABBREV_MONTH | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR);
+		}
+		dtTextView.setText(dt);
 		
 		//Prev Next Button Visibility
 		ImageButton prev = (ImageButton)prevNext.findViewById(R.id.previousButton);

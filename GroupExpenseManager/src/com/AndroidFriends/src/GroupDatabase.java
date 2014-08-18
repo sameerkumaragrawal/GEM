@@ -19,7 +19,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class GroupDatabase extends SQLiteOpenHelper{
 	private static String DATABASE_NAME = null;
-	private static final int DATABASE_VERSION = 2;
+	private static final int DATABASE_VERSION = 3;
 	
 	public final static int eventFlag = 1;
 	public final static int cashTransferFlag = 2;
@@ -32,7 +32,7 @@ public class GroupDatabase extends SQLiteOpenHelper{
 	public final static String CashTable = "CashTransfer";
 
 	public final static String createMember = "CREATE TABLE IF NOT EXISTS "+GroupDatabase.MemberTable+" ( ID int(11) NOT NULL, Name varchar(255) NOT NULL, Paid float NOT NULL, Consumed float NOT NULL )";
-	public final static String createEvent = "CREATE TABLE IF NOT EXISTS "+GroupDatabase.EventTable+" ( ID int(11) NOT NULL, Name varchar(255) NOT NULL, Flag int(1))";
+	public final static String createEvent = "CREATE TABLE IF NOT EXISTS "+GroupDatabase.EventTable+" ( ID int(11) NOT NULL, Name varchar(255) NOT NULL, Flag int(1), Date BIGINT NOT NULL Default 0)";
 	public final static String createTrans = "CREATE TABLE IF NOT EXISTS "+GroupDatabase.TransTable+" ( MemberId int(11) NOT NULL, Paid float, Consumed float, EventId int(11) NOT NULL )";
 	public final static String createCash = "CREATE TABLE IF NOT EXISTS "+GroupDatabase.CashTable+" ( FromMemberId int(11) NOT NULL, ToMemberId int(11) NOT NULL, Amount float NOT NULL, ID int(11) NOT NULL)";
 
@@ -52,8 +52,9 @@ public class GroupDatabase extends SQLiteOpenHelper{
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		if(oldVersion<2){
-			Cursor mquery = db.rawQuery("SELECT ID, Name, Balance FROM " + GroupDatabase.MemberTable,null);
+		switch (oldVersion){
+		case 1:
+			Cursor mquery = db.rawQuery("SELECT ID, Name, Balance FROM " + MemberTable,null);
 			int[] idarray = new int[mquery.getCount()];
     		float[] balancearray = new float[mquery.getCount()];
     		String[] namearray = new String[mquery.getCount()];
@@ -67,8 +68,8 @@ public class GroupDatabase extends SQLiteOpenHelper{
 			}while(mquery.moveToNext());
 			
 			
-			db.execSQL("DROP TABLE "+GroupDatabase.MemberTable);
-			db.execSQL(GroupDatabase.createMember);
+			db.execSQL("DROP TABLE "+MemberTable);
+			db.execSQL(createMember);
 			for(int i=0;i<balancearray.length;i++){
 				ContentValues values = new ContentValues();
 				values.put("ID", idarray[i]);
@@ -81,9 +82,14 @@ public class GroupDatabase extends SQLiteOpenHelper{
 					values.put("Paid", 0);
 					values.put("Consumed", balancearray[i]);
 				}
-				db.insert(GroupDatabase.MemberTable, null, values);
+				db.insert(MemberTable, null, values);
 			}
+		case 2:
+			db.execSQL("ALTER TABLE " + EventTable +" ADD COLUMN Date BIGINT NOT NULL Default 0");
+		default:
+			break;
 		}
+		
 	}
 
 	public void onCreateInsert(String[] members){
@@ -196,6 +202,7 @@ public class GroupDatabase extends SQLiteOpenHelper{
 		value1.put("ID", ID1);
 		value1.put("Name", eventName);
 		value1.put("Flag", cashTransferFlag);
+		value1.put("Date", System.currentTimeMillis());
 		getDB().insert(EventTable,null,value1);
 
 		ContentValues value2 = new ContentValues();
@@ -221,6 +228,7 @@ public class GroupDatabase extends SQLiteOpenHelper{
 		value1.put("ID", ID1);
 		value1.put("Name", eventName);
 		value1.put("Flag", eventFlag);
+		value1.put("Date", System.currentTimeMillis());
 		getDB().insert(EventTable,null,value1);
 
 		float[] memberBalance;
@@ -282,6 +290,7 @@ public class GroupDatabase extends SQLiteOpenHelper{
 		value1.put("ID", ID1);
 		value1.put("Name", eventName);
 		value1.put("Flag", eventFlag);
+		value1.put("Date", System.currentTimeMillis());
 		getDB().insert(EventTable,null,value1);
 		
 		ContentValues value2 = new ContentValues();
@@ -316,6 +325,7 @@ public class GroupDatabase extends SQLiteOpenHelper{
 		value1.put("ID", ID1);
 		value1.put("Name", "Balance Settle");
 		value1.put("Flag", cashTransferFlag);
+		value1.put("Date", System.currentTimeMillis());
 		getDB().insert(EventTable,null,value1);
 		
 		for(int i=0;i<ntransactions;i++){
@@ -328,6 +338,12 @@ public class GroupDatabase extends SQLiteOpenHelper{
 		}
 		getDB().execSQL("UPDATE "+MemberTable+" SET Paid = 0, Consumed = 0;");
 
+	}
+	
+	public long getEventDate(int id){
+		Cursor mquery = getDB().rawQuery("SELECT Date FROM " + EventTable + " WHERE ID = " + id, null);
+		mquery.moveToFirst();
+		return mquery.getLong(0);
 	}
 	
 	private SQLiteDatabase getDB() {
