@@ -87,11 +87,6 @@ public class EditGroupActivity extends Activity {
 		View row = (View)list.getChildAt(numberItems-1);
 		AutoCompleteTextView et = (AutoCompleteTextView) row.findViewById(R.id.new_group_item_et);
 		et.setText(txt);
-		
-		// Add auto complete to group name
-		et.setThreshold(1);
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, NewGroupActivity.groupNames);
-		et.setAdapter(adapter);
 	}
 	
 	public void addInitialMember(String txt){
@@ -99,11 +94,6 @@ public class EditGroupActivity extends Activity {
 		View row = (View)list.getChildAt(numberItems-1);
 		AutoCompleteTextView et = (AutoCompleteTextView) row.findViewById(R.id.new_group_item_et);
 		et.setText(txt);
-		
-		// Add auto complete to member name
-		et.setThreshold(2);
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, contactNames);
-		et.setAdapter(adapter);
 	}
 	
 	public void currencyList(){
