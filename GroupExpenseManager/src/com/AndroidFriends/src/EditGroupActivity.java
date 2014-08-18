@@ -76,7 +76,6 @@ public class EditGroupActivity extends Activity {
 		
 		addInitialGroupName(groupName);
 		
-//		newGroup.getContacts();
 		for(int j=0; j<numbermembers; j++){
 			addInitialMember(namearray[j]);
 		}
@@ -142,6 +141,12 @@ public class EditGroupActivity extends Activity {
 			removeButton.setVisibility(View.INVISIBLE);
 			MainActivity.setWeight(removeButton, 0);
 			memberText.setText("Group Name");
+			
+			// Add auto complete to the group name
+			AutoCompleteTextView groupNameEditText = (AutoCompleteTextView) convertView.findViewById(R.id.new_group_item_et);
+			groupNameEditText.setThreshold(1);
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, NewGroupActivity.groupNames);
+			groupNameEditText.setAdapter(adapter);
 		}else{
 			if(position <= numbermembers){
 				removeButton.setVisibility(View.INVISIBLE);
@@ -152,6 +157,12 @@ public class EditGroupActivity extends Activity {
 				MainActivity.setWeight(removeButton, MainActivity.imagebuttonweight);
 			}
 			memberText.setText("Member "+(position));
+			
+			// Add auto complete to member name
+			AutoCompleteTextView memberNameEditText = (AutoCompleteTextView) convertView.findViewById(R.id.new_group_item_et);
+			memberNameEditText.setThreshold(2);
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, contactNames);
+			memberNameEditText.setAdapter(adapter);
 		}
 		list.addView(convertView);
 		numberItems++;
