@@ -198,9 +198,9 @@ public class HistoryActivity extends Activity {
 		String dt = "Time of event : ";
 		long timeinmillis = gpdb.getEventDate(tempid);
 		if(timeinmillis == 0){
-			dt += "Not Specified";
+			dt += "Not Available";
 		}else{
-			dt += DateUtils.formatDateTime(this, timeinmillis, DateUtils.FORMAT_ABBREV_MONTH | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR);
+			dt += DateUtils.formatDateTime(this, timeinmillis, DateUtils.FORMAT_ABBREV_MONTH | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR | DateUtils.FORMAT_SHOW_TIME);
 		}
 		dtTextView.setText(dt);
 		
