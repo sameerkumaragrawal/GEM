@@ -15,19 +15,18 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 
 public class GroupDatabase extends SQLiteOpenHelper{
 	private static String DATABASE_NAME = null;
 	private static final int DATABASE_VERSION = 4;
-	
+
 	public final static int eventFlag = 1;
 	public final static int cashTransferFlag = 2;
 	public final static int balanceSettleFlag = 3;
 	public final static int deletedEventFlag = 8;
 	public final static int deletedCashTransferFlag = 9;
-	
+
 	public final static String balanceSettleString = "Balance Settle";
 	public final static String MemberTable = "Members";
 	public final static String EventTable = "Events";
@@ -59,8 +58,8 @@ public class GroupDatabase extends SQLiteOpenHelper{
 		case 1:
 			Cursor mquery = db.rawQuery("SELECT ID, Name, Balance FROM " + MemberTable,null);
 			int[] idarray = new int[mquery.getCount()];
-    		float[] balancearray = new float[mquery.getCount()];
-    		String[] namearray = new String[mquery.getCount()];
+			float[] balancearray = new float[mquery.getCount()];
+			String[] namearray = new String[mquery.getCount()];
 			int countmembers=0;
 			mquery.moveToFirst();
 			do{
@@ -69,8 +68,8 @@ public class GroupDatabase extends SQLiteOpenHelper{
 				balancearray[countmembers] = mquery.getFloat(2);
 				countmembers++;
 			}while(mquery.moveToNext());
-			
-			
+
+
 			db.execSQL("DROP TABLE "+MemberTable);
 			db.execSQL(createMember);
 			for(int i=0;i<balancearray.length;i++){
@@ -94,7 +93,7 @@ public class GroupDatabase extends SQLiteOpenHelper{
 		default:
 			break;
 		}
-		
+
 	}
 
 	public void onCreateInsert(String[] members){
@@ -129,24 +128,24 @@ public class GroupDatabase extends SQLiteOpenHelper{
 		Cursor mquery = getDB().rawQuery("SELECT * FROM " + MemberTable,null);
 		return mquery;
 	}
-	
+
 	public Cursor CashList(int id){
 		Cursor c = getDB().rawQuery("SELECT * FROM " + CashTable+" WHERE ID = " + id,null);
 		return c;
 	}
-	
+
 	public void updateCashTransfer(int eventid, int fromMember, int toMember, float amount, String from, String to){
 
 		String eventName = "Edited - Cash - " + from + " to " + to; 
 		getDB().execSQL("UPDATE "+EventTable+" SET Name = ? WHERE ID = ?", new Object[]{eventName, eventid});
-		
+
 		UpdateMemberTableAfterCashTransferDelete(eventid);
-		
+
 		getDB().execSQL("UPDATE "+CashTable+" SET FromMemberId = ?, ToMemberId = ?, Amount = ? WHERE ID = ?",new Object[]{fromMember, toMember, amount, eventid});
 		UpdateMemberTableAfterCashTransfer(fromMember, toMember, amount);
-		
+
 	}
-	
+
 	public void CashTransfer(int fromMember, int toMember, float amount, String from, String to){
 		int ID1=1;
 
@@ -173,12 +172,12 @@ public class GroupDatabase extends SQLiteOpenHelper{
 
 		UpdateMemberTableAfterCashTransfer(fromMember, toMember, amount);
 	}
-	
+
 	public void UpdateMemberTableAfterCashTransfer(int fromMemberId, int toMemberId, float amount){
 		getDB().execSQL("UPDATE " + MemberTable + " SET Paid = Paid + ? WHERE ID = ?", new Object[]{amount,fromMemberId});
 		getDB().execSQL("UPDATE " + MemberTable + " SET Paid = Paid - ? WHERE ID = ?", new Object[]{amount,toMemberId});
 	}
-	
+
 	public void UpdateMemberTableAfterCashTransferDelete(int id){
 		int fromMemberId, toMemberId;
 		float amount;
@@ -192,14 +191,14 @@ public class GroupDatabase extends SQLiteOpenHelper{
 			getDB().execSQL("UPDATE " + MemberTable + " SET Paid = Paid + ? WHERE ID = ?", new Object[]{amount,toMemberId});
 		}while(mquery.moveToNext());
 	}
-	
+
 	public void DeleteFromCashList(int id){
 		String newName = "Deleted - ";
 		getDB().execSQL("UPDATE " + EventTable + " SET Name = ? || Name, Flag = ? WHERE ID = " + id,new Object[]{newName, deletedCashTransferFlag});
-		
+
 		UpdateMemberTableAfterCashTransferDelete(id);
 	}
-	
+
 	public void restoreInCashList(int id){
 		getDB().execSQL("UPDATE " + EventTable + " SET Name = SUBSTR(Name, 11, LENGTH(Name)), Flag = ? WHERE ID = " + id,new Object[]{cashTransferFlag});
 		int fromMemberId, toMemberId;
@@ -213,12 +212,12 @@ public class GroupDatabase extends SQLiteOpenHelper{
 			UpdateMemberTableAfterCashTransfer(fromMemberId, toMemberId, amount);
 		}while(mquery.moveToNext());
 	}
-	
+
 	public Cursor TransList(int id){
 		Cursor c = getDB().rawQuery("SELECT * FROM " + TransTable+" WHERE EventId = " + id,null);
 		return c;
 	}
-	
+
 	public void UpdateMemberTableAfterEventDelete(int id){
 		int memberId;
 		float paid, consumed;
@@ -231,16 +230,16 @@ public class GroupDatabase extends SQLiteOpenHelper{
 			getDB().execSQL("UPDATE " + MemberTable + " SET Paid = Paid - ?, Consumed = Consumed - ? WHERE ID = ?", new Object[]{paid, consumed, memberId});
 		}while(mquery.moveToNext());
 	}
-	
+
 	public void DeleteFromTransList(int id){
 		String newName = "Deleted - ";
 		getDB().execSQL("UPDATE " + EventTable + " SET Name = ? || Name, Flag = ? WHERE ID = ?",new Object[]{newName, deletedEventFlag, id});
 		UpdateMemberTableAfterEventDelete(id);
 	}
-	
+
 	public void restoreInTransList(int id){
 		getDB().execSQL("UPDATE " + EventTable + " SET Name = SUBSTR(Name, 11, LENGTH(Name)), Flag = ? WHERE ID = ?",new Object[]{eventFlag, id});
-		
+
 		int memberId;
 		float paid, consumed;
 		Cursor mquery = getDB().rawQuery("SELECT * FROM " + TransTable + " WHERE EventId = " + id, null);
@@ -252,13 +251,13 @@ public class GroupDatabase extends SQLiteOpenHelper{
 			getDB().execSQL("UPDATE " + MemberTable + " SET Paid = Paid + ?, Consumed = Consumed + ? WHERE ID = ?", new Object[]{paid, consumed, memberId});
 		}while(mquery.moveToNext());
 	}
-	
+
 	public int getEventFlag(int id) {
 		Cursor mquery = getDB().rawQuery("SELECT Flag FROM " + EventTable + " WHERE ID = " + id, null);
 		mquery.moveToFirst();
 		return mquery.getInt(0);
 	}
-	
+
 	public Cursor eventList(int member){
 		if (member==0) {
 			Cursor mquery = getDB().rawQuery("SELECT * FROM " + EventTable+" ORDER BY ID DESC",null);
@@ -272,7 +271,7 @@ public class GroupDatabase extends SQLiteOpenHelper{
 			return mquery;
 		}
 	}
-	
+
 	private void addEntryInTransTable(int eventid, float[] amountPaid, int[] paidMembers, float[] amountConsumed, List<boolean[]> whoConsumed, int arraysize) {
 		float[] memberBalance;
 		memberBalance=new float[arraysize];
@@ -314,12 +313,12 @@ public class GroupDatabase extends SQLiteOpenHelper{
 				value2.put("Consumed", consumedBalance[i]);
 				value2.put("EventId", eventid);
 				getDB().insert(TransTable,null,value2);
-				
+
 				getDB().execSQL("UPDATE "+MemberTable+" SET Paid = Paid+?, Consumed = Consumed+? WHERE ID = ?",new Object[]{memberBalance[i],consumedBalance[i],(i+1)});
 			}
 		}
 	}
-	
+
 	private void UpdateEventNameEdited(int eventid, String eventName){
 		String editString = "Edited - ";
 		boolean flag = false;
@@ -334,7 +333,7 @@ public class GroupDatabase extends SQLiteOpenHelper{
 			getDB().execSQL("UPDATE " + EventTable + " SET Name = ? WHERE ID = ?",new Object[]{newName,eventid});
 		}
 	}
-	
+
 	public void addEvent(String eventName, float[] amountPaid, int[] paidMembers, float[] amountConsumed, List<boolean[]> whoConsumed,String[] namearray){
 		int ID1=1;
 		Cursor count = getDB().rawQuery("SELECT count(*) FROM " + EventTable , null);
@@ -352,17 +351,17 @@ public class GroupDatabase extends SQLiteOpenHelper{
 
 		addEntryInTransTable(ID1, amountPaid, paidMembers, amountConsumed, whoConsumed, namearray.length);
 	}
-	
+
 	public void updateEvent(int eventid, String eventName, float[] amountPaid, int[] paidMembers, float[] amountConsumed, List<boolean[]> whoConsumed,int arraysize){
-		
+
 		UpdateEventNameEdited(eventid, eventName);
-		
+
 		UpdateMemberTableAfterEventDelete(eventid);
 		getDB().delete(TransTable,"EventId = " + eventid, null);
-		
+
 		addEntryInTransTable(eventid, amountPaid, paidMembers, amountConsumed, whoConsumed, arraysize);
 	}
-	
+
 	private void addEntryInTransTableIndividualExpense(int eventid, int member,	float amount) {
 		ContentValues value2 = new ContentValues();
 		value2.put("MemberId", member+1);
@@ -370,11 +369,11 @@ public class GroupDatabase extends SQLiteOpenHelper{
 		value2.put("Consumed", amount);
 		value2.put("EventId", eventid);
 		getDB().insert(TransTable,null,value2);
-		
+
 		getDB().execSQL("UPDATE "+MemberTable+" SET Paid = Paid+?, Consumed = Consumed+? WHERE ID = ?",new Object[]{amount,amount,member+1});
-		
+
 	}
-	
+
 	public void addIndividualEvent(String eventName, float amount, int member){
 		int ID1=1;
 		Cursor count = getDB().rawQuery("SELECT count(*) FROM " + EventTable , null);
@@ -389,22 +388,17 @@ public class GroupDatabase extends SQLiteOpenHelper{
 		value1.put("Flag", eventFlag);
 		value1.put("Date", System.currentTimeMillis());
 		getDB().insert(EventTable,null,value1);
-		
+
 		addEntryInTransTableIndividualExpense(ID1, member, amount);
 	}
-	
-	public void updateIndividualEvent(int eventid, String eventName, float amount, int member){
-		try{
-			UpdateEventNameEdited(eventid, eventName);
 
-			UpdateMemberTableAfterEventDelete(eventid);
-			getDB().delete(TransTable,"EventId = " + eventid, null);
-			
-			addEntryInTransTableIndividualExpense(eventid, member, amount);
-		}catch(Exception e){
-			Log.e("Sameer","kk",e);
-		}
-		
+	public void updateIndividualEvent(int eventid, String eventName, float amount, int member){
+		UpdateEventNameEdited(eventid, eventName);
+
+		UpdateMemberTableAfterEventDelete(eventid);
+		getDB().delete(TransTable,"EventId = " + eventid, null);
+
+		addEntryInTransTableIndividualExpense(eventid, member, amount);
 	}
 
 	public void clearlog(){
@@ -424,14 +418,14 @@ public class GroupDatabase extends SQLiteOpenHelper{
 			count.moveToLast();
 			ID1=count.getInt(0)+1;
 		}
-		
+
 		ContentValues value1 = new ContentValues();
 		value1.put("ID", ID1);
 		value1.put("Name", balanceSettleString);
 		value1.put("Flag", balanceSettleFlag);
 		value1.put("Date", System.currentTimeMillis());
 		getDB().insert(EventTable,null,value1);
-		
+
 		for(int i=0;i<ntransactions;i++){
 			ContentValues value2 = new ContentValues();
 			value2.put("ID", ID1);
@@ -443,13 +437,13 @@ public class GroupDatabase extends SQLiteOpenHelper{
 		getDB().execSQL("UPDATE "+MemberTable+" SET Paid = 0, Consumed = 0;");
 
 	}
-	
+
 	public long getEventDate(int id){
 		Cursor mquery = getDB().rawQuery("SELECT Date FROM " + EventTable + " WHERE ID = " + id, null);
 		mquery.moveToFirst();
 		return mquery.getLong(0);
 	}
-	
+
 	private SQLiteDatabase getDB() {
 		if (db == null) {
 			db = getWritableDatabase();
