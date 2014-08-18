@@ -14,7 +14,7 @@
         android:paddingTop="10dp"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/new_group_item_et"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
@@ -23,7 +23,7 @@
         android:inputType="text" >
 
         <requestFocus />
-    </EditText>
+    </AutoCompleteTextView>
 
     <ImageButton
         android:id="@+id/new_group_item_ib"

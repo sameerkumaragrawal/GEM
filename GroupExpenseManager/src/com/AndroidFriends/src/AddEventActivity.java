@@ -18,6 +18,7 @@ import android.view.View.OnFocusChangeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -52,6 +53,13 @@ public class AddEventActivity extends Activity {
 	private int popupsize = 0;
 	private GroupDatabase gpdb;
 	private String decimalFlag;
+	private static final String[] eventNames = new String[] {
+		"Food", "Lunch", "Dinner", "Breakfast", "Restaurant", "Hotel", "Canteen", "Drinks",
+		"Transport", "Petrol", "Gas", "Car", "Bus", "Train", "Flight",
+		"Health", "Medicines", "Hospital", "Dentist",
+		"Rent", "Accommodatation", "Electricity", "Phone bill",
+		"Movie", "Sports", "Shopping", "Entertainment", "Party"
+	};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +78,11 @@ public class AddEventActivity extends Activity {
 		setContentView(R.layout.activity_add_event);
 
 		gpdb=GroupDatabase.get(this, database);
+		
+		AutoCompleteTextView eventNameEditText = (AutoCompleteTextView) findViewById(R.id.AddEventModEventName);
+		eventNameEditText.setThreshold(1);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, eventNames);
+		eventNameEditText.setAdapter(adapter);
 		
 		addItemsOnTypeSpinner();
 		doneButton = (Button) findViewById(R.id.doneButton);

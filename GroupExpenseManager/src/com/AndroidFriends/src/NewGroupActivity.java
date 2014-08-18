@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -31,6 +32,9 @@ public class NewGroupActivity extends Activity {
 	private String[] currencyArray=null;
 	private Spinner currencySpinner;
 	private ArrayList<String> listofcurrency = null;
+	private static final String[] groupNames = new String[] {
+		"Friends", "Family", "College", "School", "Office", "Colleagues", "Hostel", "Students"
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +84,10 @@ public class NewGroupActivity extends Activity {
 			removeButton.setVisibility(View.INVISIBLE);
 			MainActivity.setWeight(removeButton, 0);
 			memberText.setText("Group Name");
+			AutoCompleteTextView groupNameEditText = (AutoCompleteTextView) convertView.findViewById(R.id.new_group_item_et);
+			groupNameEditText.setThreshold(1);
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, groupNames);
+			groupNameEditText.setAdapter(adapter);
 		}else{
 			removeButton.setVisibility(View.VISIBLE);
 			MainActivity.setWeight(removeButton, MainActivity.imagebuttonweight);
@@ -143,7 +151,7 @@ public class NewGroupActivity extends Activity {
 		}
 		
 		View group_row = (View) list.getChildAt(0);
-		EditText group_et = (EditText) group_row.findViewById(R.id.new_group_item_et);
+		AutoCompleteTextView group_et = (AutoCompleteTextView) group_row.findViewById(R.id.new_group_item_et);
 		String group_name = group_et.getText().toString();
 		
 		if(group_name.equals("")){
@@ -166,7 +174,7 @@ public class NewGroupActivity extends Activity {
 
 		for (int k=0; k<numberMembers; k++) {
 			View row = (View) list.getChildAt(k+1);
-			EditText et = (EditText) row.findViewById(R.id.new_group_item_et);
+			AutoCompleteTextView et = (AutoCompleteTextView) row.findViewById(R.id.new_group_item_et);
 			members[k] = et.getText().toString();
 			if (!checkMemberName(members[k],k)){
 				return;
