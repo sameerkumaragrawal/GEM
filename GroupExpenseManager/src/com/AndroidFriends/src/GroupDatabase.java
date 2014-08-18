@@ -19,13 +19,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class GroupDatabase extends SQLiteOpenHelper{
 	private static String DATABASE_NAME = null;
-	private static final int DATABASE_VERSION = 3;
+	private static final int DATABASE_VERSION = 4;
 	
 	public final static int eventFlag = 1;
 	public final static int cashTransferFlag = 2;
+	public final static int balanceSettleFlag = 3;
 	public final static int deletedEventFlag = 8;
 	public final static int deletedCashTransferFlag = 9;
 	
+	public final static String balanceSettleString = "Balance Settle";
 	public final static String MemberTable = "Members";
 	public final static String EventTable = "Events";
 	public final static String TransTable = "Transactions";
@@ -86,6 +88,8 @@ public class GroupDatabase extends SQLiteOpenHelper{
 			}
 		case 2:
 			db.execSQL("ALTER TABLE " + EventTable +" ADD COLUMN Date BIGINT NOT NULL Default 0");
+		case 3:
+			db.execSQL("UPDATE " + EventTable +" SET Flag = ? WHERE NAME = ?",new Object[]{balanceSettleFlag,balanceSettleString});
 		default:
 			break;
 		}
@@ -125,6 +129,90 @@ public class GroupDatabase extends SQLiteOpenHelper{
 		return mquery;
 	}
 	
+	public Cursor CashList(int id){
+		Cursor c = getDB().rawQuery("SELECT * FROM " + CashTable+" WHERE ID = " + id,null);
+		return c;
+	}
+	
+	public void updateCashTransfer(int eventid, int fromMember, int toMember, float amount, String from, String to){
+
+		String eventName = "Edited - Cash - " + from + " to " + to; 
+		getDB().execSQL("UPDATE "+EventTable+" SET Name = ? WHERE ID = ?", new Object[]{eventName, eventid});
+		
+		UpdateMemberTableAfterCashTransferDelete(eventid);
+		
+		getDB().execSQL("UPDATE "+CashTable+" SET FromMemberId = ?, ToMemberId = ?, Amount = ? WHERE ID = ?",new Object[]{fromMember, toMember, amount, eventid});
+		UpdateMemberTableAfterCashTransfer(fromMember, toMember, amount);
+		
+	}
+	
+	public void CashTransfer(int fromMember, int toMember, float amount, String from, String to){
+		int ID1=1;
+
+		Cursor count = getDB().rawQuery("SELECT count(*) FROM "+EventTable, null);
+		if(count.getCount()>0){
+			count.moveToLast();
+			ID1=count.getInt(0)+1;
+		}
+
+		String eventName = "Cash - " + from + " to " + to; 
+		ContentValues value1 = new ContentValues();
+		value1.put("ID", ID1);
+		value1.put("Name", eventName);
+		value1.put("Flag", cashTransferFlag);
+		value1.put("Date", System.currentTimeMillis());
+		getDB().insert(EventTable,null,value1);
+
+		ContentValues value2 = new ContentValues();
+		value2.put("ID", ID1);
+		value2.put("FromMemberId", fromMember);
+		value2.put("ToMemberId", toMember);
+		value2.put("Amount",amount);
+		getDB().insert(CashTable,null,value2);
+
+		UpdateMemberTableAfterCashTransfer(fromMember, toMember, amount);
+	}
+	
+	public void UpdateMemberTableAfterCashTransfer(int fromMemberId, int toMemberId, float amount){
+		getDB().execSQL("UPDATE " + MemberTable + " SET Paid = Paid + ? WHERE ID = ?", new Object[]{amount,fromMemberId});
+		getDB().execSQL("UPDATE " + MemberTable + " SET Paid = Paid - ? WHERE ID = ?", new Object[]{amount,toMemberId});
+	}
+	
+	public void UpdateMemberTableAfterCashTransferDelete(int id){
+		int fromMemberId, toMemberId;
+		float amount;
+		Cursor mquery = getDB().rawQuery("SELECT * FROM " + CashTable + " WHERE ID = " + id, null);
+		mquery.moveToFirst();
+		do{
+			fromMemberId = mquery.getInt(0);
+			toMemberId= mquery.getInt(1);
+			amount = mquery.getFloat(2);
+			getDB().execSQL("UPDATE " + MemberTable + " SET Paid = Paid - ? WHERE ID = ?", new Object[]{amount,fromMemberId});
+			getDB().execSQL("UPDATE " + MemberTable + " SET Paid = Paid + ? WHERE ID = ?", new Object[]{amount,toMemberId});
+		}while(mquery.moveToNext());
+	}
+	
+	public void DeleteFromCashList(int id){
+		String newName = "Deleted - ";
+		getDB().execSQL("UPDATE " + EventTable + " SET Name = ? || Name, Flag = ? WHERE ID = " + id,new Object[]{newName, deletedCashTransferFlag});
+		
+		UpdateMemberTableAfterCashTransferDelete(id);
+	}
+	
+	public void restoreInCashList(int id){
+		getDB().execSQL("UPDATE " + EventTable + " SET Name = SUBSTR(Name, 11, LENGTH(Name)), Flag = ? WHERE ID = " + id,new Object[]{cashTransferFlag});
+		int fromMemberId, toMemberId;
+		float amount;
+		Cursor mquery = getDB().rawQuery("SELECT * FROM " + CashTable + " WHERE ID = " + id, null);
+		mquery.moveToFirst();
+		do{
+			fromMemberId = mquery.getInt(0);
+			toMemberId= mquery.getInt(1);
+			amount = mquery.getFloat(2);
+			UpdateMemberTableAfterCashTransfer(fromMemberId, toMemberId, amount);
+		}while(mquery.moveToNext());
+	}
+	
 	public Cursor TransList(int id){
 		Cursor c = getDB().rawQuery("SELECT * FROM " + TransTable+" WHERE EventId = " + id,null);
 		return c;
@@ -160,43 +248,6 @@ public class GroupDatabase extends SQLiteOpenHelper{
 			getDB().execSQL("UPDATE " + MemberTable + " SET Paid = Paid + ?, Consumed = Consumed + ? WHERE ID = " + memberId, new Object[]{paid, consumed});
 		}while(mquery.moveToNext());
 	}
-		
-	public Cursor CashList(int id){
-		Cursor c = getDB().rawQuery("SELECT * FROM " + CashTable+" WHERE ID = " + id,null);
-		return c;
-	}
-	
-	public void DeleteFromCashList(int id){
-		String newName = "Deleted - ";
-		getDB().execSQL("UPDATE " + EventTable + " SET Name = ? || Name, Flag = ? WHERE ID = " + id,new Object[]{newName, deletedCashTransferFlag});
-		
-		int fromMemberId, toMemberId;
-		float amount;
-		Cursor mquery = getDB().rawQuery("SELECT * FROM " + CashTable + " WHERE ID = " + id, null);
-		mquery.moveToFirst();
-		do{
-			fromMemberId = mquery.getInt(0);
-			toMemberId= mquery.getInt(1);
-			amount = mquery.getFloat(2);
-			getDB().execSQL("UPDATE " + MemberTable + " SET Paid = Paid - ? WHERE ID = " + fromMemberId, new Object[]{amount});
-			getDB().execSQL("UPDATE " + MemberTable + " SET Paid = Paid + ? WHERE ID = " + toMemberId, new Object[]{amount});
-		}while(mquery.moveToNext());
-	}
-	
-	public void restoreInCashList(int id){
-		getDB().execSQL("UPDATE " + EventTable + " SET Name = SUBSTR(Name, 11, LENGTH(Name)), Flag = ? WHERE ID = " + id,new Object[]{cashTransferFlag});
-		int fromMemberId, toMemberId;
-		float amount;
-		Cursor mquery = getDB().rawQuery("SELECT * FROM " + CashTable + " WHERE ID = " + id, null);
-		mquery.moveToFirst();
-		do{
-			fromMemberId = mquery.getInt(0);
-			toMemberId= mquery.getInt(1);
-			amount = mquery.getFloat(2);
-			getDB().execSQL("UPDATE " + MemberTable + " SET Paid = Paid + ? WHERE ID = " + fromMemberId, new Object[]{amount});
-			getDB().execSQL("UPDATE " + MemberTable + " SET Paid = Paid - ? WHERE ID = " + toMemberId, new Object[]{amount});
-		}while(mquery.moveToNext());
-	}
 	
 	public int getEventFlag(int id) {
 		Cursor mquery = getDB().rawQuery("SELECT Flag FROM " + EventTable + " WHERE ID = " + id, null);
@@ -218,34 +269,6 @@ public class GroupDatabase extends SQLiteOpenHelper{
 		}
 	}
 	
-	public void CashTransfer(int fromMember, int toMember, float amount, String from, String to){
-		int ID1=1;
-
-		Cursor count = getDB().rawQuery("SELECT count(*) FROM "+EventTable, null);
-		if(count.getCount()>0){
-			count.moveToLast();
-			ID1=count.getInt(0)+1;
-		}
-
-		String eventName = "Cash - " + from + " to " + to; 
-		ContentValues value1 = new ContentValues();
-		value1.put("ID", ID1);
-		value1.put("Name", eventName);
-		value1.put("Flag", cashTransferFlag);
-		value1.put("Date", System.currentTimeMillis());
-		getDB().insert(EventTable,null,value1);
-
-		ContentValues value2 = new ContentValues();
-		value2.put("ID", ID1);
-		value2.put("FromMemberId", fromMember);
-		value2.put("ToMemberId", toMember);
-		value2.put("Amount",amount);
-		getDB().insert(CashTable,null,value2);
-
-		getDB().execSQL("UPDATE "+MemberTable+" SET Paid = Paid + ? WHERE ID = ?",new Object[]{amount,fromMember});
-		getDB().execSQL("UPDATE "+MemberTable+" SET Paid = Paid - ? WHERE ID = ?",new Object[]{amount,toMember});
-	}
-
 	public void addEvent(String eventName, float[] amountPaid, int[] paidMembers, float[] amountConsumed, List<boolean[]> whoConsumed,String[] namearray){
 		int ID1=1;
 		Cursor count = getDB().rawQuery("SELECT count(*) FROM " + EventTable , null);
@@ -353,8 +376,8 @@ public class GroupDatabase extends SQLiteOpenHelper{
 		
 		ContentValues value1 = new ContentValues();
 		value1.put("ID", ID1);
-		value1.put("Name", "Balance Settle");
-		value1.put("Flag", cashTransferFlag);
+		value1.put("Name", balanceSettleString);
+		value1.put("Flag", balanceSettleFlag);
 		value1.put("Date", System.currentTimeMillis());
 		getDB().insert(EventTable,null,value1);
 		

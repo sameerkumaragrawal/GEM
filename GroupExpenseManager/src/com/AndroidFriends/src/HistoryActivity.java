@@ -12,6 +12,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,6 +30,9 @@ import com.AndroidFriends.R.id;
 
 public class HistoryActivity extends Activity {
 
+	public static final String EVENT_ID= "historyActivity/eventid";
+	public static final String EVENT_NAME= "historyActivity/eventname";
+	
 	private String grpName = "";
 	private int grpid = 0;
 	private int currencyDecimals = 2;
@@ -235,8 +239,10 @@ public class HistoryActivity extends Activity {
 		if (tempflag == GroupDatabase.deletedEventFlag || tempflag == GroupDatabase.deletedCashTransferFlag) {
 			editLayout.setVisibility(View.GONE);
 			restoreButton.setVisibility(View.VISIBLE);
-		}
-		else {
+		}else if(tempflag == GroupDatabase.balanceSettleFlag){
+			editLayout.setVisibility(View.GONE);
+			restoreButton.setVisibility(View.GONE);
+		}else {
 			editLayout.setVisibility(View.VISIBLE);
 			restoreButton.setVisibility(View.GONE);
 		}
@@ -258,7 +264,7 @@ public class HistoryActivity extends Activity {
 					addEntry(str1,str2,str3);
 				}while(mquery.moveToNext());
 			}
-			else if(tempflag==GroupDatabase.cashTransferFlag || tempflag==GroupDatabase.deletedCashTransferFlag){
+			else if(tempflag==GroupDatabase.cashTransferFlag || tempflag==GroupDatabase.deletedCashTransferFlag || tempflag==GroupDatabase.balanceSettleFlag){
 				historytablerow1.setVisibility(View.GONE);
 				historytablerow2.setVisibility(View.VISIBLE);
 				Cursor mquery = gpdb.CashList(tempid);
@@ -300,6 +306,32 @@ public class HistoryActivity extends Activity {
 	}
 	
 	public void editEvent(View v) {
+		try{
+			int tempid = idarray[eventIdArrayPosition];
+			int tempFlag = flagarray[eventIdArrayPosition];
+			String tempName = listofevents.get(eventIdArrayPosition);
+			
+			if(tempFlag == GroupDatabase.eventFlag){
+				Intent intent = new Intent(this, EditEventActivity.class);
+				intent.putExtra(GroupsActivity.GROUP_NAME, grpName);
+				intent.putExtra(GroupsActivity.GROUP_ID, grpid);
+				intent.putExtra(GroupSummaryActivity.listofmember, namearray);
+				intent.putExtra(GroupSummaryActivity.stringDecimals, currencyDecimals);
+				intent.putExtra(EVENT_ID, tempid);
+				intent.putExtra(EVENT_NAME, tempName);
+				startActivity(intent);
+			}else if(tempFlag == GroupDatabase.cashTransferFlag){
+				Intent intent = new Intent(this, EditCashTransferActivity.class);
+				intent.putExtra(GroupsActivity.GROUP_ID, grpid);
+				intent.putExtra(GroupSummaryActivity.listofmember, namearray);
+				intent.putExtra(GroupSummaryActivity.stringDecimals, currencyDecimals);
+				intent.putExtra(EVENT_ID, tempid);
+				intent.putExtra(EVENT_NAME, tempName);
+				startActivity(intent);
+			}
+		}catch(Exception e){
+			Log.e("Sameer","Here",e);
+		}
 		
 	}
 	

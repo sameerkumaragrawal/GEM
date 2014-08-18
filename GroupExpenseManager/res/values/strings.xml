@@ -87,12 +87,10 @@
     <string name="title_activity_new_group_mod">NewGroupModActivity</string>
     <string name="member_name">Member Name</string>
     <string name="group_name">Group Name</string>
-    <string name="title_activity_group_summary_mod">GroupSummaryModActivity</string>
-    <string name="title_activity_edit_group_mod">EditGroupModActivity</string>
     <string name="remove_member_button">Remove this Member</string>
-    <string name="title_activity_add_event_mod">AddEventModActivity</string>
-    <string name="title_activity_sample_main">SampleMainActivity</string>
     <string name="androidfriends">Android Friends</string>
     <string name="edit_name_button">Edit name of the group</string>
+    <string name="title_activity_edit_event">Edit Event</string>
+    <string name="title_activity_edit_cash_transfer">Edit Cash Transfer Activity</string>
 
 </resources>

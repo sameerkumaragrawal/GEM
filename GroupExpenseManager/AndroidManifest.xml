@@ -11,9 +11,9 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
+        android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/head"
-        android:allowBackup="true"
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.AndroidFriends.src.MainActivity"
@@ -21,6 +21,7 @@
             android:label="@string/title_activity_main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -63,16 +64,16 @@
         </activity>
         <activity
             android:name="com.AndroidFriends.src.HistoryActivity"
-            android:label="@string/title_activity_history"
-            android:configChanges="keyboardHidden|screenSize|orientation" >
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:label="@string/title_activity_history" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.AndroidFriends.src.GroupSummaryActivity" />
         </activity>
         <activity
             android:name="com.AndroidFriends.src.AboutActivity"
-            android:label="@string/title_activity_about"
-            android:configChanges="keyboardHidden|screenSize|orientation" >
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:label="@string/title_activity_about" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.AndroidFriends.src.GroupsActivity" />
@@ -89,14 +90,24 @@
         </activity>
         <activity
             android:name="com.AndroidFriends.src.EditGroupActivity"
-            android:windowSoftInputMode="stateHidden"
             android:configChanges="keyboardHidden|screenSize|orientation"
-            android:label="@string/title_activity_edit_group" >
+            android:label="@string/title_activity_edit_group"
+            android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
             android:name="com.AndroidFriends.src.AddEventActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:label="@string/title_activity_add_event" >
+        </activity>
+        <activity
+            android:name="com.AndroidFriends.src.EditEventActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:label="@string/title_activity_edit_event" >
+        </activity>
+        <activity
+            android:name="com.AndroidFriends.src.EditCashTransferActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:label="@string/title_activity_edit_cash_transfer" >
         </activity>
     </application>
 
