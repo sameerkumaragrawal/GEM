@@ -11,6 +11,7 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,7 +22,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -42,9 +42,8 @@ public class HistoryActivity extends Activity {
 	private int[] idarray = null;
 	private int[] flagarray = null;
 	private LinearLayout historytable = null;
-	private LinearLayout historytablerow1,historytablerow2, editLayout;
 	private Button restoreButton;
-	private RelativeLayout prevNext;
+	private LinearLayout historytablerow1,historytablerow2, editLayout, prevNext;
 	private LayoutInflater inflater;
 	private GroupDatabase gpdb;
 	private String decimalFlag;
@@ -71,7 +70,7 @@ public class HistoryActivity extends Activity {
 		historytable = (LinearLayout) findViewById(R.id.HistoryTable);
 		historytablerow1 = (LinearLayout) findViewById(R.id.historyrow1);
 		historytablerow2 = (LinearLayout) findViewById(R.id.historyrow2);
-		prevNext = (RelativeLayout)findViewById(R.id.previousNextLayout);
+		prevNext = (LinearLayout)findViewById(R.id.previousNextLayout);
 		editLayout = (LinearLayout) findViewById(R.id.editLayout);
 		restoreButton = (Button) findViewById(R.id.restoreButton);
 		
@@ -179,23 +178,31 @@ public class HistoryActivity extends Activity {
 	}
 
 	public void filltable(int position){
-		TextView dtTextView = (TextView) findViewById(R.id.dateTimeText);
-		String dt = "Time of event : ";
-		dt += "00:00 1/1/2014";		// change this
-		dtTextView.setText(dt);
-		
 		historytable.removeAllViews();
+		TextView dtTextView = (TextView) findViewById(R.id.dateTimeText);
 		
 		if(idarray.length == 0){
 			prevNext.setVisibility(View.GONE);
 			editLayout.setVisibility(View.GONE);
 			historytablerow1.setVisibility(View.GONE);
 			historytablerow2.setVisibility(View.GONE);
+			dtTextView.setVisibility(View.GONE);
 			return;
 		}
 		
 		int tempid = idarray[position];
 		int tempflag = flagarray[position];
+		
+		
+		dtTextView.setVisibility(View.VISIBLE);
+		String dt = "Time of event : ";
+		long timeinmillis = gpdb.getEventDate(tempid);
+		if(timeinmillis == 0){
+			dt += "Not Specified";
+		}else{
+			dt += DateUtils.formatDateTime(this, timeinmillis, DateUtils.FORMAT_ABBREV_MONTH | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR);
+		}
+		dtTextView.setText(dt);
 		
 		//Prev Next Button Visibility
 		ImageButton prev = (ImageButton)prevNext.findViewById(R.id.previousButton);
