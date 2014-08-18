@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -42,6 +43,7 @@ public class HistoryActivity extends Activity {
 	private int[] flagarray = null;
 	private LinearLayout historytable = null;
 	private LinearLayout historytablerow1,historytablerow2, editLayout;
+	private Button restoreButton;
 	private RelativeLayout prevNext;
 	private LayoutInflater inflater;
 	private GroupDatabase gpdb;
@@ -71,6 +73,7 @@ public class HistoryActivity extends Activity {
 		historytablerow2 = (LinearLayout) findViewById(R.id.historyrow2);
 		prevNext = (RelativeLayout)findViewById(R.id.previousNextLayout);
 		editLayout = (LinearLayout) findViewById(R.id.editLayout);
+		restoreButton = (Button) findViewById(R.id.restoreButton);
 		
 		MemberList();
 		addItemsOnMemberSpinner();
@@ -224,9 +227,11 @@ public class HistoryActivity extends Activity {
 		//Edit delete button Visibility
 		if (tempflag == GroupDatabase.deletedEventFlag || tempflag == GroupDatabase.deletedCashTransferFlag) {
 			editLayout.setVisibility(View.GONE);
+			restoreButton.setVisibility(View.VISIBLE);
 		}
 		else {
 			editLayout.setVisibility(View.VISIBLE);
+			restoreButton.setVisibility(View.GONE);
 		}
 		
 		String str1,str2,str3;
@@ -310,6 +315,26 @@ public class HistoryActivity extends Activity {
 		AlertDialog alertDialog = alertDialogBuilder.create();
 		alertDialog.show();
 	}
+	
+	public void restoreEvent(View v) {
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+		alertDialogBuilder.setTitle("Restore Deleted Event");
+		alertDialogBuilder
+		.setMessage("Restoring a deleted event will change the balance of the involved members. Are you sure you want to restore this event?")
+		.setCancelable(true)
+		.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				restoreDeletedEventInDatabase(eventIdArrayPosition);
+			}
+		})
+		.setNegativeButton("No",new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		});
+		AlertDialog alertDialog = alertDialogBuilder.create();
+		alertDialog.show();
+	}
 
 	public void clearAlert(View v) {
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -346,6 +371,23 @@ public class HistoryActivity extends Activity {
 			}
 			else if(tempflag==GroupDatabase.cashTransferFlag){
 				gpdb.DeleteFromCashList(tempid);
+			}
+		}catch(Exception e){}
+		
+		fillEvents(memberId);
+		eventSpin.setSelection(eventIdArrayPosition);
+	}
+	
+	public void restoreDeletedEventInDatabase(int position) {
+		int tempid = idarray[position];
+		int tempflag = flagarray[position];
+
+		try{
+			if(tempflag==GroupDatabase.deletedEventFlag){
+				gpdb.restoreInTransList(tempid);
+			}
+			else if(tempflag==GroupDatabase.deletedCashTransferFlag){
+				gpdb.restoreInCashList(tempid);
 			}
 		}catch(Exception e){}
 		

@@ -125,7 +125,7 @@ public class GroupDatabase extends SQLiteOpenHelper{
 	}
 	
 	public void DeleteFromTransList(int id){
-		String newName = "Deleted event - ";
+		String newName = "Deleted - ";
 		getDB().execSQL("UPDATE " + EventTable + " SET Name = ? || Name, Flag = ? WHERE ID = " + id,new Object[]{newName, deletedEventFlag});
 		
 		int memberId;
@@ -139,6 +139,21 @@ public class GroupDatabase extends SQLiteOpenHelper{
 			getDB().execSQL("UPDATE " + MemberTable + " SET Paid = Paid - ?, Consumed = Consumed - ? WHERE ID = " + memberId, new Object[]{paid, consumed});
 		}while(mquery.moveToNext());
 	}
+	
+	public void restoreInTransList(int id){
+		getDB().execSQL("UPDATE " + EventTable + " SET Name = SUBSTR(Name, 11, LENGTH(Name)), Flag = ? WHERE ID = " + id,new Object[]{eventFlag});
+		
+		int memberId;
+		float paid, consumed;
+		Cursor mquery = getDB().rawQuery("SELECT * FROM " + TransTable + " WHERE EventId = " + id, null);
+		mquery.moveToFirst();
+		do{
+			memberId = mquery.getInt(0);
+			paid= mquery.getFloat(1);
+			consumed = mquery.getFloat(2);
+			getDB().execSQL("UPDATE " + MemberTable + " SET Paid = Paid + ?, Consumed = Consumed + ? WHERE ID = " + memberId, new Object[]{paid, consumed});
+		}while(mquery.moveToNext());
+	}
 		
 	public Cursor CashList(int id){
 		Cursor c = getDB().rawQuery("SELECT * FROM " + CashTable+" WHERE ID = " + id,null);
@@ -146,7 +161,7 @@ public class GroupDatabase extends SQLiteOpenHelper{
 	}
 	
 	public void DeleteFromCashList(int id){
-		String newName = "Deleted event - ";
+		String newName = "Deleted - ";
 		getDB().execSQL("UPDATE " + EventTable + " SET Name = ? || Name, Flag = ? WHERE ID = " + id,new Object[]{newName, deletedCashTransferFlag});
 		
 		int fromMemberId, toMemberId;
@@ -159,6 +174,21 @@ public class GroupDatabase extends SQLiteOpenHelper{
 			amount = mquery.getFloat(2);
 			getDB().execSQL("UPDATE " + MemberTable + " SET Paid = Paid - ? WHERE ID = " + fromMemberId, new Object[]{amount});
 			getDB().execSQL("UPDATE " + MemberTable + " SET Paid = Paid + ? WHERE ID = " + toMemberId, new Object[]{amount});
+		}while(mquery.moveToNext());
+	}
+	
+	public void restoreInCashList(int id){
+		getDB().execSQL("UPDATE " + EventTable + " SET Name = SUBSTR(Name, 11, LENGTH(Name)), Flag = ? WHERE ID = " + id,new Object[]{cashTransferFlag});
+		int fromMemberId, toMemberId;
+		float amount;
+		Cursor mquery = getDB().rawQuery("SELECT * FROM " + CashTable + " WHERE ID = " + id, null);
+		mquery.moveToFirst();
+		do{
+			fromMemberId = mquery.getInt(0);
+			toMemberId= mquery.getInt(1);
+			amount = mquery.getFloat(2);
+			getDB().execSQL("UPDATE " + MemberTable + " SET Paid = Paid + ? WHERE ID = " + fromMemberId, new Object[]{amount});
+			getDB().execSQL("UPDATE " + MemberTable + " SET Paid = Paid - ? WHERE ID = " + toMemberId, new Object[]{amount});
 		}while(mquery.moveToNext());
 	}
 	
