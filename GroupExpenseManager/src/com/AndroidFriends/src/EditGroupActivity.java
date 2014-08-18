@@ -79,7 +79,9 @@ public class EditGroupActivity extends Activity {
 		for(int j=0; j<numbermembers; j++){
 			addInitialMember(namearray[j]);
 		}
-		
+		View row = (View)list.getChildAt(0);
+		AutoCompleteTextView et = (AutoCompleteTextView) row.findViewById(R.id.new_group_item_et);
+		et.requestFocus();
 	}
 	
 	public void addInitialGroupName(String txt){

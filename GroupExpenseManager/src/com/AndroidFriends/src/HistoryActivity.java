@@ -320,7 +320,6 @@ public class HistoryActivity extends Activity {
 			
 			if(tempFlag == GroupDatabase.eventFlag){
 				Intent intent = new Intent(this, EditEventActivity.class);
-				intent.putExtra(GroupsActivity.GROUP_NAME, grpName);
 				intent.putExtra(GroupsActivity.GROUP_ID, grpid);
 				intent.putExtra(GroupSummaryActivity.listofmember, namearray);
 				intent.putExtra(GroupSummaryActivity.stringDecimals, currencyDecimals);
