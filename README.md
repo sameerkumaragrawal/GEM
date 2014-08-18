@@ -15,7 +15,8 @@ A simple, fast, user friendly and lightweight application that saves you quite a
 ★ Add a cash transfer transaction (cash return) involving 2 individuals  
 ★ Provides a possible solution for settlement  
 ★ View and filter history of events and cash transfers for one or all members  
-★ View each individual's total payment and consumption within the group
+★ View each individual's total payment and consumption within the group  
+★ Edit, delete and restore previous events
 
 Whats New
 ==========
@@ -37,6 +38,16 @@ Whats New
 - Hint text displayed in consumption amount field for the amount currently unaccounted for while adding an event
 - Cash transfer name reflects the names of the members involved in the transaction
 
+<b>Version 2.2:</b>  
+- Bug Fix (Focus handling)
+- Currency added
+
+<b>Version 3.0:</b>  
+- Edit and delete/restore previous events
+- Date and time stored for each event
+- Improved viewing of event history
+- Auto complete suggestions for event names
+
 For Google Play
 ================
 <b>Short Description:</b>  
@@ -54,3 +65,13 @@ Version 2.1:
 - Filter history corresponding to a member
 - Hint text for filling consumption amount
 - Cash transfer event name modified
+
+Version 2.2:
+- Bug Fix (Focus handling)
+- Currency added
+
+Version 3.0:
+- Edit and delete/restore previous events
+- Date and time stored for each event
+- Improved viewing of event history
+- Auto complete suggestions for event names
