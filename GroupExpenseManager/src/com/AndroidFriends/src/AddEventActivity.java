@@ -53,7 +53,7 @@ public class AddEventActivity extends Activity {
 	private int popupsize = 0;
 	private GroupDatabase gpdb;
 	private String decimalFlag;
-	private static final String[] eventNames = new String[] {
+	public static final String[] eventNames = new String[] {
 		"Food", "Lunch", "Dinner", "Breakfast", "Restaurant", "Hotel", "Canteen", "Drinks",
 		"Transport", "Petrol", "Gas", "Car", "Bus", "Train", "Flight",
 		"Health", "Medicines", "Hospital", "Dentist",

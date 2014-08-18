@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -32,7 +31,7 @@ public class NewGroupActivity extends Activity {
 	private String[] currencyArray=null;
 	private Spinner currencySpinner;
 	private ArrayList<String> listofcurrency = null;
-	private static final String[] groupNames = new String[] {
+	public static final String[] groupNames = new String[] {
 		"Friends", "Family", "College", "School", "Office", "Colleagues", "Hostel", "Students"
 	};
 

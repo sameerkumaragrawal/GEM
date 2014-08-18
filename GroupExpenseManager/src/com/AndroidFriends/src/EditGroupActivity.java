@@ -13,7 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
+import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -80,8 +80,11 @@ public class EditGroupActivity extends Activity {
 	public void addInitialMember(String txt){
 		addMember(null);
 		View row = (View)list.getChildAt(numberItems-1);
-		EditText et = (EditText) row.findViewById(R.id.new_group_item_et);
+		AutoCompleteTextView et = (AutoCompleteTextView) row.findViewById(R.id.new_group_item_et);
 		et.setText(txt);
+		et.setThreshold(1);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, NewGroupActivity.groupNames);
+		et.setAdapter(adapter);
 	}
 	
 	public void currencyList(){
@@ -188,7 +191,7 @@ public class EditGroupActivity extends Activity {
 		}
 
 		View group_row = (View) list.getChildAt(0);
-		EditText group_et = (EditText) group_row.findViewById(R.id.new_group_item_et);
+		AutoCompleteTextView group_et = (AutoCompleteTextView) group_row.findViewById(R.id.new_group_item_et);
 		String group_name = group_et.getText().toString();
 
 		if(group_name.equals("")){
@@ -205,7 +208,7 @@ public class EditGroupActivity extends Activity {
 
 		for (int k=0; k<numberOfMembers; k++) {
 			View row = (View) list.getChildAt(k+1);
-			EditText et = (EditText) row.findViewById(R.id.new_group_item_et);
+			AutoCompleteTextView et = (AutoCompleteTextView) row.findViewById(R.id.new_group_item_et);
 			members[k] = et.getText().toString();
 			if (!checkMemberName(members[k],k)){
 				return;
