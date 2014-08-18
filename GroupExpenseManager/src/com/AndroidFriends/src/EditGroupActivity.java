@@ -56,6 +56,7 @@ public class EditGroupActivity extends Activity {
 		groupid = intent.getIntExtra(GroupsActivity.GROUP_ID,0);
 		namearray = intent.getStringArrayExtra(GroupSummaryActivity.listofmember);
 		grpCurrency = intent.getIntExtra(GroupSummaryActivity.groupCurrencyId,0);
+		contactNames = intent.getStringArrayListExtra(GroupsActivity.CONTACTS_LIST);
 		initialGrpCurrency = grpCurrency;
 		String database="Database_"+groupid;
 		gpdb=GroupDatabase.get(this, database);
@@ -63,7 +64,6 @@ public class EditGroupActivity extends Activity {
 		this.setTitle(new_title);
 		setContentView(R.layout.activity_new_group);
 		
-		contactNames = intent.getStringArrayListExtra(GroupsActivity.CONTACTS_LIST);
 		currencyList();
 		addItemsOnCurrencySpinner();
 		
