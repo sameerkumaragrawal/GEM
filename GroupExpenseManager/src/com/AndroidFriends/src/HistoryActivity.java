@@ -339,7 +339,6 @@ public class HistoryActivity extends Activity {
 		}catch(Exception e){
 			Log.e("Sameer","Here",e);
 		}
-		
 	}
 	
 	public void deleteEvent(View v) {

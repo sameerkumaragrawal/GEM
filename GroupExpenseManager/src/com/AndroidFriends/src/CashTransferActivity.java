@@ -76,7 +76,7 @@ public class CashTransferActivity extends Activity {
 			return;
 		}
 		if(fM==tM){
-			createToast("Error! To and From person cannot be same");
+			createToast("Error! To and From person cannot be the same");
 			return;
 		}
 		

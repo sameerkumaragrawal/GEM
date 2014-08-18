@@ -80,7 +80,6 @@ public class EditCashTransferActivity extends Activity {
 	}
 
 	public void transferDone(View v) {
-		
 		int fM = spin1.getSelectedItemPosition()+1;
 		int tM = spin2.getSelectedItemPosition()+1;
 		EditText editText;
@@ -91,7 +90,7 @@ public class EditCashTransferActivity extends Activity {
 			return;
 		}
 		if(fM==tM){
-			createToast("Error! To and From person cannot be same");
+			createToast("Error! To and From person cannot be the same");
 			return;
 		}
 
