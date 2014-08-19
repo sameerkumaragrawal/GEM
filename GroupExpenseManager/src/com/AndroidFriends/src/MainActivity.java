@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -42,11 +41,6 @@ public class MainActivity extends Activity {
         this.finish();
     }
     
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main, menu);
-        return true;
-    }
     @Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		// TODO Auto-generated method stub
