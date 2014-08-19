@@ -173,7 +173,7 @@ public class PossibleSolution extends Activity {
 	public void saveScreenshot(String mPath) {
 		// Folder for storing the screenshots
 		File folder = new File(Environment.getExternalStorageDirectory() + "/" + GroupSummaryActivity.FOLDER);
-	    String path = folder.getPath();
+	    //String path = folder.getPath();
 	    if(!folder.exists()){        
 	    	folder.mkdir();
 	    }

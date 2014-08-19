@@ -380,7 +380,7 @@ public class GroupSummaryActivity extends Activity {
 	public void saveScreenshot(String mPath) {
 		// Folder for storing the screenshots
 		File folder = new File(Environment.getExternalStorageDirectory() + "/" + FOLDER);
-	    String path = folder.getPath();
+	    //String path = folder.getPath();
 	    if(!folder.exists()){        
 	    	folder.mkdir();
 	    }
