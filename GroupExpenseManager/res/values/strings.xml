@@ -3,8 +3,8 @@
 
     <string name="app_name">GEM</string>
     <string name="head">GEM</string>
-    <string name="main1">Group Expense</string>
-    <string name="main2">Manager</string>
+    <string name="main1">GEM</string>
+    <string name="main2">Group Expense Manager</string>
     <string name="loading">Loading</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
@@ -78,7 +78,7 @@
     <string name="consumedby">Consumed By</string>
     <string name="addanother">Add Another</string>
     <string name="clearhistory">Clear History</string>
-    <string name="version">Version 3.0</string>
+    <string name="version">Version 3.1</string>
     <string name="developedby">Developed by:</string>
     <string name="aditya">Aditya Bhandari</string>
     <string name="sameer">Sameer Kumar Agrawal</string>
