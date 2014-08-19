@@ -10,6 +10,7 @@
     <string name="menu_settings">Settings</string>
     <string name="menu_edit">Edit</string>
     <string name="menu_delete">Delete</string>
+    <string name="share_screenshot">Share Screenshot</string>
     <string name="menu_clear">Clear History</string>
     <string name="deleteEvent">Delete Event</string>
     <string name="editEvent">Edit Event</string>

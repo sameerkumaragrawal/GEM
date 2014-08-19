@@ -1,9 +1,18 @@
 package com.AndroidFriends.src;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.NavUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,6 +38,8 @@ public class PossibleSolution extends Activity {
 	private LayoutInflater inflater;
 	private GroupDatabase gpdb;
 	private String decimalFlag;
+	private File imageFile;
+	public final static String SOLUTION = "-solution";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -72,8 +83,12 @@ public class PossibleSolution extends Activity {
 		case android.R.id.home:
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
+		case R.id.share_screenshot:
+			shareScreenshot(null);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
 		}
-		return super.onOptionsItemSelected(item);
 	}
 
 	public void filltable(){
@@ -138,6 +153,53 @@ public class PossibleSolution extends Activity {
 	public void clearbalance(){
 		gpdb.clearBalance(ntransactions, solutionarray, tramountarray);
 	}
+	
+	public void shareScreenshot(View v) {
+		// Name the screenshot according to group and activity
+		String fileName = GroupSummaryActivity.FILENAME + "-" + groupName + SOLUTION;
+		String mPath = Environment.getExternalStorageDirectory().toString() + "/" + GroupSummaryActivity.FOLDER + "/" + fileName + GroupSummaryActivity.EXTENSION;
+		saveScreenshot(mPath);
+		
+		// Share the screenshot by loading from external storage
+		Uri screenshotUri = Uri.fromFile(new File(mPath));
+		final Intent imageIntent = new Intent(android.content.Intent.ACTION_SEND);
+		imageIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		imageIntent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
+		imageIntent.setType("image/jpeg");
+
+		startActivity(Intent.createChooser(imageIntent, "Share screenshot using"));
+	}
+	
+	public void saveScreenshot(String mPath) {
+		// Folder for storing the screenshots
+		File folder = new File(Environment.getExternalStorageDirectory() + "/" + GroupSummaryActivity.FOLDER);
+	    String path = folder.getPath();
+	    if(!folder.exists()){        
+	    	folder.mkdir();
+	    }
+
+		// Create bitmap screen capture
+		Bitmap bitmap;
+		View v1 = getWindow().getDecorView().getRootView();
+		v1.setDrawingCacheEnabled(true);
+		bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+		v1.setDrawingCacheEnabled(false);
+
+		OutputStream fout = null;
+		imageFile = new File(mPath);
+
+		try {
+		    fout = new FileOutputStream(imageFile);
+		    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fout);
+		    fout.flush();
+		    fout.close();
+		} catch (FileNotFoundException e) {
+		    e.printStackTrace();
+		} catch (IOException e) {
+		    e.printStackTrace();
+		}
+	}
+	
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		// TODO Auto-generated method stub

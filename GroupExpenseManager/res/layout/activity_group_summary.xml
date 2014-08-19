@@ -32,10 +32,20 @@
                 android:id="@+id/editButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.2"
+                android:layout_weight="0.25"
                 android:contentDescription="@string/edit_name_button"
                 android:onClick="editGroup"
                 android:src="@android:drawable/ic_menu_edit" />
+            
+            <ImageButton
+                android:id="@+id/shareButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.25"
+                android:layout_marginLeft="10dp"
+                android:contentDescription="@string/share_button"
+                android:onClick="shareScreenshot"
+                android:src="@android:drawable/ic_menu_share" />
         </LinearLayout>
 
         <LinearLayout
@@ -115,7 +125,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textAppearance="?android:attr/textAppearanceSmall"
-			android:textStyle="bold"
+            android:textStyle="bold"
             android:padding="10dp" >
         </TextView>
 
@@ -133,8 +143,8 @@
                 android:layout_weight="1"
                 android:onClick="showHistory"
                 android:text="@string/history" />
-			
-			<Button
+            
+            <Button
                 android:id="@+id/summaryButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -152,13 +162,13 @@
         </LinearLayout>
         
         <Button
-			android:id="@+id/nullifyButton"
-			android:layout_width="200dp"
-			android:layout_height="wrap_content"
-			android:layout_gravity="center"
-			android:onClick="nullifyAlert"
-			android:layout_marginTop="20dp"
-			android:layout_marginBottom="10dp"
-			android:text="@string/clear" />
+            android:id="@+id/nullifyButton"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:onClick="nullifyAlert"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/clear" />
     </LinearLayout>
 </ScrollView>

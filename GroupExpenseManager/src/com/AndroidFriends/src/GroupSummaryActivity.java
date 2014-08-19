@@ -1,5 +1,10 @@
 package com.AndroidFriends.src;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 import android.app.Activity;
@@ -10,7 +15,10 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.NavUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -46,7 +54,12 @@ public class GroupSummaryActivity extends Activity {
 	private GroupDatabase gpdb;
 	private CommonDatabase commondb;
 	private String decimalFlag;
-	private ArrayList<String> contactNames ;
+	private ArrayList<String> contactNames;
+	private File imageFile;
+	public final static String FOLDER = "GEM";
+	public final static String FILENAME = "screenshot";
+	public final static String EXTENSION = ".jpg";
+	public final static String SUMMARY = "-summary";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -133,6 +146,12 @@ public class GroupSummaryActivity extends Activity {
 			return true;
 		case R.id.menu_edit:
 			editGroup(null);
+			return true;
+		case R.id.share_screenshot:
+			shareScreenshot(null);
+			return true;
+		case R.id.clear_balance:
+			nullifyAlert(null);
 			return true;
 		case R.id.menu_delete:
 			DeleteAlert();
@@ -341,6 +360,53 @@ public class GroupSummaryActivity extends Activity {
 		intent.putExtra(stringDecimals, currencyDecimals);
 		startActivity(intent);
 	}
+	
+	public void shareScreenshot(View v) {
+		// Name the screenshot according to group and activity
+		String fileName = FILENAME + "-" + grpName + SUMMARY;
+		String mPath = Environment.getExternalStorageDirectory().toString() + "/" + FOLDER + "/" + fileName + EXTENSION;
+		saveScreenshot(mPath);
+		
+		// Share the screenshot by loading from external storage
+		Uri screenshotUri = Uri.fromFile(new File(mPath));
+		final Intent imageIntent = new Intent(android.content.Intent.ACTION_SEND);
+		imageIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		imageIntent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
+		imageIntent.setType("image/jpeg");
+
+		startActivity(Intent.createChooser(imageIntent, "Share screenshot using"));
+	}
+	
+	public void saveScreenshot(String mPath) {
+		// Folder for storing the screenshots
+		File folder = new File(Environment.getExternalStorageDirectory() + "/" + FOLDER);
+	    String path = folder.getPath();
+	    if(!folder.exists()){        
+	    	folder.mkdir();
+	    }
+
+		// Create bitmap screen capture
+		Bitmap bitmap;
+		View v1 = getWindow().getDecorView().getRootView();
+		v1.setDrawingCacheEnabled(true);
+		bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+		v1.setDrawingCacheEnabled(false);
+
+		OutputStream fout = null;
+		imageFile = new File(mPath);
+
+		try {
+		    fout = new FileOutputStream(imageFile);
+		    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fout);
+		    fout.flush();
+		    fout.close();
+		} catch (FileNotFoundException e) {
+		    e.printStackTrace();
+		} catch (IOException e) {
+		    e.printStackTrace();
+		}
+	}
+	
 	public String floatToString(float v){
 		String result="";
 		int r = (int) v;
