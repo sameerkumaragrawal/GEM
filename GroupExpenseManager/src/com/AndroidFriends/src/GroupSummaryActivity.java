@@ -6,10 +6,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -19,6 +22,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore.Images;
 import android.support.v4.app.NavUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -378,6 +382,9 @@ public class GroupSummaryActivity extends Activity {
 	}
 	
 	public void saveScreenshot(String mPath) {
+		// Delete existing image from Images table
+		getContentResolver().delete(Images.Media.EXTERNAL_CONTENT_URI, Images.Media.TITLE+"=?", new String[]{grpName+SUMMARY});
+		
 		// Folder for storing the screenshots
 		File folder = new File(Environment.getExternalStorageDirectory() + "/" + FOLDER);
 	    //String path = folder.getPath();
@@ -405,6 +412,17 @@ public class GroupSummaryActivity extends Activity {
 		} catch (IOException e) {
 		    e.printStackTrace();
 		}
+		
+		// Add image to Images table to be displayed in gallery
+		ContentValues values = new ContentValues();
+	    values.put(Images.Media.TITLE, grpName + SUMMARY);
+	    values.put(Images.Media.DESCRIPTION, SUMMARY);
+	    values.put(Images.ImageColumns.BUCKET_ID, imageFile.toString().toLowerCase(Locale.US).hashCode());
+	    values.put(Images.ImageColumns.BUCKET_DISPLAY_NAME, imageFile.getName().toLowerCase(Locale.US));
+	    values.put("_data", imageFile.getAbsolutePath());
+
+	    ContentResolver cr = getContentResolver();
+	    cr.insert(Images.Media.EXTERNAL_CONTENT_URI, values);
 	}
 	
 	public String floatToString(float v){

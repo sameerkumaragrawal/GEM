@@ -5,14 +5,19 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Locale;
 
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
+import android.provider.MediaStore.Images;
 import android.support.v4.app.NavUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -109,6 +114,9 @@ public class IndividualSummaryActivity extends Activity {
 	}
 	
 	public void saveScreenshot(String mPath) {
+		// Delete existing image from Images table
+		getContentResolver().delete(Images.Media.EXTERNAL_CONTENT_URI, Images.Media.TITLE+"=?", new String[]{groupName+INDIVIDUAL_SUMMARY});
+		
 		// Folder for storing the screenshots
 		File folder = new File(Environment.getExternalStorageDirectory() + "/" + GroupSummaryActivity.FOLDER);
 	    //String path = folder.getPath();
@@ -136,6 +144,18 @@ public class IndividualSummaryActivity extends Activity {
 		} catch (IOException e) {
 		    e.printStackTrace();
 		}
+		
+		// Add image to Images table to be displayed in gallery
+		ContentValues values = new ContentValues();
+	    values.put(Images.Media.TITLE, groupName + INDIVIDUAL_SUMMARY);
+	    values.put(Images.Media.DESCRIPTION, INDIVIDUAL_SUMMARY);
+	    values.put(Images.Media.DATE_TAKEN, System.currentTimeMillis ());
+	    values.put(Images.ImageColumns.BUCKET_ID, imageFile.toString().toLowerCase(Locale.US).hashCode());
+	    values.put(Images.ImageColumns.BUCKET_DISPLAY_NAME, imageFile.getName().toLowerCase(Locale.US));
+	    values.put("_data", imageFile.getAbsolutePath());
+
+	    ContentResolver cr = getContentResolver();
+	    cr.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
 	}
 
 	@Override
