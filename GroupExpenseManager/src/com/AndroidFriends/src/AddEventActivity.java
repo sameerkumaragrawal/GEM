@@ -320,27 +320,32 @@ public class AddEventActivity extends Activity {
 		return s;
 	}
 	
+	private class GenericTextWatcher implements TextWatcher{
+
+	    private EditText et;
+	    private GenericTextWatcher(EditText e) {
+	        this.et = e;
+	    }
+
+	    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+	    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+	    public void afterTextChanged(Editable editable) {
+	    	if (et.getText().toString().equals("")) {
+            	et.setHint(getRemainingAmount());
+            }
+	    }
+	}
+	
 	public View getConsumedView(){
 		View convertView = inflater.inflate(R.layout.add_event_consumed_item, null);
 		
-		final EditText et = (EditText) convertView.findViewById(R.id.editTextAddEventMod2);
+		EditText et = (EditText) convertView.findViewById(R.id.editTextAddEventMod2);
 		customFocusListener focusListener = new customFocusListener(); 
 		et.setHint(getRemainingAmount());
 		et.setOnFocusChangeListener(focusListener);
 		
-		TextWatcher watcher= new TextWatcher() {
-	        public void afterTextChanged(Editable s) { 
-	            if (et.getText().toString().equals("")) {
-	            	et.setHint(getRemainingAmount());
-	            }
-	        }
-	        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-	        	//Do nothing               
-	        }
-	        public void onTextChanged(CharSequence s, int start, int before, int count) {
-	            //Do nothing
-	        }
-	    };
+		GenericTextWatcher watcher= new GenericTextWatcher(et);
 	    et.addTextChangedListener(watcher);
 		
 		Button shareb = (Button)convertView.findViewById(R.id.shareButtonAddEventMod);
