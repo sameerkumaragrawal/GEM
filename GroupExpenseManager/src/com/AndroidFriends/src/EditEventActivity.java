@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -163,12 +165,27 @@ public class EditEventActivity extends Activity {
 				et.setText(String.format(decimalFlag, amount));
 			}
 			amount = mquery.getFloat(2);
-			if(amount>0){
+			if(amount > 0){
 				addMember2(null);
 				k = ndialogs - 1;
 				View row = (View) slist.getChildAt(k);
-				EditText et = (EditText) row.findViewById(R.id.editTextAddEventMod2);
+				final EditText et = (EditText) row.findViewById(R.id.editTextAddEventMod2);
 				et.setText(String.format(decimalFlag, amount));
+				
+				TextWatcher watcher= new TextWatcher() {
+			        public void afterTextChanged(Editable s) { 
+			            if (et.getText().toString().equals("")) {
+			            	et.setHint(getRemainingAmount());
+			            }
+			        }
+			        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+			        	//Do nothing               
+			        }
+			        public void onTextChanged(CharSequence s, int start, int before, int count) {
+			            //Do nothing
+			        }
+			    };
+			    et.addTextChangedListener(watcher);
 
 				temparray = checkedItems.get(k);
 				temparray[mquery.getInt(0)]=true;
@@ -320,10 +337,25 @@ public class EditEventActivity extends Activity {
 	public View getConsumedView(){
 		View convertView = inflater.inflate(R.layout.add_event_consumed_item, null);
 
-		EditText et = (EditText) convertView.findViewById(R.id.editTextAddEventMod2);
+		final EditText et = (EditText) convertView.findViewById(R.id.editTextAddEventMod2);
 		customFocusListener focusListener = new customFocusListener(); 
 		et.setHint(getRemainingAmount());
 		et.setOnFocusChangeListener(focusListener);
+		
+		TextWatcher watcher= new TextWatcher() {
+	        public void afterTextChanged(Editable s) { 
+	            if (et.getText().toString().equals("")) {
+	            	et.setHint(getRemainingAmount());
+	            }
+	        }
+	        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+	        	//Do nothing               
+	        }
+	        public void onTextChanged(CharSequence s, int start, int before, int count) {
+	            //Do nothing
+	        }
+	    };
+	    et.addTextChangedListener(watcher);
 
 		Button shareb = (Button)convertView.findViewById(R.id.shareButtonAddEventMod);
 		CustomClickListener clickListener = new CustomClickListener();
