@@ -52,12 +52,18 @@ Whats New
 - Auto complete member names imported from phone contacts
 - Auto complete suggestions for event and group names
 
+<b>Version 3.0.1:</b>  
+- Bug fix in storing the screenshots while sharing
+
 For Google Play
 ================
 <b>Short Description:</b>  
 A group expense manager for managing shared transactions and expenses in a group
 
 <b>Whats New:</b>  
+Version 3.0.1:
+- Bug fix in screenshot sharing
+
 Version 3.0:
 - Edit and delete/restore previous events
 - Date and time stored and displayed for each event
