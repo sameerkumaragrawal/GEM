@@ -17,6 +17,7 @@ A simple, fast, user friendly and lightweight application that saves you quite a
 ★ Possible solution for easy settlement  
 ★ View and filter history of events and cash transfers for one or all members  
 ★ View each individual's total payment and consumption within the group  
+★ Share screenshot of group balance and solution with other members easily via social networking apps  
 ★ Multiple currency support
 
 Whats New
@@ -46,6 +47,7 @@ Whats New
 <b>Version 3.0:</b>  
 - Edit and delete/restore previous events
 - Date and time stored for each event
+- Screenshot sharing (group and individual summary as well as solution) via social networking apps
 - Improved viewing of event history
 - Auto complete member names imported from phone contacts
 - Auto complete suggestions for event and group names
@@ -59,14 +61,13 @@ A group expense manager for managing shared transactions and expenses in a group
 Version 3.0:
 - Edit and delete/restore previous events
 - Date and time stored and displayed for each event
+- Screenshot sharing via social networking apps
 - Improved viewing of event history
 - Auto complete member names imported from phone contacts
 - Auto complete suggestions for event and group names
 
 Version 2.x:
 - Support for all screen sizes and resolutions
-- Check a member's total payment and consumption summary within the group
+- Each member's total payment and consumption summary within the group
 - Two types of events - group expense and individual expense
-- Filter history corresponding to a member
-- Hint text for filling consumption amount
 - Multiple currency support
