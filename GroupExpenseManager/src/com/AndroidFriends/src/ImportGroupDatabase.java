@@ -282,6 +282,8 @@ public class ImportGroupDatabase extends Activity {
 	}
 	
 	public void finishImport(){
+		gpdb.close();
+		GroupDatabase.closeAll();
 		this.finish();
 	}
 	
