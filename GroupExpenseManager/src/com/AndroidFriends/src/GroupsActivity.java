@@ -41,9 +41,25 @@ import android.widget.Toast;
 import com.AndroidFriends.R;
 import com.AndroidFriends.R.id;
 
+
 @TargetApi(11)
 public class GroupsActivity extends Activity {
 
+//	private class fileItem {
+//		public String file;
+//		public int icon;
+//		
+//		public fileItem (String file , Integer icon) {
+//	        this.file = file;
+//	        this.icon = icon;
+//	    }
+//		
+//		 @Override
+//	    public String toString(){
+//            return file;
+//        }
+//	}
+	
 	public int selPosition;
 	public String GroupName;
 	 //LIST OF ARRAY STRINGS WHICH WILL SERVE AS LIST ITEMS
@@ -61,9 +77,10 @@ public class GroupsActivity extends Activity {
     private CommonDatabase commondb;
     private static final int DIALOG_LOAD_FILE = 1000;
     private String[] fileList;
+//    private fileItem[] fileItemList;
     private String chosenFile, currentPath;
     private int dirLevel;
-    private String rootPath = Environment.getExternalStorageDirectory() + "";
+    private String rootPath = Environment.getExternalStorageDirectory() + "/";
 
     public ArrayList<String> contactNames = new ArrayList<String>();
     
@@ -374,25 +391,58 @@ public class GroupsActivity extends Activity {
 		    }
 	        else {
 	        	fileList = new String[tempFileList.length+1];
-	        	fileList[0] = "Up";
+	        	fileList[0] = "..";
 	        	for (int i=0; i<tempFileList.length; i++) {
 	        		fileList[i+1] = tempFileList[i];
 	        	}
 	        }
+	        
+	        for (int i=0; i<fileList.length; i++) {
+	        	File tempFile = new File(mPath, fileList[i]);
+        		if (tempFile.isDirectory()) {
+        			if (!fileList[i].equals("..")) fileList[i] += "/";
+        		}
+	        }
+	        
+//	        fileItemList = new fileItem[fileList.length];
+//	        for (int i=0; i<fileList.length; i++) {
+//	        	fileItemList[i].file = fileList[i];
+//	        	fileItemList[i].icon = R.drawable.ic_menu_archive;
+//	        }
 	    }
 	    else {
-	        fileList= new String[0];
+//	        fileItemList= new fileItem[0];
+	    	fileList = new String[0];
 	    }
 	}
 
 	// Create dialog for choosing files
 	public void myShowDialog(int id) {
+//		ListAdapter adapter1 = new ArrayAdapter<fileItem>(
+//			this, android.R.layout.select_dialog_item, android.R.id.text1, fileItemList){
+//			public View getView(int position, View convertView, ViewGroup parent) {
+//	            //User super class to create the View
+//	            View v = super.getView(position, convertView, parent);
+//	            TextView tv = (TextView)v.findViewById(android.R.id.text1);
+//
+//	            //Put the image on the TextView
+//	            tv.setCompoundDrawablesWithIntrinsicBounds(fileItemList[position].icon, 0, 0, 0);
+//
+//	            //Add margin between image and text (support various screen densities)
+//	            int dp5 = (int) (5 * getResources().getDisplayMetrics().density + 0.5f);
+//	            tv.setCompoundDrawablePadding(dp5);
+//
+//	            return v;
+//	        }
+//	    };
+		
 		AlertDialog dialog = null;
 	    AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
 	    switch(id) {
 	        case DIALOG_LOAD_FILE:
-	            builder.setTitle("Choose file to import group from");
+	            builder.setTitle("Choose database file to import group from " + currentPath);
+	            builder.setIcon(R.drawable.ic_menu_archive);
 	            if(fileList == null) {
 	                dialog = builder.create();
 	                dialog.show();
@@ -402,6 +452,7 @@ public class GroupsActivity extends Activity {
 	                public void onClick(DialogInterface dialog, int which) {
 	                    if (dirLevel != 0 && which == 0) {
 	                    	currentPath = currentPath.substring(0, currentPath.lastIndexOf("/"));
+	                    	currentPath = currentPath.substring(0, currentPath.lastIndexOf("/")+1);
 	                    	File cFile = new File(currentPath);
 	                    	dirLevel--;
 	                    	loadFileList(cFile);
@@ -410,7 +461,7 @@ public class GroupsActivity extends Activity {
 	                	
 	                    else {
 		                	chosenFile = fileList[which];
-		                    currentPath = currentPath + "/" + chosenFile;
+		                    currentPath = currentPath + chosenFile;
 		                    File cFile = new File(currentPath);
 		                    if (cFile.isDirectory()) {
 		                    	dirLevel++;
