@@ -77,26 +77,26 @@
             <ImageButton
                 android:id="@+id/previousButton"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:contentDescription="@string/previousEvent"
                 android:onClick="previousEvent"
                 android:visibility="invisible"
-                android:src="@android:drawable/ic_media_previous" />
+                android:src="@drawable/ic_menu_back" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="2" />
+                android:layout_weight="2.5" />
 
             <ImageButton
                 android:id="@+id/nextButton"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:contentDescription="@string/nextEvent"
                 android:onClick="nextEvent"
-                android:src="@android:drawable/ic_media_next" />
+                android:src="@drawable/ic_menu_forward" />
         </LinearLayout>
 
         <LinearLayout

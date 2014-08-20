@@ -392,7 +392,7 @@ public class GroupsActivity extends Activity {
 
 	    switch(id) {
 	        case DIALOG_LOAD_FILE:
-	            builder.setTitle("Choose your file");
+	            builder.setTitle("Choose file to import group from");
 	            if(fileList == null) {
 	                dialog = builder.create();
 	                dialog.show();
@@ -439,8 +439,7 @@ public class GroupsActivity extends Activity {
             File data  = Environment.getDataDirectory();
 
             if (sd.canWrite()) {
-                String  currentDBPath= "//data//" + "com.AndroidFriends"
-                        + "//databases//" + "Database_" + grpId;
+                String  currentDBPath= "//data//" + "com.AndroidFriends" + "//databases//" + "Database_" + grpId;
                 File backupDB = new File(data, currentDBPath);
                 File currentDB = new File(DBPath);
 

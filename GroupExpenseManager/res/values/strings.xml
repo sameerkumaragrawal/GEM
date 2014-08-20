@@ -33,7 +33,7 @@
     <string name="desc2">An Edit Icon</string>
     <string name="desc3">An Icon</string>
     <string name="title_activity_groups">Group Expense Manager</string>
-    <string name="existing_groups">Groups</string>
+    <string name="existing_groups">Existing Groups</string>
     <string name="add_group_button">Add</string>
     <string name="import_group_button">Import</string>
     <string name="title_activity_new_group">New Group</string>

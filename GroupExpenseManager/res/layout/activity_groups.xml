@@ -13,26 +13,31 @@
         <TextView
             android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_weight="1.2"
+            android:layout_weight="1"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             android:text="@string/existing_groups"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/groupsActivityAddButton"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="newGroup"
-            android:text="@string/add_group_button" />
         
-        <Button
+        <ImageButton
+	        android:id="@+id/groupsActivityAddButton"
+	        android:layout_width="0dp"
+	        android:layout_height="match_parent"
+	        android:layout_weight="0.25"
+	        android:contentDescription="@string/edit_name_button"
+	        android:onClick="newGroup"
+	        android:src="@android:drawable/ic_menu_add" />
+            
+        <ImageButton
             android:id="@+id/groupsActivityImportButton"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:layout_marginLeft="10dp"
+            android:contentDescription="@string/share_button"
             android:onClick="importStart"
-            android:text="@string/import_group_button" />
+            android:src="@drawable/ic_menu_archive" />
 
     </LinearLayout>
 
