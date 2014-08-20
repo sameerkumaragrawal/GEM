@@ -231,6 +231,13 @@ public class NewGroupActivity extends Activity {
 		gpdb.close();
 		GroupDatabase.closeAll();
 	}
+	
+	@Override
+	public void finish(){
+		super.finish();
+		gpdb.close();
+		GroupDatabase.closeAll();
+	}
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
