@@ -11,8 +11,6 @@ import java.util.Arrays;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
-import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -33,6 +31,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
@@ -73,11 +72,19 @@ public class GroupsActivity extends Activity {
         super.onCreate(savedInstanceState);
         commondb = CommonDatabase.get(this);
         setContentView(R.layout.activity_groups);
+        adaptor = new ListAdaptor(this);
+		items = new ArrayList<String>();
+
+		list = (ListView) findViewById(R.id.GroupsList);
+		list.setAdapter(adaptor);
+		
+		groupList();
+		getContacts();
     }
 	
 	@Override
-	public void onStart(){
-		super.onStart();
+	public void onRestart(){
+		super.onRestart();
 		
 		adaptor = new ListAdaptor(this);
 		items = new ArrayList<String>();
@@ -187,10 +194,7 @@ public class GroupsActivity extends Activity {
 		
 	}
 	
-	@Override
-	public void onRestart() {
-    	super.onRestart();
-    }
+	
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_groups, menu);
@@ -241,10 +245,25 @@ public class GroupsActivity extends Activity {
     	}
     }
     
+    private class CustomOnItemClickListener implements OnItemClickListener{
+
+		private AlertDialog dialog;
+		
+		CustomOnItemClickListener(AlertDialog d){
+			this.dialog = d;
+		}
+		
+    	public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+    		sendOption(position);
+    		dialog.dismiss();
+			
+		}
+    	
+    }
     public void showOpenDialog(int pos) {
     	AlertDialog.Builder builder = new AlertDialog.Builder(
     			new ContextThemeWrapper(this, R.style.DialogTheme));
-    	//builder.setTitle("Select Color Mode");
 
     	selPosition = pos;
     	
@@ -255,20 +274,13 @@ public class GroupsActivity extends Activity {
     	modeList.setAdapter(modeAdapter);
 
     	builder.setView(modeList);
-    	final Dialog dialog = builder.create();
+    	AlertDialog dialog = builder.create();
 
     	dialog.show();
     	modeList.setClickable(true);
-        modeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {  
-        	@SuppressWarnings("rawtypes")
-    		public void onItemClick(AdapterView parentView, View childView, int option, long id) {
-        		sendOption(option);
-        		dialog.dismiss();
-        	}
-            @SuppressWarnings({ "rawtypes", "unused" })
-    		public void onNothingClick(AdapterView parentView) {
-            }
-        });
+    	CustomOnItemClickListener myitemlistener = new CustomOnItemClickListener(dialog);
+    	
+        modeList.setOnItemClickListener(myitemlistener);
     }
     
     public void DeleteAlert() {
@@ -342,7 +354,7 @@ public class GroupsActivity extends Activity {
     	currentPath = rootPath;
     	dirLevel = 0;
     	loadFileList(mPath);
-    	onCreateDialog(DIALOG_LOAD_FILE).show();
+    	myShowDialog(DIALOG_LOAD_FILE);
     }
     
     // Load list of files at given path into fileList
@@ -374,16 +386,17 @@ public class GroupsActivity extends Activity {
 	}
 
 	// Create dialog for choosing files
-	protected Dialog onCreateDialog(int id) {
-	    Dialog dialog = null;
-	    AlertDialog.Builder builder = new Builder(this);
+	public void myShowDialog(int id) {
+		AlertDialog dialog = null;
+	    AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
 	    switch(id) {
 	        case DIALOG_LOAD_FILE:
 	            builder.setTitle("Choose your file");
 	            if(fileList == null) {
 	                dialog = builder.create();
-	                return dialog;
+	                dialog.show();
+	                return;
 	            }
 	            builder.setItems(fileList, new DialogInterface.OnClickListener() {
 	                public void onClick(DialogInterface dialog, int which) {
@@ -392,7 +405,7 @@ public class GroupsActivity extends Activity {
 	                    	File cFile = new File(currentPath);
 	                    	dirLevel--;
 	                    	loadFileList(cFile);
-	                    	onCreateDialog(DIALOG_LOAD_FILE).show();
+	                    	myShowDialog(DIALOG_LOAD_FILE);
 	                    }
 	                	
 	                    else {
@@ -402,7 +415,7 @@ public class GroupsActivity extends Activity {
 		                    if (cFile.isDirectory()) {
 		                    	dirLevel++;
 		                    	loadFileList(cFile);
-		                    	onCreateDialog(DIALOG_LOAD_FILE).show();
+		                    	myShowDialog(DIALOG_LOAD_FILE);
 		                    }
 		                    else {
 		                    	Toast.makeText(getBaseContext(), "Imported group from " + currentPath + " successfully",
@@ -414,8 +427,8 @@ public class GroupsActivity extends Activity {
 	            });
 	            break;
 	    }
-	    dialog = builder.show();
-	    return dialog;
+	    dialog = builder.create();
+	    dialog.show();
 	}
     
 	@SuppressWarnings("resource")

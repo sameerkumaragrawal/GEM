@@ -12,7 +12,6 @@ import java.util.Locale;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.DialogInterface;
@@ -71,7 +70,7 @@ public class GroupSummaryActivity extends Activity {
 	public final static String SUMMARY = "-summary";
 	public final static String DATABASE = "-database";
 	public final static String DB_EXTENSION = ".db";
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -81,26 +80,26 @@ public class GroupSummaryActivity extends Activity {
 		contactNames = intent.getStringArrayListExtra(GroupsActivity.CONTACTS_LIST);
 		grpCurrency = intent.getIntExtra(GroupsActivity.GROUP_CURR_ID, 0);
 		String database="Database_"+grpId;
-		
+
 		gdName="Database_"+grpId;
-    	SQLiteDatabase groupDb=null;
-    	countmembers=0;
-    	
-    	try{
-    		groupDb = this.openOrCreateDatabase(gdName, MODE_PRIVATE, null);
-    		//Log.e("Sameer",String.valueOf(groupDb.getVersion()));
-    		groupDb.rawQuery("SELECT Balance FROM " + GroupDatabase.MemberTable+";",null);
-    		groupDb.setVersion(1);
-    		
-    	}catch(Exception e) {
-    		
-    		//Log.e("Sameer", "Table doesn't contain column named Balance", e);
-        }
-        finally{ 
-        	if(groupDb!=null)
-        		groupDb.close();
-        }
-    	
+		SQLiteDatabase groupDb=null;
+		countmembers=0;
+
+		try{
+			groupDb = this.openOrCreateDatabase(gdName, MODE_PRIVATE, null);
+			//Log.e("Sameer",String.valueOf(groupDb.getVersion()));
+			groupDb.rawQuery("SELECT Balance FROM " + GroupDatabase.MemberTable+";",null);
+			groupDb.setVersion(1);
+
+		}catch(Exception e) {
+
+			//Log.e("Sameer", "Table doesn't contain column named Balance", e);
+		}
+		finally{ 
+			if(groupDb!=null)
+				groupDb.close();
+		}
+
 		gpdb=GroupDatabase.get(this, database);
 		commondb = CommonDatabase.get(this);
 		String new_title= grpName+" - "+String.valueOf(this.getTitle());
@@ -108,9 +107,9 @@ public class GroupSummaryActivity extends Activity {
 		setContentView(R.layout.activity_group_summary);
 		TextView header = (TextView) findViewById(R.id.groupNametextView);
 		header.setText(grpName);
-		
+
 		inflater = LayoutInflater.from(this);
-		
+
 		currencyDecimals = commondb.getCurrencyDecimals(grpCurrency);
 		decimalFlag = "%." + currencyDecimals + "f";
 		MemberListWithBalance();
@@ -135,14 +134,14 @@ public class GroupSummaryActivity extends Activity {
 			break;
 		} 
 	}
-	
+
 	@Override
 	public void finish(){
 		super.finish();
 		gpdb.close();
 		GroupDatabase.closeAll();
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.activity_group_summary, menu);
@@ -194,7 +193,7 @@ public class GroupSummaryActivity extends Activity {
 				countmembers++;
 			}while(mquery.moveToNext());
 		}catch(Exception e){}
-		
+
 	}
 
 	public void fillEntryInTable(){
@@ -214,11 +213,11 @@ public class GroupSummaryActivity extends Activity {
 				v3.setText(String.format(decimalFlag, a));
 				v2.setText(null);
 			}	
-			
+
 			MainActivity.setWeight(v1,1);
 			MainActivity.setWeight(v2,0.7f);
 			MainActivity.setWeight(v3,0.7f);
-			
+
 			tl.addView(convertView);
 		}
 	}
@@ -242,7 +241,7 @@ public class GroupSummaryActivity extends Activity {
 			}
 		}
 	}
-	
+
 	public void displayCurrency() {
 		TextView currencyText = (TextView) findViewById(R.id.currencyDisplayText);
 		String text = "(All amounts displayed are in ";
@@ -270,7 +269,7 @@ public class GroupSummaryActivity extends Activity {
 		intent.putExtra(stringDecimals, currencyDecimals);
 		startActivity(intent);
 	}
-	
+
 	public void showSummary(View v){
 		Intent intent = new Intent(this, IndividualSummaryActivity.class);
 		intent.putExtra(GroupsActivity.GROUP_NAME, grpName);
@@ -291,45 +290,50 @@ public class GroupSummaryActivity extends Activity {
 		intent.putExtra(stringDecimals, currencyDecimals);
 		startActivity(intent);
 	}
-	@Override
-	protected Dialog onCreateDialog(int id) {
+
+	public void myShowDialog(int id) {
+		AlertDialog dialog = null;
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
 		switch (id){
-		case 0 : return new AlertDialog.Builder(this)
-		.setTitle("Clear Balance")
-		.setMessage("Are you sure you want to clear the group balance?")
-		.setCancelable(true)
-		.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-				nullify();
-			}
-		})
-		.setNegativeButton("No",new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-				dialog.cancel();
-			}
-		})
-		.create();
-		case 1: return new AlertDialog.Builder(this)
-		.setTitle("Delete Group")
-		.setMessage("Are you sure you want to delete the group?")
-		.setCancelable(true)
-		.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-				deleteGroup();
-			}
-		})
-		.setNegativeButton("No",new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-				dialog.cancel();
-			}
-		})
-		.create();
+		case 0 : 
+			builder.setTitle("Clear Balance")
+			.setMessage("Are you sure you want to clear the group balance?")
+			.setCancelable(true)
+			.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					nullify();
+				}
+			})
+			.setNegativeButton("No",new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					dialog.cancel();
+				}
+			});
+			break;
+		case 1: 
+			builder
+			.setTitle("Delete Group")
+			.setMessage("Are you sure you want to delete the group?")
+			.setCancelable(true)
+			.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					deleteGroup();
+				}
+			})
+			.setNegativeButton("No",new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					dialog.cancel();
+				}
+			});
+			break;
 		}
-		return null;
+		dialog = builder.create();
+		dialog.show();
 	}
-	@SuppressWarnings("deprecation")
+
 	public void nullifyAlert(View v) {
-		showDialog(0);
+		myShowDialog(0);
 	}
 
 	public void nullify(){
@@ -361,9 +365,8 @@ public class GroupSummaryActivity extends Activity {
 		this.finish();
 	}
 
-	@SuppressWarnings("deprecation")
 	public void DeleteAlert() {
-		showDialog(1);
+		myShowDialog(1);
 	}
 
 	public void toAddEvent(View v) {
@@ -374,13 +377,13 @@ public class GroupSummaryActivity extends Activity {
 		intent.putExtra(stringDecimals, currencyDecimals);
 		startActivity(intent);
 	}
-	
+
 	public void shareScreenshot(View v) {
 		// Name the screenshot according to group and activity
 		String fileName = FILENAME + "-" + grpName + SUMMARY;
 		String mPath = Environment.getExternalStorageDirectory().toString() + "/" + FOLDER + "/" + fileName + EXTENSION;
 		saveScreenshot(mPath);
-		
+
 		// Share the screenshot by loading from external storage
 		Uri screenshotUri = Uri.fromFile(new File(mPath));
 		final Intent imageIntent = new Intent(android.content.Intent.ACTION_SEND);
@@ -390,16 +393,16 @@ public class GroupSummaryActivity extends Activity {
 
 		startActivity(Intent.createChooser(imageIntent, "Share screenshot using"));
 	}
-	
+
 	public void saveScreenshot(String mPath) {
 		// Delete existing image from Images table
 		getContentResolver().delete(Images.Media.EXTERNAL_CONTENT_URI, Images.Media.TITLE+"=?", new String[]{grpName+SUMMARY});
-		
+
 		// Folder for storing the screenshots
 		File folder = new File(Environment.getExternalStorageDirectory() + "/" + FOLDER);
-	    if(!folder.exists()){        
-	    	folder.mkdir();
-	    }
+		if(!folder.exists()){        
+			folder.mkdir();
+		}
 
 		// Create bitmap screen capture
 		Bitmap bitmap;
@@ -412,32 +415,32 @@ public class GroupSummaryActivity extends Activity {
 		imageFile = new File(mPath);
 
 		try {
-		    fout = new FileOutputStream(imageFile);
-		    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fout);
-		    fout.flush();
-		    fout.close();
+			fout = new FileOutputStream(imageFile);
+			bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fout);
+			fout.flush();
+			fout.close();
 		} catch (FileNotFoundException e) {
-		    e.printStackTrace();
+			e.printStackTrace();
 		} catch (IOException e) {
-		    e.printStackTrace();
+			e.printStackTrace();
 		}
-		
+
 		// Add image to Images table to be displayed in gallery
 		ContentValues values = new ContentValues();
-	    values.put(Images.Media.TITLE, grpName + SUMMARY);
-	    values.put(Images.Media.DESCRIPTION, SUMMARY);
-	    values.put(Images.ImageColumns.BUCKET_ID, imageFile.toString().toLowerCase(Locale.US).hashCode());
-	    values.put(Images.ImageColumns.BUCKET_DISPLAY_NAME, imageFile.getName().toLowerCase(Locale.US));
-	    values.put("_data", imageFile.getAbsolutePath());
+		values.put(Images.Media.TITLE, grpName + SUMMARY);
+		values.put(Images.Media.DESCRIPTION, SUMMARY);
+		values.put(Images.ImageColumns.BUCKET_ID, imageFile.toString().toLowerCase(Locale.US).hashCode());
+		values.put(Images.ImageColumns.BUCKET_DISPLAY_NAME, imageFile.getName().toLowerCase(Locale.US));
+		values.put("_data", imageFile.getAbsolutePath());
 
-	    ContentResolver cr = getContentResolver();
-	    cr.insert(Images.Media.EXTERNAL_CONTENT_URI, values);
+		ContentResolver cr = getContentResolver();
+		cr.insert(Images.Media.EXTERNAL_CONTENT_URI, values);
 	}
-	
+
 	// Functions to export the group database
 	public void exportAlert(View v) {
 		final String DBPath = Environment.getExternalStorageDirectory() + "/" + FOLDER + "/" + grpName + DATABASE + DB_EXTENSION;
-		
+
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 		alertDialogBuilder.setTitle("Export Group Database");
 		alertDialogBuilder
@@ -456,37 +459,37 @@ public class GroupSummaryActivity extends Activity {
 		AlertDialog alertDialog = alertDialogBuilder.create();
 		alertDialog.show();
 	}
-	
+
 	@SuppressWarnings("resource")
 	public void exportGroupDatabase(String DBPath) {
 		// Folder for storing the database
 		File folder = new File(Environment.getExternalStorageDirectory() + "/" + FOLDER);
-	    if(!folder.exists()){
-	    	folder.mkdir();
-	    }
-			    
+		if(!folder.exists()){
+			folder.mkdir();
+		}
+
 		try {
-            File sd = Environment.getExternalStorageDirectory();
-            File data = Environment.getDataDirectory();
+			File sd = Environment.getExternalStorageDirectory();
+			File data = Environment.getDataDirectory();
 
-            if (sd.canWrite()) {
-                String  currentDBPath= "//data//" + "com.AndroidFriends" + "//databases//" + gdName;
-                File currentDB = new File(data, currentDBPath);
-                File backupDB = new File(DBPath);
+			if (sd.canWrite()) {
+				String  currentDBPath= "//data//" + "com.AndroidFriends" + "//databases//" + gdName;
+				File currentDB = new File(data, currentDBPath);
+				File backupDB = new File(DBPath);
 
-                FileChannel src = new FileInputStream(currentDB).getChannel();
-                FileChannel dst = new FileOutputStream(backupDB).getChannel();
-                dst.transferFrom(src, 0, src.size());
-                src.close();
-                dst.close();
-                Toast.makeText(getBaseContext(), "Group database exported to " + backupDB.toString() + " successfully",
-                        Toast.LENGTH_LONG).show();
-            }
-        } catch (Exception e) {
-            Log.e("adi", "error", e);
-        }
+				FileChannel src = new FileInputStream(currentDB).getChannel();
+				FileChannel dst = new FileOutputStream(backupDB).getChannel();
+				dst.transferFrom(src, 0, src.size());
+				src.close();
+				dst.close();
+				Toast.makeText(getBaseContext(), "Group database exported to " + backupDB.toString() + " successfully",
+						Toast.LENGTH_LONG).show();
+			}
+		} catch (Exception e) {
+			Log.e("adi", "error", e);
+		}
 	}
-	
+
 	public String floatToString(float v){
 		String result="";
 		int r = (int) v;

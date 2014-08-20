@@ -221,6 +221,11 @@ public class NewGroupActivity extends Activity {
 	}
 
 	public void createTables(String databaseName,String[] members){
+		try{
+			this.deleteDatabase(databaseName);
+		}catch(Exception e){
+			
+		}
 		gpdb = GroupDatabase.get(this, databaseName);
 		gpdb.onCreateInsert(members);
 		gpdb.close();

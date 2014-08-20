@@ -164,9 +164,13 @@ public class CommonDatabase extends SQLiteOpenHelper{
 	}
 	
 	public int getNumberOfGroups() {
+		int rvalue = 0;
 		Cursor mQuery = getDB().rawQuery("SELECT ID FROM " + tableName, null);
-		mQuery.moveToLast();
-		return mQuery.getInt(0);
+		if(mQuery.getCount()>0){
+			mQuery.moveToLast();
+			rvalue = mQuery.getInt(0);
+		}
+		return rvalue;
 	}
 
 	@Override
