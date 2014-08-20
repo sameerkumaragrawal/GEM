@@ -69,7 +69,7 @@ public class GroupSummaryActivity extends Activity {
 	public final static String EXTENSION = ".jpg";
 	public final static String SUMMARY = "-summary";
 	public final static String DATABASE = "-database";
-	public final static String DB_EXTENSION = ".db";
+	public final static String DB_EXTENSION = ".gem.db";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
