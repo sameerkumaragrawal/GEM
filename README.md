@@ -55,14 +55,20 @@ Whats New
 <b>Version 3.0.1:</b>  
 - Bug fix in storing the screenshots while sharing
 
+<b>Version 3.0.3:</b>  
+- Bug fix in hint text in add and edit event
+
+<b>Version 3.1:</b>  
+- Import/export group database
+
 For Google Play
 ================
 <b>Short Description:</b>  
 A group expense manager for managing shared transactions and expenses in a group
 
 <b>Whats New:</b>  
-Version 3.0.1:
-- Bug fix in screenshot sharing
+Version 3.1:
+- Import/export group database
 
 Version 3.0:
 - Edit and delete/restore previous events

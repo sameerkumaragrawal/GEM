@@ -1,10 +1,12 @@
 package com.AndroidFriends.src;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -24,12 +26,14 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore.Images;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.AndroidFriends.R;
 
@@ -57,6 +61,7 @@ public class GroupSummaryActivity extends Activity {
 	private LayoutInflater inflater;
 	private GroupDatabase gpdb;
 	private CommonDatabase commondb;
+	private String gdName;
 	private String decimalFlag;
 	private ArrayList<String> contactNames;
 	private File imageFile;
@@ -64,6 +69,8 @@ public class GroupSummaryActivity extends Activity {
 	public final static String FILENAME = "screenshot";
 	public final static String EXTENSION = ".jpg";
 	public final static String SUMMARY = "-summary";
+	public final static String DATABASE = "-database";
+	public final static String DB_EXTENSION = ".db";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -75,7 +82,7 @@ public class GroupSummaryActivity extends Activity {
 		grpCurrency = intent.getIntExtra(GroupsActivity.GROUP_CURR_ID, 0);
 		String database="Database_"+grpId;
 		
-		String gdName="Database_"+grpId;
+		gdName="Database_"+grpId;
     	SQLiteDatabase groupDb=null;
     	countmembers=0;
     	
@@ -153,6 +160,9 @@ public class GroupSummaryActivity extends Activity {
 			return true;
 		case R.id.share_screenshot:
 			shareScreenshot(null);
+			return true;
+		case R.id.export:
+			exportAlert(null);
 			return true;
 		case R.id.clear_balance:
 			nullifyAlert(null);
@@ -387,7 +397,6 @@ public class GroupSummaryActivity extends Activity {
 		
 		// Folder for storing the screenshots
 		File folder = new File(Environment.getExternalStorageDirectory() + "/" + FOLDER);
-	    //String path = folder.getPath();
 	    if(!folder.exists()){        
 	    	folder.mkdir();
 	    }
@@ -423,6 +432,58 @@ public class GroupSummaryActivity extends Activity {
 
 	    ContentResolver cr = getContentResolver();
 	    cr.insert(Images.Media.EXTERNAL_CONTENT_URI, values);
+	}
+	
+	public void exportAlert(View v) {
+		final String DBPath = Environment.getExternalStorageDirectory() + "/" + FOLDER + "/" + grpName + DATABASE + DB_EXTENSION;
+		
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+		alertDialogBuilder.setTitle("Export Group Database");
+		alertDialogBuilder
+		.setMessage("The group database will be stored as " + DBPath + ". Continue?")
+		.setCancelable(true)
+		.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				exportGroupDatabase(DBPath);
+			}
+		})
+		.setNegativeButton("No",new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		});
+		AlertDialog alertDialog = alertDialogBuilder.create();
+		alertDialog.show();
+	}
+	
+	@SuppressWarnings("resource")
+	public void exportGroupDatabase(String DBPath) {
+		// Folder for storing the screenshots
+		File folder = new File(Environment.getExternalStorageDirectory() + "/" + FOLDER);
+	    if(!folder.exists()){        
+	    	folder.mkdir();
+	    }
+			    
+		try {
+            File sd = Environment.getExternalStorageDirectory();
+            File data = Environment.getDataDirectory();
+
+            if (sd.canWrite()) {
+                String  currentDBPath= "//data//" + "com.AndroidFriends" + "//databases//" + gdName;
+                File currentDB = new File(data, currentDBPath);
+                File backupDB = new File(DBPath);
+
+                FileChannel src = new FileInputStream(currentDB).getChannel();
+                FileChannel dst = new FileOutputStream(backupDB).getChannel();
+                dst.transferFrom(src, 0, src.size());
+                src.close();
+                dst.close();
+                Toast.makeText(getBaseContext(), backupDB.toString() + " saved",
+                        Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception e) {
+            Log.e("adi", "error", e);
+        }
 	}
 	
 	public String floatToString(float v){

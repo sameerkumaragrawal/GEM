@@ -1,10 +1,14 @@
 package com.AndroidFriends.src;
 
+import java.io.File;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -13,6 +17,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.ContactsContract;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
@@ -29,6 +34,7 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.AndroidFriends.R;
 import com.AndroidFriends.R.id;
@@ -51,6 +57,11 @@ public class GroupsActivity extends Activity {
     public final static String GROUP_ID = "GroupSummmary/GroupID";
     public final static String GROUP_CURR_ID = "GroupSummmary/GroupCurrency";
     private CommonDatabase commondb;
+    private static final int DIALOG_LOAD_FILE = 1000;
+    private String[] fileList;
+    private String chosenFile, currentPath;
+    private int dirLevel;
+    private String rootPath = Environment.getExternalStorageDirectory() + "/";
 
     public ArrayList<String> contactNames = new ArrayList<String>();
     
@@ -190,6 +201,9 @@ public class GroupsActivity extends Activity {
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
+            case id.import_group:
+            	importStart();
+            	return true;
             case id.menu_about:
             	startActivity(new Intent(this, AboutActivity.class));
             	return true;
@@ -315,6 +329,89 @@ public class GroupsActivity extends Activity {
     	items.remove(selPosition);
     	adaptor.notifyDataSetChanged();
     }
+    
+    // Functions to import an existing database
+    public void importStart() {
+    	File mPath = new File(rootPath);
+    	currentPath = rootPath;
+    	dirLevel = 0;
+    	loadFileList(mPath);
+    	onCreateDialog(DIALOG_LOAD_FILE).show();
+    }
+    
+    // Load list of files at given path into fileList
+	private void loadFileList(File mPath) {
+		String[] tempFileList;
+	    if(mPath.exists()) {
+	        FilenameFilter filter = new FilenameFilter() {
+	            public boolean accept(File dir, String filename) {
+	                File sel = new File(dir, filename);
+	                return (filename.endsWith(GroupSummaryActivity.DB_EXTENSION) || sel.isDirectory()) && !sel.isHidden();
+	            }
+	        };
+	        tempFileList = mPath.list(filter);
+	        Arrays.sort(tempFileList);
+	        if (dirLevel == 0) {
+		    	 fileList = tempFileList;
+		    }
+	        else {
+	        	fileList = new String[tempFileList.length+1];
+	        	fileList[0] = "Up";
+	        	for (int i=0; i<tempFileList.length; i++) {
+	        		fileList[i+1] = tempFileList[i];
+	        	}
+	        }
+	    }
+	    else {
+	        fileList= new String[0];
+	    }
+	}
+
+	// Create dialog for choosing files
+	protected Dialog onCreateDialog(int id) {
+	    Dialog dialog = null;
+	    AlertDialog.Builder builder = new Builder(this);
+
+	    switch(id) {
+	        case DIALOG_LOAD_FILE:
+	            builder.setTitle("Choose your file");
+	            if(fileList == null) {
+	                dialog = builder.create();
+	                return dialog;
+	            }
+	            builder.setItems(fileList, new DialogInterface.OnClickListener() {
+	                public void onClick(DialogInterface dialog, int which) {
+	                    if (dirLevel != 0 && which == 0) {
+	                    	currentPath = currentPath.substring(0, currentPath.lastIndexOf("/"));
+	                    	File cFile = new File(currentPath);
+	                    	dirLevel--;
+	                    	loadFileList(cFile);
+	                    	onCreateDialog(DIALOG_LOAD_FILE).show();
+	                    }
+	                	
+	                    else {
+		                	chosenFile = fileList[which];
+		                    currentPath = currentPath + "/" + chosenFile;
+		                    File cFile = new File(currentPath);
+		                    if (cFile.isDirectory()) {
+		                    	dirLevel++;
+		                    	loadFileList(cFile);
+		                    	onCreateDialog(DIALOG_LOAD_FILE).show();
+		                    }
+		                    else {
+		                    	// TODO IMPORT
+		                    	Toast.makeText(getBaseContext(), "Importing " + currentPath,
+		                    			Toast.LENGTH_LONG).show();
+		                    }
+	                    }
+	                }
+	            });
+	            break;
+	    }
+	    dialog = builder.show();
+	    return dialog;
+	}
+    
     @Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		// TODO Auto-generated method stub

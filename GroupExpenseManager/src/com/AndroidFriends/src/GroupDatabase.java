@@ -2,6 +2,7 @@
  * Flag column has:
  * 1 if event
  * 2 if cash transfer
+ * 3 if balance settle
  * 8 if deleted event
  * 9 if deleted cash transfer
  */
