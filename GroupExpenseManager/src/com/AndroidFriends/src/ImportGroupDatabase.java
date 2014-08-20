@@ -259,7 +259,7 @@ public class ImportGroupDatabase extends Activity {
 		}
 		else {
 			commondb.insertImportedGroup(groupid, groupName, grpCurrency);
-			finishImport();
+			this.finish();
 		}
 	}
 	
@@ -281,10 +281,11 @@ public class ImportGroupDatabase extends Activity {
 		return true;
 	}
 	
-	public void finishImport(){
+	@Override
+	public void finish(){
+		super.finish();
 		gpdb.close();
 		GroupDatabase.closeAll();
-		this.finish();
 	}
 	
 	@Override
