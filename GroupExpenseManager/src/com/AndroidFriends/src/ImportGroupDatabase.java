@@ -282,13 +282,9 @@ public class ImportGroupDatabase extends Activity {
 	}
 	
 	public void finishImport(){
-		Intent intent = new Intent(getApplicationContext(), GroupSummaryActivity.class);
-		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		intent.putExtra(GroupsActivity.GROUP_NAME, groupName);
-		intent.putExtra(GroupsActivity.GROUP_ID, groupid);
-		intent.putExtra(GroupsActivity.GROUP_CURR_ID, grpCurrency);
-		finish();
-		startActivity(intent);
+		gpdb.close();
+		GroupDatabase.closeAll();
+		this.finish();
 	}
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
