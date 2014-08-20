@@ -1,7 +1,10 @@
 package com.AndroidFriends.src;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -61,7 +64,7 @@ public class GroupsActivity extends Activity {
     private String[] fileList;
     private String chosenFile, currentPath;
     private int dirLevel;
-    private String rootPath = Environment.getExternalStorageDirectory() + "/";
+    private String rootPath = Environment.getExternalStorageDirectory() + "";
 
     public ArrayList<String> contactNames = new ArrayList<String>();
     
@@ -201,8 +204,11 @@ public class GroupsActivity extends Activity {
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
+            case id.new_group:
+            	newGroup(null);
+            	return true;
             case id.import_group:
-            	importStart();
+            	importStart(null);
             	return true;
             case id.menu_about:
             	startActivity(new Intent(this, AboutActivity.class));
@@ -331,7 +337,7 @@ public class GroupsActivity extends Activity {
     }
     
     // Functions to import an existing database
-    public void importStart() {
+    public void importStart(View v) {
     	File mPath = new File(rootPath);
     	currentPath = rootPath;
     	dirLevel = 0;
@@ -399,9 +405,9 @@ public class GroupsActivity extends Activity {
 		                    	onCreateDialog(DIALOG_LOAD_FILE).show();
 		                    }
 		                    else {
-		                    	// TODO IMPORT
-		                    	Toast.makeText(getBaseContext(), "Importing " + currentPath,
+		                    	Toast.makeText(getBaseContext(), "Imported group from " + currentPath + " successfully",
 		                    			Toast.LENGTH_LONG).show();
+		                    	importGroupDatabase(currentPath);
 		                    }
 	                    }
 	                }
@@ -412,6 +418,37 @@ public class GroupsActivity extends Activity {
 	    return dialog;
 	}
     
+	@SuppressWarnings("resource")
+	public void importGroupDatabase(String DBPath) {
+		int grpId = commondb.getNumberOfGroups() + 1;
+		try {
+            File sd = Environment.getExternalStorageDirectory();
+            File data  = Environment.getDataDirectory();
+
+            if (sd.canWrite()) {
+                String  currentDBPath= "//data//" + "com.AndroidFriends"
+                        + "//databases//" + "Database_" + grpId;
+                File backupDB = new File(data, currentDBPath);
+                File currentDB = new File(DBPath);
+
+                FileChannel src = new FileInputStream(currentDB).getChannel();
+                FileChannel dst = new FileOutputStream(backupDB).getChannel();
+                dst.transferFrom(src, 0, src.size());
+                src.close();
+                dst.close();
+            }
+            
+            String grpName = "";
+            Intent intent = new Intent(this, ImportGroupDatabase.class);
+    		intent.putExtra(GroupsActivity.GROUP_NAME, grpName);
+    		intent.putExtra(GroupsActivity.GROUP_ID, grpId);
+    		intent.putExtra(GroupsActivity.CONTACTS_LIST, contactNames);
+    		startActivity(intent);
+        } catch (Exception e) {
+        	Log.e("adi", "error", e);
+        }
+	}
+	
     @Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		// TODO Auto-generated method stub

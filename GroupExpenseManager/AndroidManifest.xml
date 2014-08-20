@@ -113,6 +113,12 @@
             android:label="@string/title_activity_edit_cash_transfer"
             android:windowSoftInputMode="stateHidden" >
         </activity>
+        <activity
+            android:name="com.AndroidFriends.src.ImportGroupDatabase"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:label="@string/title_activity_import_group_database"
+            android:windowSoftInputMode="stateHidden" >
+        </activity>
     </application>
 
 </manifest>

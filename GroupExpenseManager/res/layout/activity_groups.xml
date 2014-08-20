@@ -13,7 +13,7 @@
         <TextView
             android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_weight="1.5"
+            android:layout_weight="1.2"
             android:text="@string/existing_groups"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textStyle="bold" />
@@ -24,7 +24,15 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="newGroup"
-            android:text="@string/add_group" />
+            android:text="@string/add_group_button" />
+        
+        <Button
+            android:id="@+id/groupsActivityImportButton"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="importStart"
+            android:text="@string/import_group_button" />
 
     </LinearLayout>
 

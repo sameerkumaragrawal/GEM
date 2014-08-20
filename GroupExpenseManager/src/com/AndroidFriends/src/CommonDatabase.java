@@ -127,6 +127,16 @@ public class CommonDatabase extends SQLiteOpenHelper{
 
 		return ID;
 	}
+	
+	public int insertImportedGroup(int grpId, String name, int currencyId){
+		ContentValues values = new ContentValues();
+		values.put("ID", grpId);
+		values.put("Name", name);
+		values.put("Currency", currencyId);
+		getDB().insert(tableName,null,values);
+
+		return grpId;
+	}
 
 	public boolean updategroupname(String grpname,int id){
 		Cursor isPresent=getDB().rawQuery("SELECT ID FROM " + tableName + " WHERE Name = ?",new String[]{grpname});
@@ -151,6 +161,12 @@ public class CommonDatabase extends SQLiteOpenHelper{
 			db = getWritableDatabase();
 		}
 		return db;
+	}
+	
+	public int getNumberOfGroups() {
+		Cursor mQuery = getDB().rawQuery("SELECT ID FROM " + tableName, null);
+		mQuery.moveToLast();
+		return mQuery.getInt(0);
 	}
 
 	@Override

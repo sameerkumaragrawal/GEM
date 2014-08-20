@@ -1,4 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/new_group"
+        android:title="@string/add_new_group" />
     <item android:id="@+id/import_group"
         android:title="@string/import_group" />
     <item android:id="@+id/menu_about"

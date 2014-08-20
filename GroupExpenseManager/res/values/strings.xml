@@ -13,6 +13,7 @@
     <string name="share_screenshot">Share Screenshot</string>
     <string name="export">Export Group Database</string>
     <string name="import_group">Import Group from File</string>
+    <string name="add_new_group">Add New Group</string>
     <string name="menu_clear">Clear History</string>
     <string name="deleteEvent">Delete Event</string>
     <string name="editEvent">Edit Event</string>
@@ -32,8 +33,9 @@
     <string name="desc2">An Edit Icon</string>
     <string name="desc3">An Icon</string>
     <string name="title_activity_groups">Group Expense Manager</string>
-    <string name="existing_groups">Existing Groups</string>
-    <string name="add_group">Add Group</string>
+    <string name="existing_groups">Groups</string>
+    <string name="add_group_button">Add</string>
+    <string name="import_group_button">Import</string>
     <string name="title_activity_new_group">New Group</string>
     <string name="blank"></string>
     <string name="title_activity_group_summary">Summary</string>
@@ -95,5 +97,6 @@
     <string name="edit_name_button">Edit name of the group</string>
     <string name="title_activity_edit_event">Edit Event</string>
     <string name="title_activity_edit_cash_transfer">Edit Cash Transfer Activity</string>
+    <string name="title_activity_import_group_database">Import Group</string>
 
 </resources>

@@ -434,13 +434,14 @@ public class GroupSummaryActivity extends Activity {
 	    cr.insert(Images.Media.EXTERNAL_CONTENT_URI, values);
 	}
 	
+	// Functions to export the group database
 	public void exportAlert(View v) {
 		final String DBPath = Environment.getExternalStorageDirectory() + "/" + FOLDER + "/" + grpName + DATABASE + DB_EXTENSION;
 		
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 		alertDialogBuilder.setTitle("Export Group Database");
 		alertDialogBuilder
-		.setMessage("The group database will be stored as " + DBPath + ". Continue?")
+		.setMessage("The group database will be exported to " + DBPath + ". Continue?")
 		.setCancelable(true)
 		.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
@@ -458,9 +459,9 @@ public class GroupSummaryActivity extends Activity {
 	
 	@SuppressWarnings("resource")
 	public void exportGroupDatabase(String DBPath) {
-		// Folder for storing the screenshots
+		// Folder for storing the database
 		File folder = new File(Environment.getExternalStorageDirectory() + "/" + FOLDER);
-	    if(!folder.exists()){        
+	    if(!folder.exists()){
 	    	folder.mkdir();
 	    }
 			    
@@ -478,7 +479,7 @@ public class GroupSummaryActivity extends Activity {
                 dst.transferFrom(src, 0, src.size());
                 src.close();
                 dst.close();
-                Toast.makeText(getBaseContext(), backupDB.toString() + " saved",
+                Toast.makeText(getBaseContext(), "Group database exported to " + backupDB.toString() + " successfully",
                         Toast.LENGTH_LONG).show();
             }
         } catch (Exception e) {
