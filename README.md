@@ -17,6 +17,7 @@ A simple, fast, user friendly and lightweight application that saves you quite a
 ★ Possible solution for easy settlement  
 ★ View and filter history of events and cash transfers for one or all members  
 ★ View each individual's total payment and consumption within the group  
+★ Export and import group database to and from SD card  
 ★ Share screenshot of group balance and solution with other members easily via social networking apps  
 ★ Multiple currency support
 
@@ -59,7 +60,7 @@ Whats New
 - Bug fix in hint text in add and edit event
 
 <b>Version 3.1:</b>  
-- Import/export group database
+- Export and import group database to and from SD card
 
 For Google Play
 ================
@@ -68,7 +69,7 @@ A group expense manager for managing shared transactions and expenses in a group
 
 <b>Whats New:</b>  
 Version 3.1:
-- Import/export group database
+- Export/import group database to/from SD card
 
 Version 3.0:
 - Edit and delete/restore previous events
