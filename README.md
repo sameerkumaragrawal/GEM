@@ -71,7 +71,7 @@ For Google Play
 A group expense manager for managing shared transactions and expenses in a group
 
 <b>Whats New:</b>  
-Version 3.1:
+Version 3.1.1:
 - Bug fix
 
 Version 3.1:
