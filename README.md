@@ -62,12 +62,18 @@ Whats New
 <b>Version 3.1:</b>  
 - Export and import group database to and from SD card
 
+<b>Version 3.1.1:</b>  
+- Bug fix in adding new group
+
 For Google Play
 ================
 <b>Short Description:</b>  
 A group expense manager for managing shared transactions and expenses in a group
 
 <b>Whats New:</b>  
+Version 3.1:
+- Bug fix
+
 Version 3.1:
 - Export/import group database to/from SD card
 
