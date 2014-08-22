@@ -64,6 +64,7 @@ Whats New
 
 <b>Version 3.1.1:</b>  
 - Bug fix in adding new group
+- Efficient member choosing option in cash transfer
 
 For Google Play
 ================
@@ -72,7 +73,7 @@ A group expense manager for managing shared transactions and expenses in a group
 
 <b>Whats New:</b>  
 Version 3.1.1:
-- Bug fix
+- Bug fixes
 
 Version 3.1:
 - Export/import group database to/from SD card
