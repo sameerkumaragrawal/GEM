@@ -216,7 +216,7 @@ public class EditGroupActivity extends Activity {
 
 	public void done(View v){
 
-		if(numberItems<1){
+		if(numberItems<2){
 			createToast("Error! Group cannot be empty");
 			return;
 		}
