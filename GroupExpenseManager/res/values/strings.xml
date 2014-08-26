@@ -100,6 +100,7 @@
     <string name="title_activity_personal">Personal Expense Manager</string>
     <string name="current_status">Current Status</string>
     <string name="selectExpense">Select Expense</string>
+    <string name="selectCategory">Select Category</string>
     <string name="name">Name</string>
     <string name="selectBill">Select Bill</string>
     <string name="dueDate">Due Date</string>
@@ -108,6 +109,10 @@
     <string name="restoreExpense">Restore Deleted Expense</string>
     <string name="payBill">Pay Bill</string>
     <string name="deleteBill">Delete Bill</string>
+    <string name="expenseName">Expense Name</string>
+    <string name="category">Category</string>
     <string name="title_activity_expense">Personal Expenses</string>
+    <string name="title_activity_add_expense">Add New Expense</string>
     <string name="title_activity_bill">Bills</string>
+    <string name="title_activity_add_bill">Add New Bill</string>
 </resources>

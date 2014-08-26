@@ -9,20 +9,38 @@
         android:orientation="vertical" >
 
         <LinearLayout
-            android:id="@+id/expenseSelect"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingBottom="20dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="20dp" >
+            android:padding="20dp" >
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center"
+                android:text="@string/selectCategory"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/categoryDropdown"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.3"
+                android:gravity="center" />
+        </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/expenseSelect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="20dp" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="@string/selectExpense"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textStyle="bold" />
@@ -31,7 +49,7 @@
                 android:id="@+id/expenseDropdown"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1.7"
+                android:layout_weight="1.3"
                 android:gravity="center" />
         </LinearLayout>
 
@@ -92,13 +110,22 @@
             android:orientation="horizontal"
             android:padding="10dp"
             android:visibility="visible" >
-
-            <TextView
+			
+			<TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/name"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textStyle="bold" />
+            
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/category"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textStyle="bold" />
 
@@ -124,7 +151,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="10dp" >
+            android:padding="20dp" >
 
             <Button
                 android:id="@+id/expenseEditButton"

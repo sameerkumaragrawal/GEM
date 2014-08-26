@@ -28,6 +28,16 @@
 	        android:contentDescription="@string/add_button"
 	        android:onClick="addTypeDialog"
 	        android:src="@android:drawable/ic_menu_add" />
+        
+        <ImageButton
+	        android:id="@+id/personalActivityEditButton"
+	        android:layout_width="0dp"
+	        android:layout_height="match_parent"
+	        android:layout_weight="0.25"
+	        android:layout_marginLeft="10dp"
+	        android:contentDescription="@string/desc2"
+	        android:onClick="editInfo"
+	        android:src="@android:drawable/ic_menu_edit" />
 
     </LinearLayout>
 

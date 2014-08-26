@@ -24,15 +24,16 @@ import android.widget.TextView;
 
 import com.AndroidFriends.R;
 
+
 public class ExpenseActivity extends Activity {
 
 	public static final String EXPENSE_ID= "expenseActivity/expenseid";
 	public static final String EXPENSE_NAME= "expenseActivity/expensename";
 	
 	private int currencyDecimals = 2;
-	private int expenseIdArrayPosition = 0;
-	private Spinner expenseSpin=null;
-	private List<String> listofexpenses = null;
+	private int expenseIdArrayPosition = 0, categoryId = 0;
+	private Spinner expenseSpin, categorySpin;
+	private List<String> listofexpenses = null, listofcategories = null;
 	private int[] idarray = null;
 	private LinearLayout expenseTable = null;
 	private Button restoreButton;
@@ -58,30 +59,27 @@ public class ExpenseActivity extends Activity {
 		editLayout = (LinearLayout) findViewById(R.id.expenseEditLayout);
 		restoreButton = (Button) findViewById(R.id.expenseRestoreButton);
 		
-		expenseList();
-		addItemsOnExpenseSpinner();
-		filltable(0);
+		categoryList();
+		addItemsOnCategorySpinner();
 		
-		expenseSpin.setOnItemSelectedListener(new OnItemSelectedListener() {
+		categorySpin.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) 
 			{
-				expenseIdArrayPosition = position;
-				filltable(position);
+				categoryId = position;
+				fillExpenses(position);
 			}
 			public void onNothingSelected(AdapterView<?> arg0) {
 				// TODO Auto-generated method stub
 			}
 
 		});
-		
 	}
 	
 	@Override
 	public void onRestart() {
 		super.onRestart();
-		expenseList();
-		addItemsOnExpenseSpinner();
+		fillExpenses(categoryId);
 		expenseSpin.setSelection(expenseIdArrayPosition);
 	}
 
@@ -104,21 +102,56 @@ public class ExpenseActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	public void categoryList() {
+		ArrayList<String> categoryList = pdb.getCategoryNames();
+		listofcategories = new ArrayList<String>();
+		listofcategories.add("All");
+		for (int i=0; i<categoryList.size(); i++) {
+			listofcategories.add(categoryList.get(i));
+		}
+	}
+	
+	public void addItemsOnCategorySpinner() {
+		categorySpin = (Spinner) findViewById(R.id.categoryDropdown);
+		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_item, listofcategories);
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		categorySpin.setAdapter(dataAdapter);
+		categorySpin.setPrompt("Select category");
+	}
 
+	public void fillExpenses(int category) {
+		expenseList(category);
+		addItemsOnExpenseSpinner();
+		filltable(0);
+		
+		expenseSpin.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) 
+			{
+				expenseIdArrayPosition = position;
+				filltable(position);
+			}
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+			}
+		});
+	}
+	
 	public void addItemsOnExpenseSpinner() {
-
 		expenseSpin = (Spinner) findViewById(R.id.expenseDropdown);
 		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_item, listofexpenses);
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		expenseSpin.setAdapter(dataAdapter);
-		expenseSpin.setPrompt("Select Expense");
+		expenseSpin.setPrompt("Select expense");
 	}
 	
-	public void expenseList(){
+	public void expenseList(int category){
 		listofexpenses = new ArrayList<String>();
 		try{
-			Cursor mquery = pdb.getExpenseList();
+			Cursor mquery = pdb.getExpenseList(category);
 			idarray=new int[mquery.getCount()];
 			int temp=0;
 			mquery.moveToFirst();
@@ -146,9 +179,10 @@ public class ExpenseActivity extends Activity {
 		Cursor expenseQuery = pdb.getExpenseDetails(tempid);
 		expenseQuery.moveToFirst();
 		String name = expenseQuery.getString(1);
-		float amount = expenseQuery.getFloat(2);
-		long timeinmillis = expenseQuery.getLong(3);
-		int expenseFlag = expenseQuery.getInt(4);
+		int category = expenseQuery.getInt(2);
+		float amount = expenseQuery.getFloat(3);
+		long timeinmillis = expenseQuery.getLong(4);
+		int expenseFlag = expenseQuery.getInt(5);
 		expenseQuery.close();
 		
 		dtTextView.setVisibility(View.VISIBLE);
@@ -197,31 +231,32 @@ public class ExpenseActivity extends Activity {
 			restoreButton.setVisibility(View.GONE);
 		}
 		
+		String categoryString = pdb.getCategoryName(category);
 		String amountString = String.format(decimalFlag, amount);
-		addEntry(name,amountString);			
+		addEntry(categoryString,name,amountString);			
 	}
 
-	public void addEntry(String name,String amount){
+	public void addEntry(String category, String name, String amount){
 		View convertView = inflater.inflate(R.layout.table_item, null);
 		TextView v1 = (TextView)convertView.findViewById(R.id.table_item_tv1);
 		TextView v2 = (TextView)convertView.findViewById(R.id.table_item_tv2);
 		TextView v3 = (TextView)convertView.findViewById(R.id.table_item_tv3);
 		v1.setText(name);
-		v2.setText(amount);
-		v3.setText("");
+		v2.setText(category);
+		v3.setText(amount);
 		
 		MainActivity.setWeight(v1,1f);
 		MainActivity.setWeight(v2,1f);
-		MainActivity.setWeight(v3,0f);
+		MainActivity.setWeight(v3,1f);
 		
 		expenseTable.addView(convertView);
 	}
 	
-	public void previousEvent(View v) {
+	public void previousExpense(View v) {
 		expenseSpin.setSelection(expenseIdArrayPosition - 1);
 	}
 	
-	public void nextEvent(View v) {
+	public void nextExpense(View v) {
 		expenseSpin.setSelection(expenseIdArrayPosition + 1);
 	}
 	
