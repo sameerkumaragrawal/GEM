@@ -225,7 +225,6 @@ public class PersonalActivity extends Activity {
 	public void addNew(int position) {
 		if (position == 0) {
 			Intent intent = new Intent(this, AddExpenseActivity.class);
-			intent.putExtra(stringDecimals, currency);
 			startActivity(intent);
 		}
 		else if (position == 1) {

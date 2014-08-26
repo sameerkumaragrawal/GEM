@@ -4,12 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -22,22 +20,14 @@ import com.AndroidFriends.R;
 
 public class AddExpenseActivity extends Activity {
 
-	private int currencyDecimals = 2;
-	private LayoutInflater inflater;
 	private Spinner categorySpinner;
 	private Button doneButton;
 	
 	private PersonalDatabase pdb;
-	private String decimalFlag;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		Intent  intent = getIntent();
-		currencyDecimals = intent.getIntExtra(PersonalActivity.stringDecimals, 0);
-		decimalFlag = "%." + currencyDecimals + "f";
-		
 		setContentView(R.layout.activity_add_expense);
 
 		pdb = PersonalDatabase.get(this);
