@@ -42,7 +42,6 @@
     <string name="from">From</string>
     <string name="to">To</string>
     <string name="test">Test</string>
-    <string name="name">Member Name</string>
     <string name="spent">Spent</string>
     <string name="consumed">Consumed</string>
     <string name="topay">To Pay</string>
@@ -98,5 +97,17 @@
     <string name="title_activity_edit_event">Edit Event</string>
     <string name="title_activity_edit_cash_transfer">Edit Cash Transfer Activity</string>
     <string name="title_activity_import_group_database">Import Group</string>
-
+    <string name="title_activity_personal">Personal Expense Manager</string>
+    <string name="current_status">Current Status</string>
+    <string name="selectExpense">Select Expense</string>
+    <string name="name">Name</string>
+    <string name="selectBill">Select Bill</string>
+    <string name="dueDate">Due Date</string>
+    <string name="editExpense">Edit Expense</string>
+    <string name="deleteExpense">Delete Expense</string>
+    <string name="restoreExpense">Restore Deleted Expense</string>
+    <string name="payBill">Pay Bill</string>
+    <string name="deleteBill">Delete Bill</string>
+    <string name="title_activity_expense">Personal Expenses</string>
+    <string name="title_activity_bill">Bills</string>
 </resources>

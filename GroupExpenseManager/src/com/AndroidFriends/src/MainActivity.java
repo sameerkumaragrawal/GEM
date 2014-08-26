@@ -36,7 +36,7 @@ public class MainActivity extends Activity {
         		myDB.close();
         	}
         }
-        Intent intent = new Intent(this, GroupsActivity.class);
+        Intent intent = new Intent(this, PersonalActivity.class);
         startActivity(intent);
         this.finish();
     }

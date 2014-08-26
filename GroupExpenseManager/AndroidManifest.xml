@@ -23,7 +23,6 @@
             android:label="@string/title_activity_main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -117,6 +116,24 @@
             android:name="com.AndroidFriends.src.ImportGroupDatabase"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:label="@string/title_activity_import_group_database"
+            android:windowSoftInputMode="stateHidden" >
+        </activity>
+        <activity
+            android:name="com.AndroidFriends.src.PersonalActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:label="@string/title_activity_personal"
+            android:windowSoftInputMode="stateHidden" >
+        </activity>
+        <activity
+            android:name="com.AndroidFriends.src.ExpenseActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:label="@string/title_activity_expense"
+            android:windowSoftInputMode="stateHidden" >
+        </activity>
+        <activity
+            android:name="com.AndroidFriends.src.BillActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:label="@string/title_activity_bill"
             android:windowSoftInputMode="stateHidden" >
         </activity>
     </application>

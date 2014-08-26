@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+	<LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="20dp" >
+
+        <TextView
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:gravity="center"
+            android:text="@string/current_status"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textStyle="bold" />
+        
+        <ImageButton
+	        android:id="@+id/personalActivityAddButton"
+	        android:layout_width="0dp"
+	        android:layout_height="match_parent"
+	        android:layout_weight="0.25"
+	        android:contentDescription="@string/add_button"
+	        android:onClick="addTypeDialog"
+	        android:src="@android:drawable/ic_menu_add" />
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/PersonalList"
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:clickable="false"
+        android:focusable="false" >
+    </ListView>
+	
+    </LinearLayout>
