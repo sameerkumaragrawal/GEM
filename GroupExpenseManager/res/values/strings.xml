@@ -110,4 +110,9 @@
     <string name="deleteBill">Delete Bill</string>
     <string name="title_activity_expense">Personal Expenses</string>
     <string name="title_activity_bill">Bills</string>
+    <string name="previousBill">Previous Bill</string>
+    <string name="nextBill">Next Bill</string>
+    <string name="editBill">Edit Bill</string>
+    <string name="restoreBill">Restore Bill</string>
+    <string name="billDueDate">Due Date</string>
 </resources>

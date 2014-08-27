@@ -24,18 +24,17 @@ import android.widget.TextView;
 
 import com.AndroidFriends.R;
 
-public class ExpenseActivity extends Activity {
+public class BillActivity extends Activity {
 
-	public static final String EXPENSE_ID= "expenseActivity/expenseid";
-	public static final String EXPENSE_NAME= "expenseActivity/expensename";
+	public static final String BILL_ID= "billActivity/billid";
+	public static final String BILL_NAME= "billActivity/billname";
 	
 	private int currencyDecimals = 2;
-	private int expenseIdArrayPosition = 0;
-	private Spinner expenseSpin=null;
-	private List<String> listofexpenses = null;
+	private int billIdArrayPosition = 0;
+	private Spinner billSpin=null;
+	private List<String> listofbills = null;
 	private int[] idarray = null;
-	private LinearLayout expenseTable = null;
-	private Button restoreButton;
+	private LinearLayout billTable = null;
 	private LinearLayout editLayout, prevNext;
 	private LayoutInflater inflater;
 	private PersonalDatabase pdb;
@@ -45,7 +44,7 @@ public class ExpenseActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Intent intent = getIntent();
-		setContentView(R.layout.activity_expenses);
+		setContentView(R.layout.activity_bills);
 
 		pdb=PersonalDatabase.get(this);
 		inflater = LayoutInflater.from(this);
@@ -53,20 +52,19 @@ public class ExpenseActivity extends Activity {
 		currencyDecimals = intent.getIntExtra(PersonalActivity.stringDecimals, 0);
 		decimalFlag = "%." + currencyDecimals + "f";
 		
-		expenseTable = (LinearLayout) findViewById(R.id.ExpenseTable);
-		prevNext = (LinearLayout)findViewById(R.id.expensePreviousNextLayout);
-		editLayout = (LinearLayout) findViewById(R.id.expenseEditLayout);
-		restoreButton = (Button) findViewById(R.id.expenseRestoreButton);
+		billTable = (LinearLayout) findViewById(R.id.billTable);
+		prevNext = (LinearLayout)findViewById(R.id.billPreviousNextLayout);
+		editLayout = (LinearLayout) findViewById(R.id.billEditLayout);
 		
-		expenseList();
-		addItemsOnExpenseSpinner();
+		billList();
+		addItemsOnBillSpinner();
 		filltable(0);
 		
-		expenseSpin.setOnItemSelectedListener(new OnItemSelectedListener() {
+		billSpin.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) 
 			{
-				expenseIdArrayPosition = position;
+				billIdArrayPosition = position;
 				filltable(position);
 			}
 			public void onNothingSelected(AdapterView<?> arg0) {
@@ -80,9 +78,9 @@ public class ExpenseActivity extends Activity {
 	@Override
 	public void onRestart() {
 		super.onRestart();
-		expenseList();
-		addItemsOnExpenseSpinner();
-		expenseSpin.setSelection(expenseIdArrayPosition);
+		billList();
+		addItemsOnBillSpinner();
+		billSpin.setSelection(billIdArrayPosition);
 	}
 
 	@Override
@@ -105,25 +103,25 @@ public class ExpenseActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	public void addItemsOnExpenseSpinner() {
+	public void addItemsOnBillSpinner() {
 
-		expenseSpin = (Spinner) findViewById(R.id.expenseDropdown);
+		billSpin = (Spinner) findViewById(R.id.billDropdown);
 		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, listofexpenses);
+				android.R.layout.simple_spinner_item, listofbills);
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		expenseSpin.setAdapter(dataAdapter);
-		expenseSpin.setPrompt("Select Expense");
+		billSpin.setAdapter(dataAdapter);
+		billSpin.setPrompt("Select Bill");
 	}
 	
-	public void expenseList(){
-		listofexpenses = new ArrayList<String>();
+	public void billList(){
+		listofbills = new ArrayList<String>();
 		try{
-			Cursor mquery = pdb.getExpenseList();
+			Cursor mquery = pdb.getBillList();
 			idarray=new int[mquery.getCount()];
 			int temp=0;
 			mquery.moveToFirst();
 			do{
-				listofexpenses.add(mquery.getString(1));
+				listofbills.add(mquery.getString(1));
 				idarray[temp]=mquery.getInt(0);
 				temp++;
 			}while(mquery.moveToNext());
@@ -131,38 +129,32 @@ public class ExpenseActivity extends Activity {
 	}
 	
 	public void filltable(int position){
-		expenseTable.removeAllViews();
-		TextView dtTextView = (TextView) findViewById(R.id.expenseDateTimeText);
+		billTable.removeAllViews();
 		
 		if(idarray.length == 0){
 			prevNext.setVisibility(View.GONE);
 			editLayout.setVisibility(View.GONE);
-			restoreButton.setVisibility(View.GONE);
-			dtTextView.setVisibility(View.GONE);
 			return;
 		}
 		
 		int tempid = idarray[position];
-		Cursor expenseQuery = pdb.getExpenseDetails(tempid);
-		expenseQuery.moveToFirst();
-		String name = expenseQuery.getString(1);
-		float amount = expenseQuery.getFloat(2);
-		long timeinmillis = expenseQuery.getLong(3);
-		int expenseFlag = expenseQuery.getInt(4);
-		expenseQuery.close();
+		Cursor billQuery = pdb.getBillDetails(tempid);
+		billQuery.moveToFirst();
+		String name = billQuery.getString(1);
+		float amount = billQuery.getFloat(2);
+		long timeinmillis = billQuery.getLong(3);
+		billQuery.close();
 		
-		dtTextView.setVisibility(View.VISIBLE);
-		String dt = "Time of expense : ";
+		String dt = "";
 		if(timeinmillis == 0){
-			dt += "Not Available";
+			dt += "";
 		}else{
-			dt += DateUtils.formatDateTime(this, timeinmillis, DateUtils.FORMAT_ABBREV_MONTH | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR | DateUtils.FORMAT_SHOW_TIME);
+			dt += DateUtils.formatDateTime(this, timeinmillis, DateUtils.FORMAT_ABBREV_MONTH | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR);
 		}
-		dtTextView.setText(dt);
 		
 		//Previous Next Button Visibility
-		View prev = (View)prevNext.findViewById(R.id.expensePreviousButton);
-		View next = (View)prevNext.findViewById(R.id.expenseNextButton);
+		View prev = (View)prevNext.findViewById(R.id.billPreviousButton);
+		View next = (View)prevNext.findViewById(R.id.billNextButton);
 		
 		if(idarray.length == 1){
 			prevNext.setVisibility(View.GONE);
@@ -170,7 +162,7 @@ public class ExpenseActivity extends Activity {
 		else{
 			prevNext.setVisibility(View.VISIBLE);
 			
-			if(expenseIdArrayPosition == 0){
+			if(billIdArrayPosition == 0){
 				prev.setVisibility(View.INVISIBLE);
 			}
 			else{
@@ -179,7 +171,7 @@ public class ExpenseActivity extends Activity {
 			
 			int lastEventPosition = idarray.length - 1;
 			
-			if(expenseIdArrayPosition == lastEventPosition){
+			if(billIdArrayPosition == lastEventPosition){
 				next.setVisibility(View.INVISIBLE);
 			}
 			else{
@@ -187,53 +179,39 @@ public class ExpenseActivity extends Activity {
 			}
 		}
 		
-		//Edit delete button visibility
-		if (expenseFlag == PersonalDatabase.deletedExpenseFlag){
-			editLayout.setVisibility(View.GONE);
-			restoreButton.setVisibility(View.VISIBLE);
-		}
-		else {
-			editLayout.setVisibility(View.VISIBLE);
-			restoreButton.setVisibility(View.GONE);
-		}
-		
 		String amountString = String.format(decimalFlag, amount);
-		addEntry(name,amountString);			
+		addEntry(name,amountString,dt);			
 	}
 
-	public void addEntry(String name,String amount){
+	public void addEntry(String name,String amount,String date){
 		View convertView = inflater.inflate(R.layout.table_item, null);
 		TextView v1 = (TextView)convertView.findViewById(R.id.table_item_tv1);
 		TextView v2 = (TextView)convertView.findViewById(R.id.table_item_tv2);
 		TextView v3 = (TextView)convertView.findViewById(R.id.table_item_tv3);
 		v1.setText(name);
 		v2.setText(amount);
-		v3.setText("");
+		v3.setText(date);
 		
 		MainActivity.setWeight(v1,1f);
 		MainActivity.setWeight(v2,1f);
-		MainActivity.setWeight(v3,0f);
+		MainActivity.setWeight(v3,1.5f);
 		
-		expenseTable.addView(convertView);
+		billTable.addView(convertView);
 	}
 	
-	public void previousEvent(View v) {
-		expenseSpin.setSelection(expenseIdArrayPosition - 1);
+	public void previousBill(View v) {
+		billSpin.setSelection(billIdArrayPosition - 1);
 	}
 	
-	public void nextEvent(View v) {
-		expenseSpin.setSelection(expenseIdArrayPosition + 1);
+	public void nextBill(View v) {
+		billSpin.setSelection(billIdArrayPosition + 1);
 	}
 	
-	public void editExpense(View v) {
-		
+	public void payBill(View v) {
+		// TODO Go to Pay bill page
 	}
 	
-	public void deleteExpense(View v) {
-		
-	}
-
-	public void restoreExpense(View v) {
+	public void deleteBill(View v) {
 		
 	}
 	
