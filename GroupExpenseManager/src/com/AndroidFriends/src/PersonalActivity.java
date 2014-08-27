@@ -185,6 +185,10 @@ public class PersonalActivity extends Activity {
 		currencySymbol = cdb.getCurrencySymbol(currency);
 	}
 	
+	public void editInfo(View v) {
+	
+	}
+	
 	private class CustomOnItemClickListener implements OnItemClickListener{
 		private AlertDialog dialog;
 		
@@ -193,7 +197,7 @@ public class PersonalActivity extends Activity {
 		}
 		
     	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//    		addNew(position);
+    		addNew(position);
     		dialog.dismiss();	
 		}
     }
@@ -218,9 +222,18 @@ public class PersonalActivity extends Activity {
         modeList.setOnItemClickListener(myitemlistener);
     }
 	
+	public void addNew(int position) {
+		if (position == 0) {
+			Intent intent = new Intent(this, AddExpenseActivity.class);
+			startActivity(intent);
+		}
+		else if (position == 1) {
+			// open add bill activity
+		}
+	}
+	
 	public void openActivity(int position) {
 		if (position == 0) {
-			// open expenses activity
 			Intent intent = new Intent(this, ExpenseActivity.class);
 			intent.putExtra(stringDecimals, currency);
 			startActivity(intent);
