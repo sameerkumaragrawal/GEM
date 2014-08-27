@@ -1,14 +1,16 @@
 package com.AndroidFriends.src;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -18,42 +20,67 @@ import android.widget.Toast;
 
 import com.AndroidFriends.R;
 
-public class AddExpenseActivity extends Activity {
+public class EditExpenseActivity extends Activity {
 
+	private String expenseName = "";
+	private int expenseId = 0, expenseTypeFlag;
+	private int currencyDecimals = 2;
 	private Spinner categorySpinner;
 	private Button doneButton;
-	
 	private PersonalDatabase pdb;
-	
+	private String decimalFlag;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		Intent  intent = getIntent();
+		expenseName = intent.getStringExtra(ExpenseActivity.EXPENSE_NAME);
+		expenseId = intent.getIntExtra(ExpenseActivity.EXPENSE_ID,0);
+
+		currencyDecimals = intent.getIntExtra(GroupSummaryActivity.stringDecimals, 0);
+		decimalFlag = "%." + currencyDecimals + "f";
+
+		String new_title= expenseName +" - Edit";
+		this.setTitle(new_title);
 		setContentView(R.layout.activity_add_expense);
 
 		pdb = PersonalDatabase.get(this);
-		
+
 		AutoCompleteTextView expenseNameEditText = (AutoCompleteTextView) findViewById(R.id.addExpenseName);
 		expenseNameEditText.setThreshold(1);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, AddEventActivity.eventNames);
 		expenseNameEditText.setAdapter(adapter);
+		expenseNameEditText.setText(expenseName);
+
+		categorySpinner = (Spinner) findViewById(R.id.spinnerExpenseCategory);
+		doneButton = (Button) findViewById(R.id.expenseDoneButton);
+
+		editExpense();
+	}
+
+	public void editExpense() {
+		doneButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				doneEditExpense(v);
+			}
+		});
 		
 		addItemsOnCategorySpinner();
-		doneButton = (Button) findViewById(R.id.expenseDoneButton);
-		doneButton.setOnClickListener(new Button.OnClickListener() {
-		    public void onClick(View v) {
-		    	doneAddExpense(v);
-		    }
-		});
-	}
+
+		Cursor mquery = pdb.getExpenseDetails(expenseId);
+		mquery.moveToFirst();
+		categorySpinner.setSelection(mquery.getInt(2)-1);
 		
+		float amount = mquery.getFloat(3);
+		EditText et = (EditText) findViewById(R.id.expenseAmount);
+		et.setText(String.format(decimalFlag, amount));
+		
+		expenseTypeFlag = mquery.getInt(5);
+	}
+
 	public void addItemsOnCategorySpinner() {
-		categorySpinner = (Spinner) findViewById(R.id.spinnerExpenseCategory);
-		List<String> list = new ArrayList<String>();
-		list.add("Select category");
-		ArrayList<String> categoryList = pdb.getCategoryNames();
-		for (int i=0; i<categoryList.size(); i++) {
-			list.add(categoryList.get(i));
-		}
+		List<String> list = pdb.getCategoryNames();
 		
 		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
 			android.R.layout.simple_spinner_item, list);
@@ -62,7 +89,7 @@ public class AddExpenseActivity extends Activity {
 		categorySpinner.setPrompt("Select expense category");
 	}
 	
-	public void doneAddExpense(View v){
+	public void doneEditExpense(View v){
 		AutoCompleteTextView expense = (AutoCompleteTextView) findViewById(R.id.addExpenseName);
 		String expenseName = expense.getText().toString();
 		if(expenseName.equals("")){
@@ -70,11 +97,13 @@ public class AddExpenseActivity extends Activity {
 			return;
 		}
 		
-		int category = categorySpinner.getSelectedItemPosition();
-		if (category == 0) {
-			createToast("Error! Please select a category for the expense");
-			return;
+		String editString = "Edited - ";
+		
+		if (expenseTypeFlag == PersonalDatabase.expenseFlag){
+			expenseName = editString + expenseName;
 		}
+		
+		int category = categorySpinner.getSelectedItemPosition() + 1;
 		
 		EditText amountText = (EditText) findViewById(R.id.expenseAmount);
 		if (amountText.getText().toString().equals("")) {
@@ -88,7 +117,7 @@ public class AddExpenseActivity extends Activity {
 		}
 
 		try {
-			pdb.insertExpense(expenseName, category, amount);
+			pdb.updateExpensesTable(expenseId, expenseName, category, amount);
 		} catch (Exception err) {
 			Log.e("adi", "error", err);
 		}
@@ -96,7 +125,7 @@ public class AddExpenseActivity extends Activity {
 	}
 	
 	public void createToast(String message){
-		Toast n = Toast.makeText(AddExpenseActivity.this,message, Toast.LENGTH_LONG);
+		Toast n = Toast.makeText(EditExpenseActivity.this,message, Toast.LENGTH_LONG);
 		n.setGravity(Gravity.CENTER_VERTICAL,0,0);
 		n.show();
 	}

@@ -115,38 +115,44 @@
         <activity
             android:name="com.AndroidFriends.src.ImportGroupDatabase"
             android:configChanges="keyboardHidden|screenSize|orientation"
-            android:label="@string/title_activity_import_group_database"
-            android:windowSoftInputMode="stateHidden" >
+            android:label="@string/title_activity_import_group_database" >
         </activity>
         <activity
             android:name="com.AndroidFriends.src.PersonalActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
-            android:label="@string/title_activity_personal"
-            android:windowSoftInputMode="stateHidden" >
+            android:label="@string/title_activity_personal" >
         </activity>
         <activity
             android:name="com.AndroidFriends.src.ExpenseActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
-            android:label="@string/title_activity_expense"
-            android:windowSoftInputMode="stateHidden" >
+            android:label="@string/title_activity_expense" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.AndroidFriends.src.PersonalActivity" />
         </activity>
         <activity
             android:name="com.AndroidFriends.src.AddExpenseActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
-            android:label="@string/title_activity_add_expense"
+            android:label="@string/title_activity_add_expense" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.AndroidFriends.src.PersonalActivity" />
+        </activity>
+        <activity
+            android:name="com.AndroidFriends.src.EditExpenseActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:label="@string/title_activity_edit_expense"
             android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
             android:name="com.AndroidFriends.src.BillActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
-            android:label="@string/title_activity_bill"
-            android:windowSoftInputMode="stateHidden" >
+            android:label="@string/title_activity_bill" >
         </activity>
         <activity
             android:name="com.AndroidFriends.src.AddBillActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
-            android:label="@string/title_activity_add_bill"
-            android:windowSoftInputMode="stateHidden" >
+            android:label="@string/title_activity_add_bill" >
         </activity>
     </application>
 

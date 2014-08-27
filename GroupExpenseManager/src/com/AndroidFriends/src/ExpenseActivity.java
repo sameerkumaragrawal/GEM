@@ -3,7 +3,10 @@ package com.AndroidFriends.src;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
@@ -23,7 +26,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.AndroidFriends.R;
-
+import com.AndroidFriends.R.id;
 
 public class ExpenseActivity extends Activity {
 
@@ -36,7 +39,7 @@ public class ExpenseActivity extends Activity {
 	private List<String> listofexpenses = null, listofcategories = null;
 	private int[] idarray = null;
 	private LinearLayout expenseTable = null;
-	private Button restoreButton;
+	private Button restoreButton, clearButton;
 	private LinearLayout editLayout, prevNext;
 	private LayoutInflater inflater;
 	private PersonalDatabase pdb;
@@ -58,12 +61,12 @@ public class ExpenseActivity extends Activity {
 		prevNext = (LinearLayout)findViewById(R.id.expensePreviousNextLayout);
 		editLayout = (LinearLayout) findViewById(R.id.expenseEditLayout);
 		restoreButton = (Button) findViewById(R.id.expenseRestoreButton);
+		clearButton = (Button) findViewById(R.id.clearExpenseHistoryButton);
 		
 		categoryList();
 		addItemsOnCategorySpinner();
 		
 		categorySpin.setOnItemSelectedListener(new OnItemSelectedListener() {
-
 			public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) 
 			{
 				categoryId = position;
@@ -72,7 +75,6 @@ public class ExpenseActivity extends Activity {
 			public void onNothingSelected(AdapterView<?> arg0) {
 				// TODO Auto-generated method stub
 			}
-
 		});
 	}
 	
@@ -96,9 +98,9 @@ public class ExpenseActivity extends Activity {
 		case android.R.id.home:
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
-//		case id.menu_clear:
-//			clearAlert(null);
-//			return true;
+		case id.menu_clear_history:
+			clearHistoryAlert(null);
+			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -127,7 +129,6 @@ public class ExpenseActivity extends Activity {
 		filltable(0);
 		
 		expenseSpin.setOnItemSelectedListener(new OnItemSelectedListener() {
-
 			public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) 
 			{
 				expenseIdArrayPosition = position;
@@ -171,6 +172,7 @@ public class ExpenseActivity extends Activity {
 			prevNext.setVisibility(View.GONE);
 			editLayout.setVisibility(View.GONE);
 			restoreButton.setVisibility(View.GONE);
+			clearButton.setVisibility(View.GONE);
 			dtTextView.setVisibility(View.GONE);
 			return;
 		}
@@ -212,7 +214,6 @@ public class ExpenseActivity extends Activity {
 			}
 			
 			int lastEventPosition = idarray.length - 1;
-			
 			if(expenseIdArrayPosition == lastEventPosition){
 				next.setVisibility(View.INVISIBLE);
 			}
@@ -222,13 +223,20 @@ public class ExpenseActivity extends Activity {
 		}
 		
 		//Edit delete button visibility
-		if (expenseFlag == PersonalDatabase.deletedExpenseFlag){
+		if (expenseFlag == PersonalDatabase.clearedExpenseFlag) {
+			editLayout.setVisibility(View.GONE);
+			restoreButton.setVisibility(View.GONE);
+			clearButton.setVisibility(View.GONE);
+		}
+		else if (expenseFlag == PersonalDatabase.deletedExpenseFlag){
 			editLayout.setVisibility(View.GONE);
 			restoreButton.setVisibility(View.VISIBLE);
+			clearButton.setVisibility(View.VISIBLE);
 		}
 		else {
 			editLayout.setVisibility(View.VISIBLE);
 			restoreButton.setVisibility(View.GONE);
+			clearButton.setVisibility(View.VISIBLE);
 		}
 		
 		String categoryString = pdb.getCategoryName(category);
@@ -236,6 +244,7 @@ public class ExpenseActivity extends Activity {
 		addEntry(categoryString,name,amountString);			
 	}
 
+	@SuppressLint("InflateParams")
 	public void addEntry(String category, String name, String amount){
 		View convertView = inflater.inflate(R.layout.table_item, null);
 		TextView v1 = (TextView)convertView.findViewById(R.id.table_item_tv1);
@@ -261,143 +270,104 @@ public class ExpenseActivity extends Activity {
 	}
 	
 	public void editExpense(View v) {
-		
+		try{
+			int tempid = idarray[expenseIdArrayPosition];
+			String tempName = listofexpenses.get(expenseIdArrayPosition);
+			
+			Intent intent = new Intent(this, EditExpenseActivity.class);
+			intent.putExtra(GroupSummaryActivity.stringDecimals, currencyDecimals);
+			intent.putExtra(EXPENSE_ID, tempid);
+			intent.putExtra(EXPENSE_NAME, tempName);
+			startActivity(intent);
+		}catch(Exception e){}
 	}
 	
 	public void deleteExpense(View v) {
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+		alertDialogBuilder.setTitle("Delete Expense");
+		alertDialogBuilder
+		.setMessage("Deleting an expense will change the overall balance. Are you sure you want to delete this expense?")
+		.setCancelable(true)
+		.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				deleteExpenseFromDatabase(expenseIdArrayPosition);
+			}
+		})
+		.setNegativeButton("No",new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		});
+		AlertDialog alertDialog = alertDialogBuilder.create();
+		alertDialog.show();
+	}
+	
+	public void deleteExpenseFromDatabase(int position) {
+		int id = idarray[position];
+
+		try {
+			pdb.deleteExpense(id);
+		} catch(Exception e){}
 		
+		fillExpenses(categoryId);
+		expenseSpin.setSelection(expenseIdArrayPosition);
 	}
 
 	public void restoreExpense(View v) {
-		
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+		alertDialogBuilder.setTitle("Restore Deleted Expense");
+		alertDialogBuilder
+		.setMessage("Restoring a deleted expense will change the overall balance. Are you sure you want to restore this expense?")
+		.setCancelable(true)
+		.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				restoreExpenseInDatabase(expenseIdArrayPosition);
+			}
+		})
+		.setNegativeButton("No",new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		});
+		AlertDialog alertDialog = alertDialogBuilder.create();
+		alertDialog.show();
 	}
 	
-//	public void editEvent(View v) {
-//		try{
-//			int tempid = idarray[eventIdArrayPosition];
-//			int tempFlag = flagarray[eventIdArrayPosition];
-//			String tempName = listofevents.get(eventIdArrayPosition);
-//			
-//			if(tempFlag == GroupDatabase.eventFlag){
-//				Intent intent = new Intent(this, EditEventActivity.class);
-//				intent.putExtra(GroupsActivity.GROUP_ID, grpid);
-//				intent.putExtra(GroupSummaryActivity.listofmember, namearray);
-//				intent.putExtra(GroupSummaryActivity.stringDecimals, currencyDecimals);
-//				intent.putExtra(EVENT_ID, tempid);
-//				intent.putExtra(EVENT_NAME, tempName);
-//				startActivity(intent);
-//			}else if(tempFlag == GroupDatabase.cashTransferFlag){
-//				Intent intent = new Intent(this, EditCashTransferActivity.class);
-//				intent.putExtra(GroupsActivity.GROUP_ID, grpid);
-//				intent.putExtra(GroupSummaryActivity.listofmember, namearray);
-//				intent.putExtra(GroupSummaryActivity.stringDecimals, currencyDecimals);
-//				intent.putExtra(EVENT_ID, tempid);
-//				intent.putExtra(EVENT_NAME, tempName);
-//				startActivity(intent);
-//			}
-//		}catch(Exception e){
-//			Log.e("Sameer","Here",e);
-//		}
-//	}
-//	
-//	public void deleteEvent(View v) {
-//		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-//		alertDialogBuilder.setTitle("Delete Event");
-//		alertDialogBuilder
-//		.setMessage("Deleting an event will change the balance of the involved members. Are you sure you want to delete this event?")
-//		.setCancelable(true)
-//		.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
-//			public void onClick(DialogInterface dialog, int id) {
-//				deleteEventFromDatabase(eventIdArrayPosition);
-//			}
-//		})
-//		.setNegativeButton("No",new DialogInterface.OnClickListener() {
-//			public void onClick(DialogInterface dialog, int id) {
-//				dialog.cancel();
-//			}
-//		});
-//		AlertDialog alertDialog = alertDialogBuilder.create();
-//		alertDialog.show();
-//	}
-//	
-//	public void restoreEvent(View v) {
-//		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-//		alertDialogBuilder.setTitle("Restore Deleted Event");
-//		alertDialogBuilder
-//		.setMessage("Restoring a deleted event will change the balance of the involved members. Are you sure you want to restore this event?")
-//		.setCancelable(true)
-//		.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
-//			public void onClick(DialogInterface dialog, int id) {
-//				restoreDeletedEventInDatabase(eventIdArrayPosition);
-//			}
-//		})
-//		.setNegativeButton("No",new DialogInterface.OnClickListener() {
-//			public void onClick(DialogInterface dialog, int id) {
-//				dialog.cancel();
-//			}
-//		});
-//		AlertDialog alertDialog = alertDialogBuilder.create();
-//		alertDialog.show();
-//	}
-//
-//	public void clearAlert(View v) {
-//		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-//		alertDialogBuilder.setTitle("Clear History");
-//		alertDialogBuilder
-//		.setMessage("Clearing the history will delete all the events from history but will not affect the balance of any member. Are you sure you want to continue?")
-//		.setCancelable(true)
-//		.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
-//			public void onClick(DialogInterface dialog, int id) {
-//				clearlog();
-//			}
-//		})
-//		.setNegativeButton("No",new DialogInterface.OnClickListener() {
-//			public void onClick(DialogInterface dialog, int id) {
-//				dialog.cancel();
-//			}
-//		});
-//		AlertDialog alertDialog = alertDialogBuilder.create();
-//		alertDialog.show();
-//	}
-//
-//	public void clearlog(){
-//		gpdb.clearlog();
-//		this.finish();
-//	}
-//	
-//	public void deleteEventFromDatabase(int position) {
-//		int tempid = idarray[position];
-//		int tempflag = flagarray[position];
-//
-//		try{
-//			if(tempflag==GroupDatabase.eventFlag){
-//				gpdb.DeleteFromTransList(tempid);
-//			}
-//			else if(tempflag==GroupDatabase.cashTransferFlag){
-//				gpdb.DeleteFromCashList(tempid);
-//			}
-//		}catch(Exception e){}
-//		
-//		fillEvents(memberId);
-//		eventSpin.setSelection(eventIdArrayPosition);
-//	}
-//	
-//	public void restoreDeletedEventInDatabase(int position) {
-//		int tempid = idarray[position];
-//		int tempflag = flagarray[position];
-//
-//		try{
-//			if(tempflag==GroupDatabase.deletedEventFlag){
-//				gpdb.restoreInTransList(tempid);
-//			}
-//			else if(tempflag==GroupDatabase.deletedCashTransferFlag){
-//				gpdb.restoreInCashList(tempid);
-//			}
-//		}catch(Exception e){}
-//		
-//		fillEvents(memberId);
-//		eventSpin.setSelection(eventIdArrayPosition);
-//	}
+	public void restoreExpenseInDatabase(int position) {
+		int id = idarray[position];
+
+		try {
+			pdb.restoreExpense(id);
+		} catch(Exception e){}
+		
+		fillExpenses(categoryId);
+		expenseSpin.setSelection(expenseIdArrayPosition);
+	}
+	
+	public void clearHistoryAlert(View v) {
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+		alertDialogBuilder.setTitle("Clear Expense History");
+		alertDialogBuilder
+		.setMessage("Clearing the expense history will delete all the expenses as well as set the total expenses to zero. Are you sure you want to continue?")
+		.setCancelable(true)
+		.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				clearExpenseHistory();
+			}
+		})
+		.setNegativeButton("No",new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		});
+		AlertDialog alertDialog = alertDialogBuilder.create();
+		alertDialog.show();
+	}
+
+	public void clearExpenseHistory(){
+		pdb.clearExpenses();
+		this.finish();
+	}
 	
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
