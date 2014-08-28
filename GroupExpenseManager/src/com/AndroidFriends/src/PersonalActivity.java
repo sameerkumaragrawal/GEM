@@ -175,7 +175,9 @@ public class PersonalActivity extends Activity {
 			startActivity(intent);
 		}
 		else if (position == 1) {
-			// open bills activity
+			Intent intent = new Intent(this, BillActivity.class);
+			intent.putExtra(stringDecimals, currency);
+			startActivity(intent);
 		}
 	}
 	
