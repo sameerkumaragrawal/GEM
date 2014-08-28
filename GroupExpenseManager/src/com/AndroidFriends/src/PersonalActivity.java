@@ -23,6 +23,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -40,8 +42,12 @@ public class PersonalActivity extends Activity {
 	private PersonalDatabase pdb;
 	private CommonDatabase cdb;
 	private String name, currencySymbol;
-	private float salary;
+	private float salary, expenses, bills;
 	private int currency, salaryFlag, currencyDecimals=2;
+	private boolean infoAvailable = true;
+	private ImageButton editInfoButton, addButton;
+	private Button addInfoButton;
+	private TextView noInfoText;
 	public final static String stringDecimals = "summaryActivity/stringDecimals";
 	
 	@Override
@@ -54,11 +60,16 @@ public class PersonalActivity extends Activity {
 		list = (ListView) findViewById(R.id.PersonalList);
 		list.setAdapter(adaptor);
 		
+		addButton = (ImageButton) findViewById(R.id.personalActivityAddButton);
+		editInfoButton = (ImageButton) findViewById(R.id.personalActivityEditButton);
+		addInfoButton = (Button) findViewById(R.id.addInfoButton);
+		noInfoText = (TextView) findViewById(R.id.noInfoText);
+		
 		pdb = PersonalDatabase.get(this);
 		cdb = CommonDatabase.get(this);
-		
-		makeList();
+
 		getInfo();
+		makeList();
     }
 	
 	@Override
@@ -97,6 +108,78 @@ public class PersonalActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
     
+    public void makeList(){
+		if (!infoAvailable) {
+			noInfoText.setVisibility(View.VISIBLE);
+			addInfoButton.setVisibility(View.VISIBLE);
+			list.setVisibility(View.GONE);
+			addButton.setVisibility(View.GONE);
+			editInfoButton.setVisibility(View.GONE);
+		}
+		else {
+			noInfoText.setVisibility(View.GONE);
+			addInfoButton.setVisibility(View.GONE);
+			list.setVisibility(View.VISIBLE);
+			addButton.setVisibility(View.VISIBLE);
+			editInfoButton.setVisibility(View.VISIBLE);
+			
+			String expenseItem = "Expenses = 1500 INR";
+			String billItem = "Bils Due = 500 INR";
+			// get from database
+	    	
+			items.add(expenseItem);
+	    	items.add(billItem);    	
+	    	adaptor.notifyDataSetChanged();
+		}
+    }
+	
+	public void getInfo() {
+		Cursor infoQuery = pdb.getInformation();
+		if (infoQuery.getCount() == 0) {
+			infoAvailable = false;
+		}
+		else {
+			infoQuery.moveToFirst();
+			name = infoQuery.getString(0);
+			currency = infoQuery.getInt(1);
+			salary = infoQuery.getFloat(2);
+			salaryFlag = infoQuery.getInt(3);
+			currencyDecimals = cdb.getCurrencyDecimals(currency);
+			currencySymbol = cdb.getCurrencySymbol(currency);
+		}
+		infoQuery.close();
+	}
+	
+	public void addInfo(View v) {
+		
+	}
+	
+	public void editInfo(View v) {
+	
+	}
+	
+	public void addNew(int position) {
+		if (position == 0) {
+			Intent intent = new Intent(this, AddExpenseActivity.class);
+			startActivity(intent);
+		}
+		else if (position == 1) {
+			// open add bill activity
+		}
+	}
+	
+	public void openActivity(int position) {
+		if (position == 0) {
+			Intent intent = new Intent(this, ExpenseActivity.class);
+			intent.putExtra(stringDecimals, currency);
+			startActivity(intent);
+		}
+		else if (position == 1) {
+			// open bills activity
+		}
+	}
+	
+    // Define required classes
     private class ListAdaptor extends BaseAdapter{
 
 		private LayoutInflater inflater;
@@ -154,41 +237,6 @@ public class PersonalActivity extends Activity {
 		}
 	}
 	
-	public void makeList(){
-		String expenseItem = "Expenses = 1500 INR";
-		String billItem = "Bils Due = 500 INR";
-		// get from database
-    	
-		items.add(expenseItem);
-    	items.add(billItem);    	
-    	adaptor.notifyDataSetChanged();
-    }
-	
-	public void getInfo() {
-		Cursor infoQuery = pdb.getInformation();
-		if (infoQuery.getCount() > 0) {
-			infoQuery.moveToFirst();
-			name = infoQuery.getString(0);
-			currency = infoQuery.getInt(1);
-			salary = infoQuery.getFloat(2);
-			salaryFlag = infoQuery.getInt(3);
-		}
-		else {
-			name = "";
-			currency = 1;
-			salary = 0;
-			salaryFlag = 0;
-		}
-		infoQuery.close();
-		
-		currencyDecimals = cdb.getCurrencyDecimals(currency);
-		currencySymbol = cdb.getCurrencySymbol(currency);
-	}
-	
-	public void editInfo(View v) {
-	
-	}
-	
 	private class CustomOnItemClickListener implements OnItemClickListener{
 		private AlertDialog dialog;
 		
@@ -221,27 +269,6 @@ public class PersonalActivity extends Activity {
     	
         modeList.setOnItemClickListener(myitemlistener);
     }
-	
-	public void addNew(int position) {
-		if (position == 0) {
-			Intent intent = new Intent(this, AddExpenseActivity.class);
-			startActivity(intent);
-		}
-		else if (position == 1) {
-			// open add bill activity
-		}
-	}
-	
-	public void openActivity(int position) {
-		if (position == 0) {
-			Intent intent = new Intent(this, ExpenseActivity.class);
-			intent.putExtra(stringDecimals, currency);
-			startActivity(intent);
-		}
-		else if (position == 1) {
-			// open bills activity
-		}
-	}
         
     public void exitAlert() {
     	AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);

@@ -118,4 +118,6 @@
     <string name="title_activity_edit_expense">Edit Expense</string>
     <string name="title_activity_bill">Bills</string>
     <string name="title_activity_add_bill">Add New Bill</string>
+    <string name="noInfo">No Personal Information Available</string>
+    <string name="addInfo">Add Information</string>
 </resources>
