@@ -10,6 +10,7 @@ import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
@@ -87,14 +88,10 @@ public class GroupSummaryActivity extends Activity {
 
 		try{
 			groupDb = this.openOrCreateDatabase(gdName, MODE_PRIVATE, null);
-			//Log.e("Sameer",String.valueOf(groupDb.getVersion()));
 			groupDb.rawQuery("SELECT Balance FROM " + GroupDatabase.MemberTable+";",null);
 			groupDb.setVersion(1);
 
-		}catch(Exception e) {
-
-			//Log.e("Sameer", "Table doesn't contain column named Balance", e);
-		}
+		}catch(Exception e) {}
 		finally{ 
 			if(groupDb!=null)
 				groupDb.close();
@@ -196,6 +193,7 @@ public class GroupSummaryActivity extends Activity {
 
 	}
 
+	@SuppressLint("InflateParams")
 	public void fillEntryInTable(){
 		LinearLayout tl = (LinearLayout)findViewById(R.id.groupSummaryTableLayout);
 		for(int j=0;j<countmembers;j++){

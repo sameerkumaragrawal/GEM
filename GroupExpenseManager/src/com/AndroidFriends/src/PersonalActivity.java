@@ -42,7 +42,7 @@ public class PersonalActivity extends Activity {
 	
 	private PersonalDatabase pdb;
 	private CommonDatabase cdb;
-	private String name, currencySymbol;
+	private String name, currencySymbol, decimalFlag;
 	private float salary, expenses, bills;
 	private int currency, salaryFlag, currencyDecimals=2;
 	private boolean infoAvailable = true;
@@ -128,9 +128,10 @@ public class PersonalActivity extends Activity {
 			addButton.setVisibility(View.VISIBLE);
 			editInfoButton.setVisibility(View.VISIBLE);
 			
-			String expenseItem = "Expenses = 1500 INR";
-			String billItem = "Bils Due = 500 INR";
-			// get from database
+			displayCurrency();
+			String expenseItem = "Expenses - ";
+			expenseItem += String.format(decimalFlag, expenses);
+			String billItem = "Bils Due - 500"; //TODO
 	    	
 			items.add(expenseItem);
 	    	items.add(billItem);    	
@@ -139,6 +140,9 @@ public class PersonalActivity extends Activity {
     }
 	
 	public void getInfo() {
+		expenses = pdb.getTotalExpenses();
+//		bills = pdb.getTotalBills();
+		
 		Cursor infoQuery = pdb.getInformation();
 		if (infoQuery.getCount() == 0) {
 			infoAvailable = false;
@@ -152,6 +156,7 @@ public class PersonalActivity extends Activity {
 			salaryFlag = infoQuery.getInt(3);
 			currencyDecimals = cdb.getCurrencyDecimals(currency);
 			currencySymbol = cdb.getCurrencySymbol(currency);
+			decimalFlag = "%." + currencyDecimals + "f";
 		}
 		infoQuery.close();
 	}
@@ -192,6 +197,12 @@ public class PersonalActivity extends Activity {
 			intent.putExtra(personalCurrencyDecimals, currencyDecimals);
 			startActivity(intent);
 		}
+	}
+	
+	public void displayCurrency() {
+		TextView currencyText = (TextView) findViewById(R.id.personalCurrencyText);
+		String text = "(All amounts displayed are in " + currencySymbol + ")";
+		currencyText.setText(text);
 	}
 	
 	

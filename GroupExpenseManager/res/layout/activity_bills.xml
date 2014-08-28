@@ -22,7 +22,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center"
                 android:text="@string/selectBill"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textStyle="bold" />
@@ -31,7 +30,7 @@
                 android:id="@+id/billDropdown"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1.7"
+                android:layout_weight="1.5"
                 android:gravity="center" />
         </LinearLayout>
 
