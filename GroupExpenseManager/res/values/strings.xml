@@ -125,4 +125,9 @@
     <string name="title_activity_add_bill">Add New Bill</string>
     <string name="noInfo">No Personal Information Available</string>
     <string name="addInfo">Add Information</string>
+    <string name="salary">Salary</string>
+    <string name="addSalary">Add Salary</string>
+    <string name="removeSalary">Remove Salary</string>
+    <string name="title_activity_add_info">Add Personal Information</string>
+    <string name="title_activity_edit_info">Edit Personal Information</string>
 </resources>

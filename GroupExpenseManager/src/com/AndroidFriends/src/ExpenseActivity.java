@@ -54,7 +54,7 @@ public class ExpenseActivity extends Activity {
 		pdb=PersonalDatabase.get(this);
 		inflater = LayoutInflater.from(this);
 
-		currencyDecimals = intent.getIntExtra(PersonalActivity.stringDecimals, 0);
+		currencyDecimals = intent.getIntExtra(PersonalActivity.personalCurrencyDecimals, 0);
 		decimalFlag = "%." + currencyDecimals + "f";
 		
 		expenseTable = (LinearLayout) findViewById(R.id.ExpenseTable);

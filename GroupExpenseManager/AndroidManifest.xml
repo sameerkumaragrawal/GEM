@@ -154,6 +154,17 @@
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:label="@string/title_activity_add_bill" >
         </activity>
+        <activity
+            android:name="com.AndroidFriends.src.AddPersonalInfoActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:label="@string/title_activity_add_info" >
+        </activity>
+        <activity
+            android:name="com.AndroidFriends.src.EditPersonalInfoActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:label="@string/title_activity_edit_info"
+            android:windowSoftInputMode="stateHidden" >
+        </activity>
     </application>
 
 </manifest>

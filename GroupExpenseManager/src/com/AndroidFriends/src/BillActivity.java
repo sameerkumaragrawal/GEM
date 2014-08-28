@@ -3,6 +3,7 @@ package com.AndroidFriends.src;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -17,7 +18,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -49,7 +49,7 @@ public class BillActivity extends Activity {
 		pdb=PersonalDatabase.get(this);
 		inflater = LayoutInflater.from(this);
 
-		currencyDecimals = intent.getIntExtra(PersonalActivity.stringDecimals, 0);
+		currencyDecimals = intent.getIntExtra(PersonalActivity.personalCurrencyDecimals, 0);
 		decimalFlag = "%." + currencyDecimals + "f";
 		
 		billTable = (LinearLayout) findViewById(R.id.billTable);
@@ -70,9 +70,7 @@ public class BillActivity extends Activity {
 			public void onNothingSelected(AdapterView<?> arg0) {
 				// TODO Auto-generated method stub
 			}
-
 		});
-		
 	}
 	
 	@Override
@@ -183,6 +181,7 @@ public class BillActivity extends Activity {
 		addEntry(name,amountString,dt);			
 	}
 
+	@SuppressLint("InflateParams")
 	public void addEntry(String name,String amount,String date){
 		View convertView = inflater.inflate(R.layout.table_item, null);
 		TextView v1 = (TextView)convertView.findViewById(R.id.table_item_tv1);

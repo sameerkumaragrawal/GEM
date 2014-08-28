@@ -2,6 +2,7 @@ package com.AndroidFriends.src;
 
 import java.util.ArrayList;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -48,7 +49,11 @@ public class PersonalActivity extends Activity {
 	private ImageButton editInfoButton, addButton;
 	private Button addInfoButton;
 	private TextView noInfoText;
-	public final static String stringDecimals = "summaryActivity/stringDecimals";
+	public final static String personalName = "personalActivity/name";
+	public final static String personalSalary = "personalActivity/salary";
+	public final static String personalSalaryFlag = "personalActivity/salaryFlag";
+	public final static String personalCurrency = "personalActivity/currency";
+	public final static String personalCurrencyDecimals = "personalActivity/currencyDecimals";
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,10 +83,10 @@ public class PersonalActivity extends Activity {
 		
 		adaptor = new ListAdaptor(this);
 		items = new ArrayList<String>();
-
 		list = (ListView) findViewById(R.id.PersonalList);
 		list.setAdapter(adaptor);
 		
+		getInfo();
 		makeList();
 	}
 			
@@ -139,6 +144,7 @@ public class PersonalActivity extends Activity {
 			infoAvailable = false;
 		}
 		else {
+			infoAvailable = true;
 			infoQuery.moveToFirst();
 			name = infoQuery.getString(0);
 			currency = infoQuery.getInt(1);
@@ -151,11 +157,18 @@ public class PersonalActivity extends Activity {
 	}
 	
 	public void addInfo(View v) {
-		
+		Intent intent = new Intent(this, AddPersonalInfoActivity.class);
+		startActivity(intent);
 	}
 	
 	public void editInfo(View v) {
-	
+		Intent intent = new Intent(this, EditPersonalInfoActivity.class);
+		intent.putExtra(personalName, name);
+		intent.putExtra(personalSalaryFlag, salaryFlag);
+		intent.putExtra(personalSalary, salary);
+		intent.putExtra(personalCurrency, currency);
+		intent.putExtra(personalCurrencyDecimals, currencyDecimals);
+		startActivity(intent);
 	}
 	
 	public void addNew(int position) {
@@ -171,15 +184,16 @@ public class PersonalActivity extends Activity {
 	public void openActivity(int position) {
 		if (position == 0) {
 			Intent intent = new Intent(this, ExpenseActivity.class);
-			intent.putExtra(stringDecimals, currency);
+			intent.putExtra(personalCurrencyDecimals, currencyDecimals);
 			startActivity(intent);
 		}
 		else if (position == 1) {
 			Intent intent = new Intent(this, BillActivity.class);
-			intent.putExtra(stringDecimals, currency);
+			intent.putExtra(personalCurrencyDecimals, currencyDecimals);
 			startActivity(intent);
 		}
 	}
+	
 	
     // Define required classes
     private class ListAdaptor extends BaseAdapter{
@@ -202,6 +216,7 @@ public class PersonalActivity extends Activity {
 			return position;
 		}
 
+		@SuppressLint("InflateParams")
 		public View getView(int position, View convertView, ViewGroup parent) {
 			Holder holder;
 			if(convertView == null){
@@ -218,7 +233,6 @@ public class PersonalActivity extends Activity {
 			holder.memberText.setText(items.get(position));
 			return convertView;
 		}
-
 	}
 	
 	private class Holder{
