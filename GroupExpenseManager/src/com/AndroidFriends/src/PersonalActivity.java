@@ -164,7 +164,8 @@ public class PersonalActivity extends Activity {
 			startActivity(intent);
 		}
 		else if (position == 1) {
-			// open add bill activity
+			Intent intent = new Intent(this, AddBillActivity.class);
+			startActivity(intent);
 		}
 	}
 	

@@ -125,4 +125,5 @@
     <string name="title_activity_add_bill">Add New Bill</string>
     <string name="noInfo">No Personal Information Available</string>
     <string name="addInfo">Add Information</string>
+    <string name="billName">Bill Name</string>
 </resources>
