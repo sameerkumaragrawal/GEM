@@ -13,6 +13,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -229,6 +230,49 @@ public class BillActivity extends Activity {
 	
 	public void payBill(View v) {
 		// TODO Go to Pay bill page
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+		alertDialogBuilder.setTitle("Pay Bill");
+		alertDialogBuilder
+		.setMessage("Are you sure you want to pay this bill?")
+		.setCancelable(true)
+		.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				payBillToExpenses(billIdArrayPosition);
+			}
+		})
+		.setNegativeButton("No",new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		});
+		AlertDialog alertDialog = alertDialogBuilder.create();
+		alertDialog.show();
+	}
+	
+	public void payBillToExpenses(int position) {
+		int id = idarray[position];
+
+		try {
+			pdb.payBill(id);
+		} catch(Exception e){
+			Log.e("nik","Here",e);
+		}
+		
+		fillBills();
+		billSpin.setSelection((billIdArrayPosition>0)?(billIdArrayPosition-1):billIdArrayPosition);
+	}
+	
+	public void editBill(View v) {
+		try{
+			int tempid = idarray[billIdArrayPosition];
+			String tempName = listofbills.get(billIdArrayPosition);
+			
+			Intent intent = new Intent(this, EditBillActivity.class);
+			intent.putExtra(GroupSummaryActivity.stringDecimals, currencyDecimals);
+			intent.putExtra(BILL_ID, tempid);
+			intent.putExtra(BILL_NAME, tempName);
+			startActivity(intent);
+		}catch(Exception e){}
 	}
 	
 	public void deleteBill(View v) {

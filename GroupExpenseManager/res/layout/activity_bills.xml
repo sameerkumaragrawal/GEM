@@ -121,12 +121,12 @@
             android:padding="10dp" >
 
             <Button
-                android:id="@+id/billPayButton"
+                android:id="@+id/editBillButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:onClick="payBbill"
-                android:text="@string/payBill" />
+                android:onClick="editBill"
+                android:text="@string/editBill" />
 
             <Button
                 android:id="@+id/billDeleteButton"
@@ -136,6 +136,16 @@
                 android:onClick="deleteBill"
                 android:text="@string/deleteBill" />
         </LinearLayout>
+        
+        <Button
+            android:id="@+id/billPayButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:onClick="payBill"
+            android:text="@string/payBill"
+			android:layout_marginBottom="10dp" />
         
     </LinearLayout>
 

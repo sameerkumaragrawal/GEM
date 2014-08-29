@@ -165,6 +165,12 @@
             android:label="@string/title_activity_edit_info"
             android:windowSoftInputMode="stateHidden" >
         </activity>
+        <activity
+            android:name="com.AndroidFriends.src.EditBillActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:label="@string/title_activity_add_bill"
+            android:windowSoftInputMode="stateHidden" >
+        </activity>
     </application>
 
 </manifest>
