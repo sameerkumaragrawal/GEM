@@ -122,6 +122,7 @@
     <string name="restoreBill">Restore Bill</string>
     <string name="billDueDate">Due Date</string>
     <string name="title_activity_add_bill">Add New Bill</string>
+    <string name="billDateFormat">DD-MM-YYYY</string>
     <string name="noInfo">No Personal Information Available</string>
     <string name="addInfo">Add Information</string>
     <string name="billName">Bill Name</string>
