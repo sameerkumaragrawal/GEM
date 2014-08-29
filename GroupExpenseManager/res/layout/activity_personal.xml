@@ -16,7 +16,7 @@
             android:layout_weight="1"
             android:padding="10dp"
             android:gravity="center"
-            android:text="@string/current_status"
+            android:text="@string/summary"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textStyle="bold" />
         
@@ -51,15 +51,44 @@
 		android:padding="10dp" >
 	</TextView>
 	
+	<LinearLayout
+	    android:id="@+id/salaryLayout"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+        android:padding="20dp" >
+	
+	    <TextView
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:textAppearance="?android:attr/textAppearanceLarge"
+	        android:paddingLeft="10dp"
+	        android:paddingRight="10dp"
+	        android:gravity="left"
+	        android:text="@string/salary" />
+	
+	    <TextView
+	        android:id="@+id/salaryAmountTV"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:textAppearance="?android:attr/textAppearanceLarge"
+	        android:paddingLeft="10dp"
+	        android:paddingRight="10dp"
+	        android:gravity="right" />
+	    
+	</LinearLayout>
+	
     <ListView
         android:id="@+id/PersonalList"
         android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:clickable="false"
-        android:focusable="false" >
+        android:focusable="false"
+        android:padding="10dp" >
     </ListView>
-        
+                
     <TextView
         android:id="@+id/noInfoText"
         android:layout_width="match_parent"

@@ -27,7 +27,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 public class AddBillActivity extends Activity {
-	private Spinner categorySpinner;
 	private Button doneButton;
 	private String[] billNames = new String[] {"Electricity", "Landline", "Mobile", "Rent", "Hospital", "Hotel", "Insurance", "EMI", "Tax" };
 	private TextView dateDisplay;

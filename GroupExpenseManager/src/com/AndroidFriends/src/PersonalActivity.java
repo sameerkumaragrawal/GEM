@@ -26,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -36,8 +37,10 @@ import com.AndroidFriends.R.id;
 public class PersonalActivity extends Activity {
 	private ListAdaptor adaptor;
     private ListView list;
+    private LinearLayout salaryLayout;
+    private TextView salaryAmountTV;
     public int selPosition;
-    public ArrayList<String> items;
+    public ArrayList<String> titles, amounts;
 	public String[] stringArray = new String[] { "Expense", "Bill" };
 	
 	private PersonalDatabase pdb;
@@ -54,16 +57,21 @@ public class PersonalActivity extends Activity {
 	public final static String personalSalaryFlag = "personalActivity/salaryFlag";
 	public final static String personalCurrency = "personalActivity/currency";
 	public final static String personalCurrencyDecimals = "personalActivity/currencyDecimals";
+	public final static String personalExpenses = "personalActivity/expenses";
+	public final static String personalBills = "personalActivity/bills";
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal);
         adaptor = new ListAdaptor(this);
-		items = new ArrayList<String>();
+		titles = new ArrayList<String>();
+		amounts = new ArrayList<String>();
 
 		list = (ListView) findViewById(R.id.PersonalList);
 		list.setAdapter(adaptor);
+		salaryLayout = (LinearLayout) findViewById(R.id.salaryLayout);
+		salaryAmountTV = (TextView) findViewById(R.id.salaryAmountTV);
 		
 		addButton = (ImageButton) findViewById(R.id.personalActivityAddButton);
 		editInfoButton = (ImageButton) findViewById(R.id.personalActivityEditButton);
@@ -82,7 +90,8 @@ public class PersonalActivity extends Activity {
 		super.onRestart();
 		
 		adaptor = new ListAdaptor(this);
-		items = new ArrayList<String>();
+		titles = new ArrayList<String>();
+		amounts = new ArrayList<String>();
 		list = (ListView) findViewById(R.id.PersonalList);
 		list.setAdapter(adaptor);
 		
@@ -111,33 +120,6 @@ public class PersonalActivity extends Activity {
             	return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-    
-    public void makeList(){
-		if (!infoAvailable) {
-			noInfoText.setVisibility(View.VISIBLE);
-			addInfoButton.setVisibility(View.VISIBLE);
-			list.setVisibility(View.GONE);
-			addButton.setVisibility(View.GONE);
-			editInfoButton.setVisibility(View.GONE);
-		}
-		else {
-			noInfoText.setVisibility(View.GONE);
-			addInfoButton.setVisibility(View.GONE);
-			list.setVisibility(View.VISIBLE);
-			addButton.setVisibility(View.VISIBLE);
-			editInfoButton.setVisibility(View.VISIBLE);
-			
-			displayCurrency();
-			String expenseItem = "Expenses - ";
-			expenseItem += String.format(decimalFlag, expenses);
-			String billItem = "Bils Due - "; 
-			billItem += String.format(decimalFlag, bills);
-	    	
-			items.add(expenseItem);
-	    	items.add(billItem);    	
-	    	adaptor.notifyDataSetChanged();
-		}
     }
 	
 	public void getInfo() {
@@ -177,6 +159,49 @@ public class PersonalActivity extends Activity {
 		startActivity(intent);
 	}
 	
+	public void makeList(){
+		if (!infoAvailable) {
+			noInfoText.setVisibility(View.VISIBLE);
+			addInfoButton.setVisibility(View.VISIBLE);
+			list.setVisibility(View.GONE);
+			addButton.setVisibility(View.GONE);
+			editInfoButton.setVisibility(View.GONE);
+		}
+		else {
+			noInfoText.setVisibility(View.GONE);
+			addInfoButton.setVisibility(View.GONE);
+			list.setVisibility(View.VISIBLE);
+			addButton.setVisibility(View.VISIBLE);
+			editInfoButton.setVisibility(View.VISIBLE);
+			
+			displayCurrency();
+			String salaryAmount = String.format(decimalFlag, salary);
+			String expenseItem = "Expenses";
+			String expenseAmount = String.format(decimalFlag, expenses);
+			String billItem = "Bils Due";
+	    	String billAmount = String.format(decimalFlag, bills);
+			String balanceItem = "Balance";
+			String balanceAmount = String.format(decimalFlag, salary-expenses);
+			
+			titles.add(expenseItem);
+			amounts.add(expenseAmount);
+	    	titles.add(billItem);    	
+	    	amounts.add(billAmount);
+	    	if (salaryFlag == 1) {
+	    		salaryLayout.setVisibility(View.VISIBLE);
+	    		salaryAmountTV.setVisibility(View.VISIBLE);
+	    		salaryAmountTV.setText(salaryAmount);
+		    	titles.add(balanceItem);    	
+		    	amounts.add(balanceAmount);
+	    	}
+	    	else {
+	    		salaryLayout.setVisibility(View.GONE);
+	    		salaryAmountTV.setVisibility(View.GONE);
+	    	}
+	    	adaptor.notifyDataSetChanged();
+		}
+    }
+	
 	public void addNew(int position) {
 		if (position == 0) {
 			Intent intent = new Intent(this, AddExpenseActivity.class);
@@ -199,6 +224,14 @@ public class PersonalActivity extends Activity {
 			intent.putExtra(personalCurrencyDecimals, currencyDecimals);
 			startActivity(intent);
 		}
+		else if (position == 2) {
+			Intent intent = new Intent(this, BalanceActivity.class);
+			intent.putExtra(personalCurrencyDecimals, currencyDecimals);
+			intent.putExtra(personalSalary, salary);
+			intent.putExtra(personalExpenses, expenses);
+			intent.putExtra(personalBills, bills);
+			startActivity(intent);
+		}
 	}
 	
 	public void displayCurrency() {
@@ -218,11 +251,11 @@ public class PersonalActivity extends Activity {
 		}
 
 		public int getCount() {
-			return items.size();
+			return titles.size();
 		}
 
 		public String getItem(int position) {
-			return items.get(position);
+			return titles.get(position);
 		}
 
 		public long getItemId(int position) {
@@ -233,23 +266,27 @@ public class PersonalActivity extends Activity {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			Holder holder;
 			if(convertView == null){
-				convertView = inflater.inflate(R.layout.group_item, null);
+				convertView = inflater.inflate(R.layout.personal_item, null);
 				holder = new Holder();
-				holder.memberText = (TextView)convertView.findViewById(R.id.group_item_tv);
+				holder.memberText = (TextView)convertView.findViewById(R.id.personal_title_tv);
+				holder.amountText = (TextView)convertView.findViewById(R.id.personal_amount_tv);
 				holder.clickListener= new CustomOnClickListener(); 
-				holder.memberText.setOnClickListener(holder.clickListener);
+				convertView.setOnClickListener(holder.clickListener);
 				convertView.setTag(holder);
 			}else{
 				holder = (Holder) convertView.getTag();
 			}
+			
 			holder.clickListener.setPosition(position);
-			holder.memberText.setText(items.get(position));
+			holder.memberText.setText(titles.get(position));
+			holder.amountText.setText(amounts.get(position));
 			return convertView;
 		}
 	}
 	
 	private class Holder{
 		TextView memberText;
+		TextView amountText;
 		CustomOnClickListener clickListener;
 	}
 	
@@ -275,7 +312,7 @@ public class PersonalActivity extends Activity {
 		
     	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
     		addNew(position);
-    		dialog.dismiss();	
+    		dialog.dismiss();
 		}
     }
 	

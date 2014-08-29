@@ -66,21 +66,23 @@
         	android:paddingTop="20dp"
         	android:paddingBottom="20dp" >
 
-            <TextView
-            	android:id="@+id/dateDisplay"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="DD-MM-YYYY"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textStyle="bold" />
-
             <Button
                 android:id="@+id/billDueDate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/billDueDate"
-                android:layout_weight="1.5" />
+                android:layout_weight="1" />
+            
+            <TextView
+            	android:id="@+id/dateDisplay"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/billDateFormat"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="bold" />
+            
         </LinearLayout>
         
         <Button
