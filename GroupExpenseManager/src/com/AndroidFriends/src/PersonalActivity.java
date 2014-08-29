@@ -124,8 +124,7 @@ public class PersonalActivity extends Activity {
 	
 	public void getInfo() {
 		expenses = pdb.getTotalExpenses();
-//		bills = pdb.getTotalBills();
-		bills = 0;
+		bills = pdb.getTotalBills();
 		
 		Cursor infoQuery = pdb.getInformation();
 		if (infoQuery.getCount() == 0) {
@@ -209,7 +208,8 @@ public class PersonalActivity extends Activity {
 			startActivity(intent);
 		}
 		else if (position == 1) {
-			// open add bill activity
+			Intent intent = new Intent(this, AddBillActivity.class);
+			startActivity(intent);
 		}
 	}
 	

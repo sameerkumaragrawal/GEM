@@ -237,6 +237,18 @@ public class PersonalDatabase extends SQLiteOpenHelper{
 		}
 		return total;
 	}
+	
+	public float getTotalBills() {
+		float total = 0;
+		Cursor mquery = getDB().rawQuery("SELECT Amount FROM " + billsTable, null);
+		if (mquery.getCount() > 0) {
+			mquery.moveToFirst();
+			do {
+				total += mquery.getFloat(0);
+			} while (mquery.moveToNext());
+		}
+		return total;
+	}
 		
 	public String getCategoryName(int id) {
 		Cursor mquery = getDB().rawQuery("SELECT Name FROM " + categoryTable + " WHERE ID = " + id, null);

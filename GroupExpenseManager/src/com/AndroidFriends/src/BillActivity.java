@@ -5,6 +5,8 @@ import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
@@ -126,6 +128,25 @@ public class BillActivity extends Activity {
 		}catch(Exception e){}
 	}
 	
+	public void fillBills() {
+		billList();
+		addItemsOnBillSpinner();
+		
+		filltable(0);
+		
+		billSpin.setOnItemSelectedListener(new OnItemSelectedListener() {
+			public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) 
+			{
+				billIdArrayPosition = position;
+				filltable(position);
+			}
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+			}
+		});
+		
+	}
+	
 	public void filltable(int position){
 		billTable.removeAllViews();
 		
@@ -211,7 +232,34 @@ public class BillActivity extends Activity {
 	}
 	
 	public void deleteBill(View v) {
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+		alertDialogBuilder.setTitle("Delete Bill");
+		alertDialogBuilder
+		.setMessage("Deleting an bill will change the overall balance. Are you sure you want to delete this bill?")
+		.setCancelable(true)
+		.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				deleteBillFromDatabase(billIdArrayPosition);
+			}
+		})
+		.setNegativeButton("No",new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		});
+		AlertDialog alertDialog = alertDialogBuilder.create();
+		alertDialog.show();
+	}
+	
+	public void deleteBillFromDatabase(int position) {
+		int id = idarray[position];
+
+		try {
+			pdb.deleteBill(id);
+		} catch(Exception e){}
 		
+		fillBills();
+		billSpin.setSelection((billIdArrayPosition>0)?(billIdArrayPosition-1):billIdArrayPosition);
 	}
 	
 //	public void editEvent(View v) {
