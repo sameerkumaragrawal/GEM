@@ -2,6 +2,7 @@ package com.AndroidFriends.src;
 
 import java.util.ArrayList;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -41,14 +42,18 @@ public class PersonalActivity extends Activity {
 	
 	private PersonalDatabase pdb;
 	private CommonDatabase cdb;
-	private String name, currencySymbol;
+	private String name, currencySymbol, decimalFlag;
 	private float salary, expenses, bills;
 	private int currency, salaryFlag, currencyDecimals=2;
 	private boolean infoAvailable = true;
 	private ImageButton editInfoButton, addButton;
 	private Button addInfoButton;
 	private TextView noInfoText;
-	public final static String stringDecimals = "summaryActivity/stringDecimals";
+	public final static String personalName = "personalActivity/name";
+	public final static String personalSalary = "personalActivity/salary";
+	public final static String personalSalaryFlag = "personalActivity/salaryFlag";
+	public final static String personalCurrency = "personalActivity/currency";
+	public final static String personalCurrencyDecimals = "personalActivity/currencyDecimals";
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,10 +83,10 @@ public class PersonalActivity extends Activity {
 		
 		adaptor = new ListAdaptor(this);
 		items = new ArrayList<String>();
-
 		list = (ListView) findViewById(R.id.PersonalList);
 		list.setAdapter(adaptor);
 		
+		getInfo();
 		makeList();
 	}
 			
@@ -123,9 +128,11 @@ public class PersonalActivity extends Activity {
 			addButton.setVisibility(View.VISIBLE);
 			editInfoButton.setVisibility(View.VISIBLE);
 			
-			String expenseItem = "Expenses = 1500 INR";
-			String billItem = "Bils Due = 500 INR";
-			// get from database
+			displayCurrency();
+			String expenseItem = "Expenses - ";
+			expenseItem += String.format(decimalFlag, expenses);
+			String billItem = "Bils Due - "; 
+			billItem += String.format(decimalFlag, bills);
 	    	
 			items.add(expenseItem);
 	    	items.add(billItem);    	
@@ -134,11 +141,15 @@ public class PersonalActivity extends Activity {
     }
 	
 	public void getInfo() {
+		expenses = pdb.getTotalExpenses();
+		bills = pdb.getTotalBills();
+		
 		Cursor infoQuery = pdb.getInformation();
 		if (infoQuery.getCount() == 0) {
 			infoAvailable = false;
 		}
 		else {
+			infoAvailable = true;
 			infoQuery.moveToFirst();
 			name = infoQuery.getString(0);
 			currency = infoQuery.getInt(1);
@@ -146,16 +157,24 @@ public class PersonalActivity extends Activity {
 			salaryFlag = infoQuery.getInt(3);
 			currencyDecimals = cdb.getCurrencyDecimals(currency);
 			currencySymbol = cdb.getCurrencySymbol(currency);
+			decimalFlag = "%." + currencyDecimals + "f";
 		}
 		infoQuery.close();
 	}
 	
 	public void addInfo(View v) {
-		
+		Intent intent = new Intent(this, AddPersonalInfoActivity.class);
+		startActivity(intent);
 	}
 	
 	public void editInfo(View v) {
-	
+		Intent intent = new Intent(this, EditPersonalInfoActivity.class);
+		intent.putExtra(personalName, name);
+		intent.putExtra(personalSalaryFlag, salaryFlag);
+		intent.putExtra(personalSalary, salary);
+		intent.putExtra(personalCurrency, currency);
+		intent.putExtra(personalCurrencyDecimals, currencyDecimals);
+		startActivity(intent);
 	}
 	
 	public void addNew(int position) {
@@ -172,15 +191,22 @@ public class PersonalActivity extends Activity {
 	public void openActivity(int position) {
 		if (position == 0) {
 			Intent intent = new Intent(this, ExpenseActivity.class);
-			intent.putExtra(stringDecimals, currency);
+			intent.putExtra(personalCurrencyDecimals, currencyDecimals);
 			startActivity(intent);
 		}
 		else if (position == 1) {
 			Intent intent = new Intent(this, BillActivity.class);
-			intent.putExtra(stringDecimals, currency);
+			intent.putExtra(personalCurrencyDecimals, currencyDecimals);
 			startActivity(intent);
 		}
 	}
+	
+	public void displayCurrency() {
+		TextView currencyText = (TextView) findViewById(R.id.personalCurrencyText);
+		String text = "(All amounts displayed are in " + currencySymbol + ")";
+		currencyText.setText(text);
+	}
+	
 	
     // Define required classes
     private class ListAdaptor extends BaseAdapter{
@@ -203,6 +229,7 @@ public class PersonalActivity extends Activity {
 			return position;
 		}
 
+		@SuppressLint("InflateParams")
 		public View getView(int position, View convertView, ViewGroup parent) {
 			Holder holder;
 			if(convertView == null){
@@ -219,7 +246,6 @@ public class PersonalActivity extends Activity {
 			holder.memberText.setText(items.get(position));
 			return convertView;
 		}
-
 	}
 	
 	private class Holder{

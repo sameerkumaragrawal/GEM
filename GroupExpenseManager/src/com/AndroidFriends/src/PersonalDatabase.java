@@ -23,13 +23,18 @@ public class PersonalDatabase extends SQLiteOpenHelper{
 	public final static int deletedExpenseFlag = 3;
 	public final static int clearedExpenseFlag = 4;
 	
+	public final static int billFlag = 1;
+	public final static int editedBillFlag = 2;
+	public final static int paidBillFlag = 3;
+	public final static int deletedBillFlag = 4;
+	
 	public final static int noSalaryFlag = 0;
 	public final static int salaryFlag = 1;
 	
-	public final static String createInfoTable = "CREATE TABLE IF NOT EXISTS " + infoTable + " ( Name varchar(255) NOT NULL, Currency int(2) NOT NULL DEFAULT 1, Salary float NOT NULL DEFAULT 0, Flag int(1) NOT NULL)";
-	public final static String createExpensesTable = "CREATE TABLE IF NOT EXISTS " + expensesTable + " ( ID int(11) NOT NULL, Name varchar(255) NOT NULL, Category int(2) NOT NULL, Amount float NOT NULL, Date BIGINT NOT NULL DEFAULT 0, Flag int(1) NOT NULL)";
-	public final static String createBillsTable = "CREATE TABLE IF NOT EXISTS " + billsTable + " ( ID int(11) NOT NULL, Name varchar(255) NOT NULL, Amount float NOT NULL, Date BIGINT NOT NULL DEFAULT 0)";
-	public final static String createCategoryTable = "CREATE TABLE IF NOT EXISTS " + categoryTable + " ( ID int(11) NOT NULL, Name varchar(255) NOT NULL)";
+	public final static String createInfoTable = "CREATE TABLE IF NOT EXISTS " + infoTable + " (Name varchar(255) NOT NULL, Currency int(2) NOT NULL DEFAULT 1, Salary float NOT NULL DEFAULT 0, Flag int(1) NOT NULL)";
+	public final static String createExpensesTable = "CREATE TABLE IF NOT EXISTS " + expensesTable + " (ID int(11) NOT NULL, Name varchar(255) NOT NULL, Category int(2) NOT NULL, Amount float NOT NULL, Date BIGINT NOT NULL DEFAULT 0, Flag int(1) NOT NULL)";
+	public final static String createBillsTable = "CREATE TABLE IF NOT EXISTS " + billsTable + " (ID int(11) NOT NULL, Name varchar(255) NOT NULL, Amount float NOT NULL, Date BIGINT NOT NULL DEFAULT 0, Flag int(1) NOT NULL)";
+	public final static String createCategoryTable = "CREATE TABLE IF NOT EXISTS " + categoryTable + " (ID int(11) NOT NULL, Name varchar(255) NOT NULL)";
 
 	private SQLiteDatabase db=null;
 
@@ -118,6 +123,7 @@ public class PersonalDatabase extends SQLiteOpenHelper{
 		values.put("Name", name);
 		values.put("Amount", amount);
 		values.put("Date",date);
+		values.put("Flag", billFlag);
 		getDB().insert(billsTable,null,values);
 	}
 	
@@ -168,7 +174,7 @@ public class PersonalDatabase extends SQLiteOpenHelper{
 	}
 	
 	public void updateBillsTable(int id, String name, float amount, long date) {
-		getDB().execSQL("UPDATE " + expensesTable + " SET Name = ?, Amount = ?, Date = ? WHERE ID = ?", new Object[]{name, amount, date, id});
+		getDB().execSQL("UPDATE " + expensesTable + " SET Name = ?, Amount = ?, Date = ?, Flag = ? WHERE ID = ?", new Object[]{name, amount, date, editedBillFlag, id});
 	}
 	
 	public void deleteExpense(int id) {
@@ -178,6 +184,18 @@ public class PersonalDatabase extends SQLiteOpenHelper{
 	
 	public void deleteBill(int id) {
 		getDB().execSQL("DELETE FROM " + billsTable + " WHERE ID = ?", new Object[]{id});
+	}
+	
+	public void payBill(int id) {
+		Cursor mquery = getDB().rawQuery("SELECT Name, Amount FROM " + billsTable + " WEHERE ID = " + id, null);
+		mquery.moveToFirst();
+		String name = "Bill Payment - " + mquery.getString(0);
+		float amount = mquery.getFloat(1);
+		mquery.close();
+		
+		insertExpense(name, 7, amount);
+		String prefix = "Paid - ";
+		getDB().execSQL("UPDATE " + billsTable + " SET Name = ? || Name Flag = ? WHERE ID = ?", new Object[]{prefix, paidBillFlag, id});
 	}
 	
 	public void restoreExpense(int id) {
@@ -211,6 +229,18 @@ public class PersonalDatabase extends SQLiteOpenHelper{
 	public float getTotalExpenses() {
 		float total = 0;
 		Cursor mquery = getDB().rawQuery("SELECT Amount FROM " + expensesTable + " WHERE Flag <= " + editedExpenseFlag, null);
+		if (mquery.getCount() > 0) {
+			mquery.moveToFirst();
+			do {
+				total += mquery.getFloat(0);
+			} while (mquery.moveToNext());
+		}
+		return total;
+	}
+	
+	public float getTotalBills() {
+		float total = 0;
+		Cursor mquery = getDB().rawQuery("SELECT Amount FROM " + billsTable, null);
 		if (mquery.getCount() > 0) {
 			mquery.moveToFirst();
 			do {

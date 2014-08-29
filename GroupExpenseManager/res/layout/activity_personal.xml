@@ -41,6 +41,16 @@
 
     </LinearLayout>
 
+	<TextView 
+		android:id="@+id/personalCurrencyText"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:textAppearance="?android:attr/textAppearanceSmall"
+		android:textStyle="bold"
+		android:padding="10dp" >
+	</TextView>
+	
     <ListView
         android:id="@+id/PersonalList"
         android:layout_width="match_parent"
