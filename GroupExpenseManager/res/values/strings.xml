@@ -98,7 +98,6 @@
     <string name="title_activity_edit_cash_transfer">Edit Cash Transfer Activity</string>
     <string name="title_activity_import_group_database">Import Group</string>
     <string name="title_activity_personal">Personal Expense Manager</string>
-    <string name="current_status">Current Status</string>
     <string name="selectExpense">Select Expense</string>
     <string name="selectCategory">Select Category</string>
     <string name="name">Name</string>
@@ -126,8 +125,13 @@
     <string name="noInfo">No Personal Information Available</string>
     <string name="addInfo">Add Information</string>
     <string name="salary">Salary</string>
+    <string name="balance">Balance</string>
     <string name="addSalary">Add Salary</string>
     <string name="removeSalary">Remove Salary</string>
     <string name="title_activity_add_info">Add Personal Information</string>
     <string name="title_activity_edit_info">Edit Personal Information</string>
+    <string name="title_activity_balance">Balance Statistics</string>
+    <string name="balancePieChart">Balance Pie Chart</string>
+    <string name="expensePieChart">Expense Pie Chart</string>
+    <string name="showExpensePieChart">Show Expense Pie Chart</string>
 </resources>
