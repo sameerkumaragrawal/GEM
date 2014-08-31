@@ -187,14 +187,14 @@ public class PersonalDatabase extends SQLiteOpenHelper{
 	}
 	
 	public void payBill(int id) {
-		Cursor mquery = getDB().rawQuery("SELECT Name, Amount FROM " + billsTable + " WEHERE ID = " + id, null);
+		Cursor mquery = getDB().rawQuery("SELECT Name, Amount FROM " + billsTable + " WHERE ID = " + id, null);
 		mquery.moveToFirst();
 		String name = "Bill Payment - " + mquery.getString(0);
 		float amount = mquery.getFloat(1);
 		mquery.close();
 		
 		insertExpense(name, 7, amount);
-		String prefix = "Paid - ";
+		//String prefix = "Paid - ";
 		//getDB().execSQL("DELETE FROM " + billsTable + " WHERE ID = ?", new Object[]{id});
 		deleteBill(id);
 	}
