@@ -2,14 +2,11 @@ package com.AndroidFriends.src;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.StringTokenizer;
 
-import com.AndroidFriends.R;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.res.Configuration;
@@ -23,19 +20,19 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Spinner;
 import android.widget.Toast;
+
+import com.AndroidFriends.R;
 
 public class AddBillActivity extends Activity {
 	private Button doneButton;
 	private String[] billNames = new String[] {"Electricity", "Landline", "Mobile", "Rent", "Hospital", "Hotel", "Insurance", "EMI", "Tax" };
 	private TextView dateDisplay;
 	private Button dueDateButton;
-	private int year, month, day;
 	private int cyear, cmonth, cday;
 	private DatePickerDialog dialog = null;
 	
-	static final int DATE_DIALOG_ID=100;
+	static final int DATE_DIALOG_ID = 100;
 	
 	private PersonalDatabase pdb;
 	
@@ -56,7 +53,6 @@ public class AddBillActivity extends Activity {
 		setCurrentDate();
 		addButtonListener();
 		
-		//addItemsOnCategorySpinner();
 		doneButton = (Button) findViewById(R.id.billDoneButton);
 		doneButton.setOnClickListener(new Button.OnClickListener() {
 		    public void onClick(View v) {
@@ -70,23 +66,18 @@ public class AddBillActivity extends Activity {
 		cyear = c.get(Calendar.YEAR);
 		cmonth = c.get(Calendar.MONTH);
 		cday = c.get(Calendar.DAY_OF_MONTH);
-		year = cyear;
-		month = cmonth;
-		day = cday;
-		dateDisplay.setText(new StringBuilder().append(day).append("-").append(month+1).append("-").append(year));
+		dateDisplay.setText(new StringBuilder().append(cday).append("/").append(cmonth+1).append("/").append(cyear));
 	}
 	
 	public void addButtonListener() {
 		dueDateButton.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Calendar c = null;
 				String preExistingDate = (String) dateDisplay.getText().toString();
 				String iyear, imonth, iday;
 				
 				if(preExistingDate != null && !preExistingDate.equals("")) {
-					StringTokenizer st = new StringTokenizer(preExistingDate,"-");
+					StringTokenizer st = new StringTokenizer(preExistingDate,"/");
 					iday = st.nextToken();
 					imonth = st.nextToken();
 					iyear = st.nextToken();
@@ -103,22 +94,15 @@ public class AddBillActivity extends Activity {
 
 	private class PickDate implements DatePickerDialog.OnDateSetListener {
 
-		public void onDateSet(DatePicker view, int pyear, int monthOfYear,
-				int dayOfMonth) {
-			// TODO Auto-generated method stub
+		public void onDateSet(DatePicker view, int pyear, int monthOfYear, int dayOfMonth) {
 			view.updateDate(pyear, monthOfYear, dayOfMonth);
 			int monthOffset = monthOfYear+1;
-			dateDisplay.setText(dayOfMonth+"-"+monthOffset+"-"+pyear);
+			dateDisplay.setText(dayOfMonth + "/" + monthOffset + "/" + pyear);
 		}
 		
 	}
-	/*protected Dialog onCreateDialog(int id) {
-		switch(id) {
-		case DATE_DIALOG_ID:
-			return DatePickerDialog(this, datePickerListener, year, month, day)
-		}
-	}*/
 	
+	@SuppressLint("SimpleDateFormat")
 	public void doneAddBill(View v){
 		AutoCompleteTextView bill = (AutoCompleteTextView) findViewById(R.id.addBillName);
 		String billName = bill.getText().toString();
@@ -140,21 +124,17 @@ public class AddBillActivity extends Activity {
 		}
 		
 		String billDueDate = dateDisplay.getText().toString();
-		StringTokenizer st = new StringTokenizer(billDueDate,"-");
-		//day = Integer.parseInt(st.nextToken());
-		//month = Integer.parseInt(st.nextToken());
-		//year = Integer.parseInt(st.nextToken());
-		SimpleDateFormat f = new SimpleDateFormat("d-M-yyyy");
-		Date d=null;
+		SimpleDateFormat f = new SimpleDateFormat("d/M/yyyy");
+		Date d = null;
 		try {
 			d = f.parse(billDueDate);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			Log.e("nik", "error", e);
+			Log.e("adi", "error", e);
 		}
+		
 		long dueDateMsec = d.getTime();
 		if(!checkDueDate(dueDateMsec)) {
-			createToast("Error! Due Date must be after today");
+			createToast("Error! The due date must be after today");
 			return;
 		}
 

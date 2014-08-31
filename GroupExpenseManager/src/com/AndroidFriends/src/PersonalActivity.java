@@ -38,7 +38,7 @@ public class PersonalActivity extends Activity {
 	private ListAdaptor adaptor;
     private ListView list;
     private LinearLayout salaryLayout;
-    private TextView salaryAmountTV;
+    private TextView salaryAmountTV, currencyText;
     public int selPosition;
     public ArrayList<String> titles, amounts;
 	public String[] stringArray = new String[] { "Expense", "Bill" };
@@ -72,6 +72,7 @@ public class PersonalActivity extends Activity {
 		list.setAdapter(adaptor);
 		salaryLayout = (LinearLayout) findViewById(R.id.salaryLayout);
 		salaryAmountTV = (TextView) findViewById(R.id.salaryAmountTV);
+		currencyText = (TextView) findViewById(R.id.personalCurrencyText);
 		
 		addButton = (ImageButton) findViewById(R.id.personalActivityAddButton);
 		editInfoButton = (ImageButton) findViewById(R.id.personalActivityEditButton);
@@ -166,6 +167,9 @@ public class PersonalActivity extends Activity {
 			list.setVisibility(View.GONE);
 			addButton.setVisibility(View.GONE);
 			editInfoButton.setVisibility(View.GONE);
+			salaryLayout.setVisibility(View.GONE);
+    		salaryAmountTV.setVisibility(View.GONE);
+    		currencyText.setVisibility(View.GONE);
 		}
 		else {
 			noInfoText.setVisibility(View.GONE);
@@ -235,7 +239,7 @@ public class PersonalActivity extends Activity {
 	}
 	
 	public void displayCurrency() {
-		TextView currencyText = (TextView) findViewById(R.id.personalCurrencyText);
+		currencyText.setVisibility(View.VISIBLE);
 		String text = "(All amounts displayed are in " + currencySymbol + ")";
 		currencyText.setText(text);
 	}

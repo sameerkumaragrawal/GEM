@@ -6,8 +6,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.StringTokenizer;
 
-import com.AndroidFriends.R;
-
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -25,6 +23,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.AndroidFriends.R;
+
 public class EditBillActivity extends Activity {
 	private Button doneButton;
 	private String[] billNames = new String[] {"Electricity", "Landline", "Mobile", "Rent", "Hospital", "Hotel", "Insurance", "EMI", "Tax" };
@@ -32,7 +32,6 @@ public class EditBillActivity extends Activity {
 	private Button dueDateButton;
 	private AutoCompleteTextView billNameEditText;
 	private EditText billAmountEditText;
-	private int year, month, day;
 	private int cyear, cmonth, cday;
 	private DatePickerDialog dialog = null;
 	private int billId;
