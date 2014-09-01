@@ -54,7 +54,7 @@ public class EditBillActivity extends Activity {
 		this.setTitle(new_title);
 		setContentView(R.layout.activity_add_bill);
 
-		currencyDecimals = intent.getIntExtra(GroupSummaryActivity.stringDecimals, 0);
+		currencyDecimals = intent.getIntExtra(PersonalActivity.personalCurrencyDecimals, 0);
 		decimalFlag = "%." + currencyDecimals + "f";
 		
 		pdb = PersonalDatabase.get(this);

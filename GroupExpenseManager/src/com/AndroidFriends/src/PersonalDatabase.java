@@ -94,7 +94,7 @@ public class PersonalDatabase extends SQLiteOpenHelper{
 	
 	public void insertExpense(String name, int category, float amount) {
 		int ID1=1;
-		Cursor count = getDB().rawQuery("SELECT count(*) FROM " + expensesTable , null);
+		Cursor count = getDB().rawQuery("SELECT MAX(ID) FROM " + expensesTable , null);
 		if(count.getCount()>0){
 			count.moveToLast();
 			ID1=count.getInt(0)+1;
@@ -111,8 +111,8 @@ public class PersonalDatabase extends SQLiteOpenHelper{
 	}
 	
 	public void insertBill(String name, float amount, long date) {
-		int ID1=1;
-		Cursor count = getDB().rawQuery("SELECT count(*) FROM " + billsTable, null);
+		int ID1 = 1;
+		Cursor count = getDB().rawQuery("SELECT MAX(ID) FROM " + billsTable, null);
 		if(count.getCount()>0){
 			count.moveToLast();
 			ID1=count.getInt(0)+1;
@@ -206,22 +206,26 @@ public class PersonalDatabase extends SQLiteOpenHelper{
 		getDB().execSQL("DELETE FROM " + expensesTable + " WHERE Flag != " + clearedExpenseFlag);
 		
 		if (total != 0) {
-			int ID1=1;
-			Cursor count = getDB().rawQuery("SELECT count(*) FROM " + expensesTable , null);
-			if(count.getCount()>0){
-				count.moveToLast();
-				ID1=count.getInt(0)+1;
-			}
-	
-			ContentValues values = new ContentValues();
-			values.put("ID", ID1);
-			values.put("Name", "Cleared Expenses");
-			values.put("Category", 8);
-			values.put("Amount", total);
-			values.put("Date",System.currentTimeMillis());
-			values.put("Flag", clearedExpenseFlag);
-			getDB().insert(expensesTable,null,values);
+			insertClearedExpense(total);
 		}
+	}
+	
+	public void insertClearedExpense(float total) {
+		int ID1=1;
+		Cursor count = getDB().rawQuery("SELECT MAX(ID) FROM " + expensesTable , null);
+		if(count.getCount()>0){
+			count.moveToLast();
+			ID1=count.getInt(0)+1;
+		}
+
+		ContentValues values = new ContentValues();
+		values.put("ID", ID1);
+		values.put("Name", "Cleared Expenses");
+		values.put("Category", 8);
+		values.put("Amount", total);
+		values.put("Date",System.currentTimeMillis());
+		values.put("Flag", clearedExpenseFlag);
+		getDB().insert(expensesTable,null,values);
 	}
 	
 	public float getTotalExpenses() {
