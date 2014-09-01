@@ -15,7 +15,6 @@ import android.support.v4.app.NavUtils;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -84,13 +83,6 @@ public class BillActivity extends Activity {
 		addItemsOnBillSpinner();
 		billSpin.setSelection(billIdArrayPosition);
 	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.activity_history, menu);
-		return true;
-	}
-
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

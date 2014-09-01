@@ -150,7 +150,7 @@ public class GroupDatabase extends SQLiteOpenHelper{
 	public void CashTransfer(int fromMember, int toMember, float amount, String from, String to){
 		int ID1=1;
 
-		Cursor count = getDB().rawQuery("SELECT count(*) FROM "+EventTable, null);
+		Cursor count = getDB().rawQuery("SELECT MAX(ID) FROM "+EventTable, null);
 		if(count.getCount()>0){
 			count.moveToLast();
 			ID1=count.getInt(0)+1;
@@ -337,7 +337,7 @@ public class GroupDatabase extends SQLiteOpenHelper{
 
 	public void addEvent(String eventName, float[] amountPaid, int[] paidMembers, float[] amountConsumed, List<boolean[]> whoConsumed,String[] namearray){
 		int ID1=1;
-		Cursor count = getDB().rawQuery("SELECT count(*) FROM " + EventTable , null);
+		Cursor count = getDB().rawQuery("SELECT MAX(ID) FROM " + EventTable , null);
 		if(count.getCount()>0){
 			count.moveToLast();
 			ID1=count.getInt(0)+1;
@@ -377,7 +377,7 @@ public class GroupDatabase extends SQLiteOpenHelper{
 
 	public void addIndividualEvent(String eventName, float amount, int member){
 		int ID1=1;
-		Cursor count = getDB().rawQuery("SELECT count(*) FROM " + EventTable , null);
+		Cursor count = getDB().rawQuery("SELECT MAX(ID) FROM " + EventTable , null);
 		if(count.getCount()>0){
 			count.moveToLast();
 			ID1=count.getInt(0)+1;
@@ -414,7 +414,7 @@ public class GroupDatabase extends SQLiteOpenHelper{
 	public void clearBalance(int ntransactions,String [][]solutionarray,float []tramountarray){
 		int ID1=1;
 
-		Cursor count = getDB().rawQuery("SELECT count(*) FROM " + EventTable , null);
+		Cursor count = getDB().rawQuery("SELECT MAX(ID) FROM " + EventTable , null);
 		if(count.getCount()>0){
 			count.moveToLast();
 			ID1=count.getInt(0)+1;

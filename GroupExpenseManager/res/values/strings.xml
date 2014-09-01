@@ -127,10 +127,10 @@
     <string name="noInfo">No Personal Information Available</string>
     <string name="addInfo">Add Information</string>
     <string name="billName">Bill Name</string>
-    <string name="salary">Salary</string>
+    <string name="income">Income</string>
     <string name="balance">Balance</string>
-    <string name="addSalary">Add Salary</string>
-    <string name="removeSalary">Remove Salary</string>
+    <string name="addIncome">Add Income</string>
+    <string name="removeIncome">Remove Income</string>
     <string name="title_activity_add_info">Add Personal Information</string>
     <string name="title_activity_edit_info">Edit Personal Information</string>
     <string name="title_activity_balance">Balance Statistics</string>

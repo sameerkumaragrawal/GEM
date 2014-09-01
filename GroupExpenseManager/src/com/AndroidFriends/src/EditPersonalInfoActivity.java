@@ -22,11 +22,11 @@ import com.AndroidFriends.R;
 public class EditPersonalInfoActivity extends Activity {
 
 	private String name = "";
-	private int currency, currencyDecimals, salaryFlag;
-	private float salary;
+	private int currency, currencyDecimals, incomeFlag;
+	private float income;
 	private Spinner currencySpinner;
-	private Button doneButton, addSalaryButton, removeSalaryButton;
-	private LinearLayout salaryLayout;
+	private Button doneButton, addIncomeButton, removeIncomeButton;
+	private LinearLayout incomeLayout;
 	private PersonalDatabase pdb;
 	private CommonDatabase cdb;
 	private String decimalFlag;
@@ -37,8 +37,8 @@ public class EditPersonalInfoActivity extends Activity {
 
 		Intent  intent = getIntent();
 		name = intent.getStringExtra(PersonalActivity.personalName);
-		salaryFlag = intent.getIntExtra(PersonalActivity.personalSalaryFlag, PersonalDatabase.noSalaryFlag);
-		salary = intent.getFloatExtra(PersonalActivity.personalSalary, 0);
+		incomeFlag = intent.getIntExtra(PersonalActivity.personalIncomeFlag, PersonalDatabase.noIncomeFlag);
+		income = intent.getFloatExtra(PersonalActivity.personalIncome, 0);
 		currency = intent.getIntExtra(PersonalActivity.personalCurrency, 1);
 		currencyDecimals = intent.getIntExtra(PersonalActivity.personalCurrencyDecimals, 0);
 		decimalFlag = "%." + currencyDecimals + "f";
@@ -50,9 +50,9 @@ public class EditPersonalInfoActivity extends Activity {
 
 		currencySpinner = (Spinner) findViewById(R.id.personalSpinnerCurrency);
 		doneButton = (Button) findViewById(R.id.personalDoneButton);
-		addSalaryButton = (Button) findViewById(R.id.personalAddSalaryButton);
-		removeSalaryButton = (Button) findViewById(R.id.personalRemoveSalaryButton);
-		salaryLayout = (LinearLayout) findViewById(R.id.personalSalaryLayout);
+		addIncomeButton = (Button) findViewById(R.id.personalAddIncomeButton);
+		removeIncomeButton = (Button) findViewById(R.id.personalRemoveIncomeButton);
+		incomeLayout = (LinearLayout) findViewById(R.id.personalIncomeLayout);
 		
 		doneButton.setOnClickListener(new Button.OnClickListener() {
 		    public void onClick(View v) {
@@ -70,18 +70,18 @@ public class EditPersonalInfoActivity extends Activity {
 		addItemsOnCurrencySpinner();
 		currencySpinner.setSelection(currency-1);
 	
-		if (salaryFlag == PersonalDatabase.salaryFlag) {
-			salaryLayout.setVisibility(View.VISIBLE);
-			removeSalaryButton.setVisibility(View.VISIBLE);
-			addSalaryButton.setVisibility(View.GONE);
+		if (incomeFlag == PersonalDatabase.incomeFlag) {
+			incomeLayout.setVisibility(View.VISIBLE);
+			removeIncomeButton.setVisibility(View.VISIBLE);
+			addIncomeButton.setVisibility(View.GONE);
 			
-			EditText salaryText = (EditText) salaryLayout.findViewById(R.id.personalSalary);
-			salaryText.setText(String.format(decimalFlag, salary));
+			EditText incomeText = (EditText) incomeLayout.findViewById(R.id.personalIncome);
+			incomeText.setText(String.format(decimalFlag, income));
 		}
 		else {
-			salaryLayout.setVisibility(View.GONE);
-			removeSalaryButton.setVisibility(View.GONE);
-			addSalaryButton.setVisibility(View.VISIBLE);
+			incomeLayout.setVisibility(View.GONE);
+			removeIncomeButton.setVisibility(View.GONE);
+			addIncomeButton.setVisibility(View.VISIBLE);
 		}
 	}
 
@@ -96,18 +96,18 @@ public class EditPersonalInfoActivity extends Activity {
 		currencySpinner.setPrompt("Select currency");
 	}
 	
-	public void addSalaryLayouts(View v) {
-		salaryFlag = PersonalDatabase.salaryFlag;
-		salaryLayout.setVisibility(View.VISIBLE);
-		removeSalaryButton.setVisibility(View.VISIBLE);
-		addSalaryButton.setVisibility(View.GONE);
+	public void addIncomeLayouts(View v) {
+		incomeFlag = PersonalDatabase.incomeFlag;
+		incomeLayout.setVisibility(View.VISIBLE);
+		removeIncomeButton.setVisibility(View.VISIBLE);
+		addIncomeButton.setVisibility(View.GONE);
 	}
 	
-	public void removeSalaryLayouts(View v) {
-		salaryFlag = PersonalDatabase.noSalaryFlag;
-		salaryLayout.setVisibility(View.GONE);
-		removeSalaryButton.setVisibility(View.GONE);
-		addSalaryButton.setVisibility(View.VISIBLE);
+	public void removeIncomeLayouts(View v) {
+		incomeFlag = PersonalDatabase.noIncomeFlag;
+		incomeLayout.setVisibility(View.GONE);
+		removeIncomeButton.setVisibility(View.GONE);
+		addIncomeButton.setVisibility(View.VISIBLE);
 	}
 	
 	public void doneEditInfo(View v){
@@ -120,19 +120,19 @@ public class EditPersonalInfoActivity extends Activity {
 		
 		int currency = currencySpinner.getSelectedItemPosition() + 1;
 		
-		if (salaryFlag == PersonalDatabase.salaryFlag) {
-			EditText salaryText = (EditText) salaryLayout.findViewById(R.id.personalSalary);
-			if (salaryText.getText().toString().equals("")) {
-				createToast("Error! Cannot leave the salary amount field empty");
+		if (incomeFlag == PersonalDatabase.incomeFlag) {
+			EditText incomeText = (EditText) incomeLayout.findViewById(R.id.personalIncome);
+			if (incomeText.getText().toString().equals("")) {
+				createToast("Error! Cannot leave the income amount field empty");
 				return;
 			}
-			float salaryAmount = Float.valueOf(salaryText.getText().toString());
-			if (salaryAmount == 0) {
-				createToast("Error! Cannot have a zero salary amount");
+			float incomeAmount = Float.valueOf(incomeText.getText().toString());
+			if (incomeAmount == 0) {
+				createToast("Error! Cannot have a zero income amount");
 				return;
 			}
 			try {
-				pdb.updateInfoTable(name, currency, salaryAmount);
+				pdb.updateInfoTable(name, currency, incomeAmount);
 			} catch (Exception e) {}
 		}
 		else {

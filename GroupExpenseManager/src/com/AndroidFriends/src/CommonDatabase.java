@@ -115,7 +115,7 @@ public class CommonDatabase extends SQLiteOpenHelper{
 		if(isPresent.getCount()>0){
 			return -1;				
 		}
-		Cursor count = getDB().rawQuery("SELECT max(ID) FROM " + tableName , null);
+		Cursor count = getDB().rawQuery("SELECT MAX(ID) FROM " + tableName , null);
 		if(count.moveToFirst()){
 			ID=count.getInt(0)+1;
 		}

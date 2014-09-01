@@ -52,7 +52,7 @@
 	</TextView>
 	
 	<LinearLayout
-	    android:id="@+id/salaryLayout"
+	    android:id="@+id/incomeLayout"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="horizontal"
@@ -66,10 +66,10 @@
 	        android:paddingLeft="10dp"
 	        android:paddingRight="10dp"
 	        android:gravity="left"
-	        android:text="@string/salary" />
+	        android:text="@string/income" />
 	
 	    <TextView
-	        android:id="@+id/salaryAmountTV"
+	        android:id="@+id/incomeAmountTV"
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
 	        android:layout_weight="1"

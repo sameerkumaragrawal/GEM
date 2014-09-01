@@ -22,7 +22,7 @@ public class BalanceActivity extends Activity {
     private TextView expensePercentageText, billsPercentageText, balancePercentageText;
     private LinearLayout pieChartLayout;
     private int size, chartSize, marginSize;
-	float expenses, salary, bills;
+	float expenses, income, bills;
     float values[];
 
     @Override
@@ -32,7 +32,7 @@ public class BalanceActivity extends Activity {
         
         Intent intent = getIntent();
         expenses = intent.getFloatExtra(PersonalActivity.personalExpenses, 0);
-        salary = intent.getFloatExtra(PersonalActivity.personalSalary, 0);
+        income = intent.getFloatExtra(PersonalActivity.personalIncome, 0);
         bills = intent.getFloatExtra(PersonalActivity.personalBills, 0);
         
         expensePercentageText = (TextView) findViewById(R.id.expensePercentageText);
@@ -51,23 +51,23 @@ public class BalanceActivity extends Activity {
         View pieChartView = new MyGraphView(this, values, marginSize, size-marginSize);
         pieChartLayout.addView(pieChartView);
         
-        int expensesPercentage = (int) (100 * expenses/salary);
-        expensePercentageText.setText("Current expenses are " + String.valueOf(expensesPercentage) + "% of your salary");
+        int expensesPercentage = (int) (100 * expenses/income);
+        expensePercentageText.setText("Current expenses are " + String.valueOf(expensesPercentage) + "% of your income");
         expensePercentageText.setTextColor(Color.RED);
         
-        int billsPercentage = (int) (100 * bills/salary);
-        billsPercentageText.setText("Due bills are " + String.valueOf(billsPercentage) + "% of your salary");
+        int billsPercentage = (int) (100 * bills/income);
+        billsPercentageText.setText("Due bills are " + String.valueOf(billsPercentage) + "% of your income");
         billsPercentageText.setTextColor(Color.YELLOW);
         
         int balancePercentage = 100 - expensesPercentage - billsPercentage;
-        balancePercentageText.setText("Remaining balance is " + String.valueOf(balancePercentage) + "% of your salary");
+        balancePercentageText.setText("Remaining balance is " + String.valueOf(balancePercentage) + "% of your income");
         balancePercentageText.setTextColor(Color.GREEN);
     }
     
     private float[] calculateData() {
         float[] data = new float[3];
-        data[2] = 360 * (expenses)/salary;
-        data[1] = 360 * bills/salary;
+        data[2] = 360 * (expenses)/income;
+        data[1] = 360 * bills/income;
         data[0] = 360 - data[1] - data[2];
         return data;
     }

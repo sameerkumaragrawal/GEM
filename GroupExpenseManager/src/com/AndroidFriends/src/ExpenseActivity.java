@@ -87,7 +87,7 @@ public class ExpenseActivity extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.activity_history, menu);
+		getMenuInflater().inflate(R.menu.activity_expenses, menu);
 		return true;
 	}
 

@@ -28,10 +28,10 @@ public class PersonalDatabase extends SQLiteOpenHelper{
 	public final static int paidBillFlag = 3;
 	public final static int deletedBillFlag = 4;
 	
-	public final static int noSalaryFlag = 0;
-	public final static int salaryFlag = 1;
+	public final static int noIncomeFlag = 0;
+	public final static int incomeFlag = 1;
 	
-	public final static String createInfoTable = "CREATE TABLE IF NOT EXISTS " + infoTable + " (Name varchar(255) NOT NULL, Currency int(2) NOT NULL DEFAULT 1, Salary float NOT NULL DEFAULT 0, Flag int(1) NOT NULL)";
+	public final static String createInfoTable = "CREATE TABLE IF NOT EXISTS " + infoTable + " (Name varchar(255) NOT NULL, Currency int(2) NOT NULL DEFAULT 1, Income float NOT NULL DEFAULT 0, Flag int(1) NOT NULL)";
 	public final static String createExpensesTable = "CREATE TABLE IF NOT EXISTS " + expensesTable + " (ID int(11) NOT NULL, Name varchar(255) NOT NULL, Category int(2) NOT NULL, Amount float NOT NULL, Date BIGINT NOT NULL DEFAULT 0, Flag int(1) NOT NULL)";
 	public final static String createBillsTable = "CREATE TABLE IF NOT EXISTS " + billsTable + " (ID int(11) NOT NULL, Name varchar(255) NOT NULL, Amount float NOT NULL, Date BIGINT NOT NULL DEFAULT 0)";
 	public final static String createCategoryTable = "CREATE TABLE IF NOT EXISTS " + categoryTable + " (ID int(11) NOT NULL, Name varchar(255) NOT NULL)";
@@ -74,21 +74,21 @@ public class PersonalDatabase extends SQLiteOpenHelper{
 		return true;
 	}
 	
-	public void insertInfoWithoutSalary(String name, int currency) {
+	public void insertInfoWithoutIncome(String name, int currency) {
 		ContentValues values = new ContentValues();
 		values.put("Name", name);
 		values.put("Currency", currency);
-		values.put("Salary", 0);
-		values.put("Flag", noSalaryFlag);
+		values.put("Income", 0);
+		values.put("Flag", noIncomeFlag);
 		getDB().insert(infoTable,null,values);
 	}
 	
-	public void insertInfoWithSalary(String name, int currency, float salary) {
+	public void insertInfoWithIncome(String name, int currency, float income) {
 		ContentValues values = new ContentValues();
 		values.put("Name", name);
 		values.put("Currency", currency);
-		values.put("Salary", salary);
-		values.put("Flag", salaryFlag);
+		values.put("Income", income);
+		values.put("Flag", incomeFlag);
 		getDB().insert(infoTable,null,values);
 	}
 	
@@ -157,15 +157,15 @@ public class PersonalDatabase extends SQLiteOpenHelper{
 		return mquery;
 	}
 	
-	public void updateInfoTable(String name, int currency, float salary) {
+	public void updateInfoTable(String name, int currency, float income) {
 		int newFlag;
-		if (salary == 0) {
-			newFlag = noSalaryFlag;
+		if (income == 0) {
+			newFlag = noIncomeFlag;
 		}
 		else {
-			newFlag = salaryFlag;
+			newFlag = incomeFlag;
 		}
-		getDB().execSQL("UPDATE " + infoTable + " SET Name = ?, Currency = ?, Salary = ?, Flag = ?", new Object[]{name, currency, salary, newFlag});
+		getDB().execSQL("UPDATE " + infoTable + " SET Name = ?, Currency = ?, Income = ?, Flag = ?", new Object[]{name, currency, income, newFlag});
 	}
 	
 	public void updateExpensesTable(int id, String name, int category, float amount) {

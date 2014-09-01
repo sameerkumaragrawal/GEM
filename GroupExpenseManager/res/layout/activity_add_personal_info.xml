@@ -35,7 +35,7 @@
         </LinearLayout>
         
         <LinearLayout
-            android:id="@+id/personalSalaryLayout"
+            android:id="@+id/personalIncomeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -46,12 +46,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/salary"
+                android:text="@string/income"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/personalSalary"
+                android:id="@+id/personalIncome"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.5"
@@ -59,22 +59,22 @@
         </LinearLayout>
         
         <Button
-            android:id="@+id/personalAddSalaryButton"
+            android:id="@+id/personalAddIncomeButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:gravity="center"
-            android:text="@string/addSalary"
-            android:onClick="addSalaryLayouts" />
+            android:text="@string/addIncome"
+            android:onClick="addIncomeLayouts" />
         
         <Button
-            android:id="@+id/personalRemoveSalaryButton"
+            android:id="@+id/personalRemoveIncomeButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:gravity="center"
-            android:text="@string/removeSalary"
-            android:onClick="removeSalaryLayouts" />
+            android:text="@string/removeIncome"
+            android:onClick="removeIncomeLayouts" />
         
         <Spinner
 	        android:id="@+id/personalSpinnerCurrency"

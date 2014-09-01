@@ -37,8 +37,8 @@ import com.AndroidFriends.R.id;
 public class PersonalActivity extends Activity {
 	private ListAdaptor adaptor;
     private ListView list;
-    private LinearLayout salaryLayout;
-    private TextView salaryAmountTV, currencyText;
+    private LinearLayout incomeLayout;
+    private TextView incomeAmountTV, currencyText;
     public int selPosition;
     public ArrayList<String> titles, amounts;
 	public String[] stringArray = new String[] { "Expense", "Bill" };
@@ -46,15 +46,15 @@ public class PersonalActivity extends Activity {
 	private PersonalDatabase pdb;
 	private CommonDatabase cdb;
 	private String name, currencySymbol, decimalFlag;
-	private float salary, expenses, bills;
-	private int currency, salaryFlag, currencyDecimals=2;
+	private float income, expenses, bills;
+	private int currency, incomeFlag, currencyDecimals=2;
 	private boolean infoAvailable = true;
 	private ImageButton editInfoButton, addButton;
 	private Button addInfoButton;
 	private TextView noInfoText;
 	public final static String personalName = "personalActivity/name";
-	public final static String personalSalary = "personalActivity/salary";
-	public final static String personalSalaryFlag = "personalActivity/salaryFlag";
+	public final static String personalIncome = "personalActivity/income";
+	public final static String personalIncomeFlag = "personalActivity/incomeFlag";
 	public final static String personalCurrency = "personalActivity/currency";
 	public final static String personalCurrencyDecimals = "personalActivity/currencyDecimals";
 	public final static String personalExpenses = "personalActivity/expenses";
@@ -70,8 +70,8 @@ public class PersonalActivity extends Activity {
 
 		list = (ListView) findViewById(R.id.PersonalList);
 		list.setAdapter(adaptor);
-		salaryLayout = (LinearLayout) findViewById(R.id.salaryLayout);
-		salaryAmountTV = (TextView) findViewById(R.id.salaryAmountTV);
+		incomeLayout = (LinearLayout) findViewById(R.id.incomeLayout);
+		incomeAmountTV = (TextView) findViewById(R.id.incomeAmountTV);
 		currencyText = (TextView) findViewById(R.id.personalCurrencyText);
 		
 		addButton = (ImageButton) findViewById(R.id.personalActivityAddButton);
@@ -136,8 +136,8 @@ public class PersonalActivity extends Activity {
 			infoQuery.moveToFirst();
 			name = infoQuery.getString(0);
 			currency = infoQuery.getInt(1);
-			salary = infoQuery.getFloat(2);
-			salaryFlag = infoQuery.getInt(3);
+			income = infoQuery.getFloat(2);
+			incomeFlag = infoQuery.getInt(3);
 			currencyDecimals = cdb.getCurrencyDecimals(currency);
 			currencySymbol = cdb.getCurrencySymbol(currency);
 			decimalFlag = "%." + currencyDecimals + "f";
@@ -153,8 +153,8 @@ public class PersonalActivity extends Activity {
 	public void editInfo(View v) {
 		Intent intent = new Intent(this, EditPersonalInfoActivity.class);
 		intent.putExtra(personalName, name);
-		intent.putExtra(personalSalaryFlag, salaryFlag);
-		intent.putExtra(personalSalary, salary);
+		intent.putExtra(personalIncomeFlag, incomeFlag);
+		intent.putExtra(personalIncome, income);
 		intent.putExtra(personalCurrency, currency);
 		intent.putExtra(personalCurrencyDecimals, currencyDecimals);
 		startActivity(intent);
@@ -167,8 +167,8 @@ public class PersonalActivity extends Activity {
 			list.setVisibility(View.GONE);
 			addButton.setVisibility(View.GONE);
 			editInfoButton.setVisibility(View.GONE);
-			salaryLayout.setVisibility(View.GONE);
-    		salaryAmountTV.setVisibility(View.GONE);
+			incomeLayout.setVisibility(View.GONE);
+    		incomeAmountTV.setVisibility(View.GONE);
     		currencyText.setVisibility(View.GONE);
 		}
 		else {
@@ -179,28 +179,28 @@ public class PersonalActivity extends Activity {
 			editInfoButton.setVisibility(View.VISIBLE);
 			
 			displayCurrency();
-			String salaryAmount = String.format(decimalFlag, salary);
+			String incomeAmount = String.format(decimalFlag, income);
 			String expenseItem = "Expenses";
 			String expenseAmount = String.format(decimalFlag, expenses);
 			String billItem = "Bils Due";
 	    	String billAmount = String.format(decimalFlag, bills);
 			String balanceItem = "Balance";
-			String balanceAmount = String.format(decimalFlag, salary-expenses);
+			String balanceAmount = String.format(decimalFlag, income-expenses);
 			
 			titles.add(expenseItem);
 			amounts.add(expenseAmount);
 	    	titles.add(billItem);    	
 	    	amounts.add(billAmount);
-	    	if (salaryFlag == 1) {
-	    		salaryLayout.setVisibility(View.VISIBLE);
-	    		salaryAmountTV.setVisibility(View.VISIBLE);
-	    		salaryAmountTV.setText(salaryAmount);
+	    	if (incomeFlag == 1) {
+	    		incomeLayout.setVisibility(View.VISIBLE);
+	    		incomeAmountTV.setVisibility(View.VISIBLE);
+	    		incomeAmountTV.setText(incomeAmount);
 		    	titles.add(balanceItem);    	
 		    	amounts.add(balanceAmount);
 	    	}
 	    	else {
-	    		salaryLayout.setVisibility(View.GONE);
-	    		salaryAmountTV.setVisibility(View.GONE);
+	    		incomeLayout.setVisibility(View.GONE);
+	    		incomeAmountTV.setVisibility(View.GONE);
 	    	}
 	    	adaptor.notifyDataSetChanged();
 		}
@@ -231,7 +231,7 @@ public class PersonalActivity extends Activity {
 		else if (position == 2) {
 			Intent intent = new Intent(this, BalanceActivity.class);
 			intent.putExtra(personalCurrencyDecimals, currencyDecimals);
-			intent.putExtra(personalSalary, salary);
+			intent.putExtra(personalIncome, income);
 			intent.putExtra(personalExpenses, expenses);
 			intent.putExtra(personalBills, bills);
 			startActivity(intent);
