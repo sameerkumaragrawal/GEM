@@ -150,6 +150,11 @@
             android:label="@string/title_activity_bill" >
         </activity>
         <activity
+            android:name="com.AndroidFriends.src.BalanceActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:label="@string/title_activity_balance" >
+        </activity>
+        <activity
             android:name="com.AndroidFriends.src.AddBillActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:label="@string/title_activity_add_bill" >
@@ -168,7 +173,7 @@
         <activity
             android:name="com.AndroidFriends.src.EditBillActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
-            android:label="@string/title_activity_add_bill"
+            android:label="@string/title_activity_edit_bill"
             android:windowSoftInputMode="stateHidden" >
         </activity>
     </application>

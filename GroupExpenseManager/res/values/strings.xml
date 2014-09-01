@@ -115,14 +115,15 @@
     <string name="title_activity_expense">Personal Expenses</string>
     <string name="title_activity_add_expense">Add New Expense</string>
     <string name="title_activity_edit_expense">Edit Expense</string>
-    <string name="title_activity_bill">Bills</string>
+    <string name="title_activity_bill">Bills Due</string>
     <string name="previousBill">Previous Bill</string>
     <string name="nextBill">Next Bill</string>
     <string name="editBill">Edit Bill</string>
     <string name="restoreBill">Restore Bill</string>
     <string name="billDueDate">Due Date</string>
     <string name="title_activity_add_bill">Add New Bill</string>
-    <string name="billDateFormat">DD-MM-YYYY</string>
+    <string name="title_activity_edit_bill">Edit Bill</string>
+    <string name="billDateFormat">DD/MM/YYYY</string>
     <string name="noInfo">No Personal Information Available</string>
     <string name="addInfo">Add Information</string>
     <string name="billName">Bill Name</string>

@@ -123,7 +123,6 @@ public class PersonalDatabase extends SQLiteOpenHelper{
 		values.put("Name", name);
 		values.put("Amount", amount);
 		values.put("Date",date);
-		//values.put("Flag", billFlag);
 		getDB().insert(billsTable,null,values);
 	}
 	
@@ -139,7 +138,7 @@ public class PersonalDatabase extends SQLiteOpenHelper{
 	}
 	
 	public Cursor getBillList() {
-		Cursor mquery = getDB().rawQuery("SELECT ID, Name FROM " + billsTable + " ORDER BY Date DESC", null);
+		Cursor mquery = getDB().rawQuery("SELECT ID, Name FROM " + billsTable + " ORDER BY Date", null);
 		return mquery;
 	}
 	
@@ -174,7 +173,7 @@ public class PersonalDatabase extends SQLiteOpenHelper{
 	}
 	
 	public void updateBillsTable(int id, String name, float amount, long date) {
-		getDB().execSQL("UPDATE " + expensesTable + " SET Name = ?, Amount = ?, Date = ? WHERE ID = ?", new Object[]{name, amount, date, id});
+		getDB().execSQL("UPDATE " + billsTable + " SET Name = ?, Amount = ?, Date = ? WHERE ID = ?", new Object[]{name, amount, date, id});
 	}
 	
 	public void deleteExpense(int id) {
@@ -194,8 +193,6 @@ public class PersonalDatabase extends SQLiteOpenHelper{
 		mquery.close();
 		
 		insertExpense(name, 7, amount);
-		//String prefix = "Paid - ";
-		//getDB().execSQL("DELETE FROM " + billsTable + " WHERE ID = ?", new Object[]{id});
 		deleteBill(id);
 	}
 	

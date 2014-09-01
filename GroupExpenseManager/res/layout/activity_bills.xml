@@ -118,7 +118,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="10dp" >
+            android:padding="20dp" >
 
             <Button
                 android:id="@+id/editBillButton"
@@ -141,11 +141,10 @@
             android:id="@+id/billPayButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+	        android:layout_margin="20dp"
             android:gravity="center"
             android:onClick="payBill"
-            android:text="@string/payBill"
-			android:layout_marginBottom="10dp" />
+            android:text="@string/payBill" />
         
     </LinearLayout>
 

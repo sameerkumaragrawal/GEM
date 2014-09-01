@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -39,6 +40,7 @@ public class BillActivity extends Activity {
 	private int[] idarray = null;
 	private LinearLayout billTable = null;
 	private LinearLayout editLayout, prevNext;
+	private Button payBillButton;
 	private LayoutInflater inflater;
 	private PersonalDatabase pdb;
 	private String decimalFlag;
@@ -58,10 +60,9 @@ public class BillActivity extends Activity {
 		billTable = (LinearLayout) findViewById(R.id.billTable);
 		prevNext = (LinearLayout)findViewById(R.id.billPreviousNextLayout);
 		editLayout = (LinearLayout) findViewById(R.id.billEditLayout);
+		payBillButton = (Button) findViewById(R.id.billPayButton);
 		
-		billList();
-		addItemsOnBillSpinner();
-		filltable(0);
+		fillBills();
 		
 		billSpin.setOnItemSelectedListener(new OnItemSelectedListener() {
 
@@ -97,15 +98,11 @@ public class BillActivity extends Activity {
 		case android.R.id.home:
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
-//		case id.menu_clear:
-//			clearAlert(null);
-//			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
 	public void addItemsOnBillSpinner() {
-
 		billSpin = (Spinner) findViewById(R.id.billDropdown);
 		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_item, listofbills);
@@ -132,20 +129,7 @@ public class BillActivity extends Activity {
 	public void fillBills() {
 		billList();
 		addItemsOnBillSpinner();
-		
 		filltable(0);
-		
-		billSpin.setOnItemSelectedListener(new OnItemSelectedListener() {
-			public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) 
-			{
-				billIdArrayPosition = position;
-				filltable(position);
-			}
-			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
-			}
-		});
-		
 	}
 	
 	public void filltable(int position){
@@ -154,6 +138,7 @@ public class BillActivity extends Activity {
 		if(idarray.length == 0){
 			prevNext.setVisibility(View.GONE);
 			editLayout.setVisibility(View.GONE);
+			payBillButton.setVisibility(View.GONE);
 			return;
 		}
 		
@@ -200,7 +185,7 @@ public class BillActivity extends Activity {
 		}
 		
 		String amountString = String.format(decimalFlag, amount);
-		addEntry(name,amountString,dt);			
+		addEntry(name,amountString,dt);
 	}
 
 	@SuppressLint("InflateParams")
@@ -215,7 +200,7 @@ public class BillActivity extends Activity {
 		
 		MainActivity.setWeight(v1,1f);
 		MainActivity.setWeight(v2,1f);
-		MainActivity.setWeight(v3,1.5f);
+		MainActivity.setWeight(v3,1f);
 		
 		billTable.addView(convertView);
 	}
@@ -229,11 +214,10 @@ public class BillActivity extends Activity {
 	}
 	
 	public void payBill(View v) {
-		// TODO Go to Pay bill page
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 		alertDialogBuilder.setTitle("Pay Bill");
 		alertDialogBuilder
-		.setMessage("Are you sure you want to pay this bill?")
+		.setMessage("Paying a bill will automatically add it to your expenses. Are you sure you want to pay this bill?")
 		.setCancelable(true)
 		.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
@@ -268,7 +252,7 @@ public class BillActivity extends Activity {
 			String tempName = listofbills.get(billIdArrayPosition);
 			
 			Intent intent = new Intent(this, EditBillActivity.class);
-			intent.putExtra(GroupSummaryActivity.stringDecimals, currencyDecimals);
+			intent.putExtra(PersonalActivity.personalCurrencyDecimals, currencyDecimals);
 			intent.putExtra(BILL_ID, tempid);
 			intent.putExtra(BILL_NAME, tempName);
 			startActivity(intent);
@@ -279,7 +263,7 @@ public class BillActivity extends Activity {
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 		alertDialogBuilder.setTitle("Delete Bill");
 		alertDialogBuilder
-		.setMessage("Deleting an bill will change the overall balance. Are you sure you want to delete this bill?")
+		.setMessage("The bill will be deleted from the list. Are you sure you want to continue?")
 		.setCancelable(true)
 		.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
@@ -306,132 +290,6 @@ public class BillActivity extends Activity {
 		billSpin.setSelection((billIdArrayPosition>0)?(billIdArrayPosition-1):billIdArrayPosition);
 	}
 	
-//	public void editEvent(View v) {
-//		try{
-//			int tempid = idarray[eventIdArrayPosition];
-//			int tempFlag = flagarray[eventIdArrayPosition];
-//			String tempName = listofevents.get(eventIdArrayPosition);
-//			
-//			if(tempFlag == GroupDatabase.eventFlag){
-//				Intent intent = new Intent(this, EditEventActivity.class);
-//				intent.putExtra(GroupsActivity.GROUP_ID, grpid);
-//				intent.putExtra(GroupSummaryActivity.listofmember, namearray);
-//				intent.putExtra(GroupSummaryActivity.stringDecimals, currencyDecimals);
-//				intent.putExtra(EVENT_ID, tempid);
-//				intent.putExtra(EVENT_NAME, tempName);
-//				startActivity(intent);
-//			}else if(tempFlag == GroupDatabase.cashTransferFlag){
-//				Intent intent = new Intent(this, EditCashTransferActivity.class);
-//				intent.putExtra(GroupsActivity.GROUP_ID, grpid);
-//				intent.putExtra(GroupSummaryActivity.listofmember, namearray);
-//				intent.putExtra(GroupSummaryActivity.stringDecimals, currencyDecimals);
-//				intent.putExtra(EVENT_ID, tempid);
-//				intent.putExtra(EVENT_NAME, tempName);
-//				startActivity(intent);
-//			}
-//		}catch(Exception e){
-//			Log.e("Sameer","Here",e);
-//		}
-//	}
-//	
-//	public void deleteEvent(View v) {
-//		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-//		alertDialogBuilder.setTitle("Delete Event");
-//		alertDialogBuilder
-//		.setMessage("Deleting an event will change the balance of the involved members. Are you sure you want to delete this event?")
-//		.setCancelable(true)
-//		.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
-//			public void onClick(DialogInterface dialog, int id) {
-//				deleteEventFromDatabase(eventIdArrayPosition);
-//			}
-//		})
-//		.setNegativeButton("No",new DialogInterface.OnClickListener() {
-//			public void onClick(DialogInterface dialog, int id) {
-//				dialog.cancel();
-//			}
-//		});
-//		AlertDialog alertDialog = alertDialogBuilder.create();
-//		alertDialog.show();
-//	}
-//	
-//	public void restoreEvent(View v) {
-//		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-//		alertDialogBuilder.setTitle("Restore Deleted Event");
-//		alertDialogBuilder
-//		.setMessage("Restoring a deleted event will change the balance of the involved members. Are you sure you want to restore this event?")
-//		.setCancelable(true)
-//		.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
-//			public void onClick(DialogInterface dialog, int id) {
-//				restoreDeletedEventInDatabase(eventIdArrayPosition);
-//			}
-//		})
-//		.setNegativeButton("No",new DialogInterface.OnClickListener() {
-//			public void onClick(DialogInterface dialog, int id) {
-//				dialog.cancel();
-//			}
-//		});
-//		AlertDialog alertDialog = alertDialogBuilder.create();
-//		alertDialog.show();
-//	}
-//
-//	public void clearAlert(View v) {
-//		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-//		alertDialogBuilder.setTitle("Clear History");
-//		alertDialogBuilder
-//		.setMessage("Clearing the history will delete all the events from history but will not affect the balance of any member. Are you sure you want to continue?")
-//		.setCancelable(true)
-//		.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
-//			public void onClick(DialogInterface dialog, int id) {
-//				clearlog();
-//			}
-//		})
-//		.setNegativeButton("No",new DialogInterface.OnClickListener() {
-//			public void onClick(DialogInterface dialog, int id) {
-//				dialog.cancel();
-//			}
-//		});
-//		AlertDialog alertDialog = alertDialogBuilder.create();
-//		alertDialog.show();
-//	}
-//
-//	public void clearlog(){
-//		gpdb.clearlog();
-//		this.finish();
-//	}
-//	
-//	public void deleteEventFromDatabase(int position) {
-//		int tempid = idarray[position];
-//		int tempflag = flagarray[position];
-//
-//		try{
-//			if(tempflag==GroupDatabase.eventFlag){
-//				gpdb.DeleteFromTransList(tempid);
-//			}
-//			else if(tempflag==GroupDatabase.cashTransferFlag){
-//				gpdb.DeleteFromCashList(tempid);
-//			}
-//		}catch(Exception e){}
-//		
-//		fillEvents(memberId);
-//		eventSpin.setSelection(eventIdArrayPosition);
-//	}
-//	
-//	public void restoreDeletedEventInDatabase(int position) {
-//		int tempid = idarray[position];
-//		int tempflag = flagarray[position];
-//
-//		try{
-//			if(tempflag==GroupDatabase.deletedEventFlag){
-//				gpdb.restoreInTransList(tempid);
-//			}
-//			else if(tempflag==GroupDatabase.deletedCashTransferFlag){
-//				gpdb.restoreInCashList(tempid);
-//			}
-//		}catch(Exception e){}
-//		
-//		fillEvents(memberId);
-//		eventSpin.setSelection(eventIdArrayPosition);
-//	}
 	
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {

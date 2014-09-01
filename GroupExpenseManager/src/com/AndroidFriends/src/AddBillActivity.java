@@ -26,15 +26,16 @@ import com.AndroidFriends.R;
 
 public class AddBillActivity extends Activity {
 	private Button doneButton;
-	private String[] billNames = new String[] {"Electricity", "Landline", "Mobile", "Rent", "Hospital", "Hotel", "Insurance", "EMI", "Tax" };
 	private TextView dateDisplay;
 	private Button dueDateButton;
 	private int cyear, cmonth, cday;
 	private DatePickerDialog dialog = null;
-	
-	static final int DATE_DIALOG_ID = 100;
-	
 	private PersonalDatabase pdb;
+	
+	public static final int DATE_DIALOG_ID = 100;
+	public static final String[] billNames = new String[] 
+			{"Electricity", "Phone", "Landline", "Mobile", "Rent", "Hospital", "Hotel", "Insurance", "EMI", "Tax", "Car" };
+
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

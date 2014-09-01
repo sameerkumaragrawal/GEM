@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.StringTokenizer;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -26,10 +27,8 @@ import android.widget.Toast;
 import com.AndroidFriends.R;
 
 public class EditBillActivity extends Activity {
-	private Button doneButton;
-	private String[] billNames = new String[] {"Electricity", "Landline", "Mobile", "Rent", "Hospital", "Hotel", "Insurance", "EMI", "Tax" };
+	private Button doneButton, dueDateButton;
 	private TextView dateDisplay;
-	private Button dueDateButton;
 	private AutoCompleteTextView billNameEditText;
 	private EditText billAmountEditText;
 	private int cyear, cmonth, cday;
@@ -51,7 +50,7 @@ public class EditBillActivity extends Activity {
 		obillName = intent.getStringExtra(BillActivity.BILL_NAME);
 		billId = intent.getIntExtra(BillActivity.BILL_ID,0);
 		
-		String new_title= obillName +" - Edit";
+		String new_title= obillName + " - Edit";
 		this.setTitle(new_title);
 		setContentView(R.layout.activity_add_bill);
 
@@ -65,7 +64,7 @@ public class EditBillActivity extends Activity {
 		billAmountEditText = (EditText) findViewById(R.id.billAmount);
 		billNameEditText = (AutoCompleteTextView) findViewById(R.id.addBillName);
 		billNameEditText.setThreshold(1);
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, billNames);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, AddBillActivity.billNames);
 		billNameEditText.setAdapter(adapter);
 		
 		setValues();
@@ -94,20 +93,18 @@ public class EditBillActivity extends Activity {
 		
 		billNameEditText.setText(obillName);
 		billAmountEditText.setText(String.format(decimalFlag, obillAmount));
-		dateDisplay.setText(new StringBuilder().append(cday).append("-").append(cmonth+1).append("-").append(cyear));
+		dateDisplay.setText(new StringBuilder().append(cday).append("/").append(cmonth+1).append("/").append(cyear));
 	}
 	
 	public void addButtonListener() {
 		dueDateButton.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Calendar c = null;
 				String preExistingDate = (String) dateDisplay.getText().toString();
 				String iyear, imonth, iday;
 				
 				if(preExistingDate != null && !preExistingDate.equals("")) {
-					StringTokenizer st = new StringTokenizer(preExistingDate,"-");
+					StringTokenizer st = new StringTokenizer(preExistingDate,"/");
 					iday = st.nextToken();
 					imonth = st.nextToken();
 					iyear = st.nextToken();
@@ -124,24 +121,16 @@ public class EditBillActivity extends Activity {
 
 	public class PickDate implements DatePickerDialog.OnDateSetListener {
 
-		public void onDateSet(DatePicker view, int pyear, int monthOfYear,
-				int dayOfMonth) {
-			// TODO Auto-generated method stub
+		public void onDateSet(DatePicker view, int pyear, int monthOfYear, int dayOfMonth) {
 			view.updateDate(pyear, monthOfYear, dayOfMonth);
 			int monthOffset = monthOfYear+1;
-			dateDisplay.setText(dayOfMonth+"-"+monthOffset+"-"+pyear);
+			dateDisplay.setText(dayOfMonth + "/" + monthOffset + "/" + pyear);
 		}
 		
 	}
-	/*protected Dialog onCreateDialog(int id) {
-		switch(id) {
-		case DATE_DIALOG_ID:
-			return DatePickerDialog(this, datePickerListener, year, month, day)
-		}
-	}*/
 	
+	@SuppressLint("SimpleDateFormat")
 	public void doneEditBill(View v){
-		//AutoCompleteTextView bill = (AutoCompleteTextView) findViewById(R.id.addBillName);
 		String billName = billNameEditText.getText().toString();
 		if(billName.equals("")){
 			createToast("Error! Cannot leave the bill name empty");
@@ -161,21 +150,16 @@ public class EditBillActivity extends Activity {
 		}
 		
 		String billDueDate = dateDisplay.getText().toString();
-		StringTokenizer st = new StringTokenizer(billDueDate,"-");
-		//day = Integer.parseInt(st.nextToken());
-		//month = Integer.parseInt(st.nextToken());
-		//year = Integer.parseInt(st.nextToken());
-		SimpleDateFormat f = new SimpleDateFormat("d-M-yyyy");
+		SimpleDateFormat f = new SimpleDateFormat("d/M/yyyy");
 		Date d=null;
 		try {
 			d = f.parse(billDueDate);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			Log.e("nik", "error", e);
+			Log.e("adi", "error", e);
 		}
 		long dueDateMsec = d.getTime();
 		if(!checkDueDate(dueDateMsec)) {
-			createToast("Error! Due Date must be after today");
+			createToast("Error! The due date must be after today");
 			return;
 		}
 
