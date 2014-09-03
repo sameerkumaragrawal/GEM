@@ -2,26 +2,28 @@ package com.AndroidFriends.src;
 
 import java.io.File;
 
-import android.app.Activity;
+import android.app.TabActivity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TabHost;
+import android.widget.TabHost.TabSpec;
 
-import com.AndroidFriends.R;
-
-public class MainActivity extends Activity {
+@SuppressWarnings("deprecation")
+public class MainActivity extends TabActivity {
 
 	//public final static String GroupName = "com.example.gem.groupname";
 	//public final static String MEMBERS = "com.example.gem.members";
 	public final static float imagebuttonweight = 0.3f;
+	private TabHost myTabHost;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
         SQLiteDatabase myDB= null;
         try{
         	File dbFile = this.getDatabasePath("GroupNames");
@@ -36,9 +38,19 @@ public class MainActivity extends Activity {
         		myDB.close();
         	}
         }
-        Intent intent = new Intent(this, PersonalActivity.class);
-        startActivity(intent);
-        this.finish();
+        
+        myTabHost = getTabHost();
+        
+        // Adding the tabs 
+        TabSpec spec1 = myTabHost.newTabSpec("groups_tab"); 
+        spec1.setIndicator("Groups"); 
+        spec1.setContent(new Intent(this, GroupsActivity.class));
+        myTabHost.addTab(spec1);
+
+        TabSpec spec2 = myTabHost.newTabSpec("personal_tab"); 
+        spec2.setIndicator("Personal");
+        spec2.setContent(new Intent(this, PersonalActivity.class));
+        myTabHost.addTab(spec2);
     }
     
     @Override
@@ -51,6 +63,5 @@ public class MainActivity extends Activity {
 		LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) v.getLayoutParams();
 		params.weight = w;
 		v.setLayoutParams(params);
-	}
-    
+	}   
 }
