@@ -19,6 +19,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,7 +28,7 @@ import com.AndroidFriends.R;
 public class AddBillActivity extends Activity {
 	private Button doneButton;
 	private TextView dateDisplay;
-	private Button dueDateButton;
+	private ImageButton dueDateButton;
 	private int cyear, cmonth, cday;
 	private DatePickerDialog dialog = null;
 	private PersonalDatabase pdb;
@@ -44,7 +45,7 @@ public class AddBillActivity extends Activity {
 
 		pdb = PersonalDatabase.get(this);
 		dateDisplay = (TextView) findViewById(R.id.dateDisplay);
-		dueDateButton = (Button) findViewById(R.id.billDueDate);
+		dueDateButton = (ImageButton) findViewById(R.id.billDueDate);
 		
 		AutoCompleteTextView billNameEditText = (AutoCompleteTextView) findViewById(R.id.addBillName);
 		billNameEditText.setThreshold(1);

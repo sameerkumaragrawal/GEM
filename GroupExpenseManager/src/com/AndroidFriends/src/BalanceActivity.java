@@ -1,6 +1,7 @@
 package com.AndroidFriends.src;
 
 import android.annotation.SuppressLint;
+import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -21,9 +22,10 @@ import com.AndroidFriends.R;
 public class BalanceActivity extends Activity {
     private TextView expensePercentageText, billsPercentageText, balancePercentageText;
     private LinearLayout pieChartLayout;
-    private int size, chartSize, marginSize;
+    private int size, chartSize, xmarginSize;
 	float expenses, income, bills;
     float values[];
+    public final static int[] COLORS = {Color.GREEN, Color.YELLOW, Color.RED, Color.BLUE, Color.LTGRAY, Color.MAGENTA, Color.CYAN, Color.WHITE};
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,12 +46,13 @@ public class BalanceActivity extends Activity {
         Point screenSize = new Point();
         Display d = getWindowManager().getDefaultDisplay();
         d.getSize(screenSize);
-        size = screenSize.x < screenSize.y ? screenSize.x : screenSize.y;
-        chartSize = (int) (size * 0.75);
-        marginSize = (size-chartSize) / 2;
-        
-        View pieChartView = new MyGraphView(this, values, marginSize, size-marginSize);
-        pieChartLayout.addView(pieChartView);
+        size = screenSize.x < (screenSize.y/2) ? screenSize.x : (screenSize.y/2);
+        chartSize = (int) (size * 0.7);
+        xmarginSize = (screenSize.x - chartSize) / 2;
+
+        LayoutParams mLayoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        View pieChartView = new MyGraphView(this, values, xmarginSize, 0, chartSize+xmarginSize, chartSize);
+        pieChartLayout.addView(pieChartView, mLayoutParams);
         
         int expensesPercentage = (int) (100 * expenses/income);
         expensePercentageText.setText("Current expenses are " + String.valueOf(expensesPercentage) + "% of your income");
@@ -72,20 +75,22 @@ public class BalanceActivity extends Activity {
         return data;
     }
     
+    // Class for pie chart
     public class MyGraphView extends View
     {
-        private Paint paint=new Paint(Paint.ANTI_ALIAS_FLAG);
+        private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         private float[] value_degree;
-        private int[] COLORS={Color.GREEN, Color.YELLOW, Color.RED, Color.BLUE, Color.LTGRAY, Color.CYAN, Color.MAGENTA, Color.WHITE};
         RectF rectf;
         int temp=0;
+        int lastNonZero;
         
-		public MyGraphView(Context context, float[] values, int start, int end) {
+		public MyGraphView(Context context, float[] values, int xstart, int ystart, int xend, int yend) {
             super(context);
-            rectf = new RectF(start, start, end, end);
+            rectf = new RectF(xstart, ystart, xend, yend);
             value_degree = new float[values.length];
             for(int i=0;i<values.length;i++) {
                 value_degree[i]=values[i];
+                if (values[i] != 0) lastNonZero = i;
             }
         }
         
@@ -98,7 +103,7 @@ public class BalanceActivity extends Activity {
                     paint.setColor(COLORS[i]);
                     canvas.drawArc(rectf, 0, value_degree[i], true, paint);
                 } 
-                else if (i == value_degree.length - 1) {
+                else if (i == lastNonZero) {
                     temp += (int) value_degree[i - 1];
                     paint.setColor(COLORS[i]);
                     canvas.drawArc(rectf, temp, 360-temp, true, paint);
@@ -110,6 +115,5 @@ public class BalanceActivity extends Activity {
                 }
             }
         }
-
     }
 }

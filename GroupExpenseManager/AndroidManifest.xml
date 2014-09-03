@@ -155,6 +155,11 @@
             android:label="@string/title_activity_balance" >
         </activity>
         <activity
+            android:name="com.AndroidFriends.src.ExpensesStatsActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:label="@string/title_activity_expenses_stats" >
+        </activity>
+        <activity
             android:name="com.AndroidFriends.src.AddBillActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:label="@string/title_activity_add_bill" >

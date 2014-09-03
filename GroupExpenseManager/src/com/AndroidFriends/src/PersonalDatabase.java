@@ -23,11 +23,6 @@ public class PersonalDatabase extends SQLiteOpenHelper{
 	public final static int deletedExpenseFlag = 3;
 	public final static int clearedExpenseFlag = 4;
 	
-	public final static int billFlag = 1;
-	public final static int editedBillFlag = 2;
-	public final static int paidBillFlag = 3;
-	public final static int deletedBillFlag = 4;
-	
 	public final static int noIncomeFlag = 0;
 	public final static int incomeFlag = 1;
 	
@@ -129,10 +124,10 @@ public class PersonalDatabase extends SQLiteOpenHelper{
 	public Cursor getExpenseList(int category) {
 		Cursor mquery;
 		if (category == 0) {
-			mquery = getDB().rawQuery("SELECT ID, Name FROM " + expensesTable + " ORDER BY ID DESC", null);
+			mquery = getDB().rawQuery("SELECT ID, Name, Amount FROM " + expensesTable + " ORDER BY ID DESC", null);
 		}
 		else {
-			mquery = getDB().rawQuery("SELECT ID,  name FROM " + expensesTable + " WHERE Category = " + category + " ORDER BY ID DESC", null);
+			mquery = getDB().rawQuery("SELECT ID, Name, Amount FROM " + expensesTable + " WHERE Category = " + category + " ORDER BY ID DESC", null);
 		}
 		return mquery;
 	}
@@ -231,6 +226,18 @@ public class PersonalDatabase extends SQLiteOpenHelper{
 	public float getTotalExpenses() {
 		float total = 0;
 		Cursor mquery = getDB().rawQuery("SELECT Amount FROM " + expensesTable + " WHERE Flag <= " + editedExpenseFlag, null);
+		if (mquery.getCount() > 0) {
+			mquery.moveToFirst();
+			do {
+				total += mquery.getFloat(0);
+			} while (mquery.moveToNext());
+		}
+		return total;
+	}
+	
+	public float getTotalCategoryExpenses(int category) {
+		float total = 0;
+		Cursor mquery = getDB().rawQuery("SELECT Amount FROM " + expensesTable + " WHERE Category = " + category + " AND Flag <= " + editedExpenseFlag, null);
 		if (mquery.getCount() > 0) {
 			mquery.moveToFirst();
 			do {

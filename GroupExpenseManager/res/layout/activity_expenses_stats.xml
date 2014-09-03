@@ -1,0 +1,139 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:orientation="horizontal" >
+        
+        <TextView
+	        android:id="@+id/foodTextView"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:gravity="left"
+	        android:text="@string/food"
+	        android:textAppearance="?android:attr/textAppearanceSmall"
+	        android:textStyle="bold" />
+        
+        <TextView
+	        android:id="@+id/healthTextView"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:gravity="left"
+	        android:text="@string/health"
+	        android:textAppearance="?android:attr/textAppearanceSmall"
+	        android:textStyle="bold" />
+        
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:orientation="horizontal" >
+        
+        <TextView
+	        android:id="@+id/entertainmentTextView"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:gravity="left"
+	        android:text="@string/entertainment"
+	        android:textAppearance="?android:attr/textAppearanceSmall"
+	        android:textStyle="bold" />
+        
+        <TextView
+	        android:id="@+id/travelTextView"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:gravity="left"
+	        android:text="@string/travel"
+	        android:textAppearance="?android:attr/textAppearanceSmall"
+	        android:textStyle="bold" />
+        
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:orientation="horizontal" >
+	
+        <TextView
+	        android:id="@+id/accommodationTextView"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:gravity="left"
+	        android:text="@string/accommodation"
+	        android:textAppearance="?android:attr/textAppearanceSmall"
+	        android:textStyle="bold" /> 
+        
+        <TextView
+	        android:id="@+id/shoppingTextView"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:gravity="left"
+	        android:text="@string/shopping"
+	        android:textAppearance="?android:attr/textAppearanceSmall"
+	        android:textStyle="bold" />
+        
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:orientation="horizontal" >
+        
+        <TextView
+	        android:id="@+id/billsTextView"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:gravity="left"
+	        android:text="@string/bills"
+	        android:textAppearance="?android:attr/textAppearanceSmall"
+	        android:textStyle="bold" /> 
+        
+        <TextView
+	        android:id="@+id/miscellaneousTextView"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:gravity="left"
+	        android:text="@string/miscellaneous"
+	        android:textAppearance="?android:attr/textAppearanceSmall"
+	        android:textStyle="bold" />
+        
+    </LinearLayout>
+       
+	<LinearLayout
+	    android:id="@+id/expensePieChartLayout"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_marginTop="30dp"
+	    android:layout_marginBottom="20dp"
+	    android:orientation="horizontal" />
+</LinearLayout>

@@ -66,22 +66,32 @@
         	android:paddingTop="20dp"
         	android:paddingBottom="20dp" >
 
-            <Button
-                android:id="@+id/billDueDate"
+            <TextView 
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
                 android:text="@string/billDueDate"
-                android:layout_weight="1" />
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="bold" />
             
             <TextView
             	android:id="@+id/dateDisplay"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_weight="1.5"
                 android:gravity="center"
                 android:text="@string/billDateFormat"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textStyle="bold" />
+            
+            <ImageButton
+                android:id="@+id/billDueDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:src="@android:drawable/ic_menu_my_calendar"
+                android:contentDescription="@string/billDueDate" />
             
         </LinearLayout>
         

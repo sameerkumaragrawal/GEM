@@ -134,7 +134,16 @@
     <string name="title_activity_add_info">Add Personal Information</string>
     <string name="title_activity_edit_info">Edit Personal Information</string>
     <string name="title_activity_balance">Balance Statistics</string>
+    <string name="title_activity_expenses_stats">Expense Breakdown</string>
     <string name="balancePieChart">Balance Pie Chart</string>
-    <string name="expensePieChart">Expense Pie Chart</string>
-    <string name="showExpensePieChart">Show Expense Pie Chart</string>
+    <string name="expensePieChart">Expenses Pie Chart</string>
+    <string name="expenseStats">Expense Breakdown</string>
+    <string name="food">Food</string>
+    <string name="health">Health</string>
+    <string name="entertainment">Entertainment</string>
+    <string name="travel">Travel</string>
+    <string name="accommodation">Accommodation</string>
+    <string name="shopping">Shopping</string>
+    <string name="bills">Bills</string>
+    <string name="miscellaneous">Miscellaneous</string>
 </resources>

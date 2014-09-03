@@ -39,7 +39,7 @@ public class ExpenseActivity extends Activity {
 	private List<String> listofexpenses = null, listofcategories = null;
 	private int[] idarray = null;
 	private LinearLayout expenseTable = null;
-	private Button restoreButton, clearButton;
+	private Button restoreButton, clearButton, expenseStatsButton;
 	private LinearLayout editLayout, prevNext;
 	private LayoutInflater inflater;
 	private PersonalDatabase pdb;
@@ -62,6 +62,7 @@ public class ExpenseActivity extends Activity {
 		editLayout = (LinearLayout) findViewById(R.id.expenseEditLayout);
 		restoreButton = (Button) findViewById(R.id.expenseRestoreButton);
 		clearButton = (Button) findViewById(R.id.clearExpenseHistoryButton);
+		expenseStatsButton = (Button) findViewById(R.id.expenseStatsButton);
 		
 		categoryList();
 		addItemsOnCategorySpinner();
@@ -97,6 +98,9 @@ public class ExpenseActivity extends Activity {
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			NavUtils.navigateUpFromSameTask(this);
+			return true;
+		case id.expense_stats:
+			openExpenseStats(null);
 			return true;
 		case id.menu_clear_history:
 			clearHistoryAlert(null);
@@ -173,6 +177,7 @@ public class ExpenseActivity extends Activity {
 			editLayout.setVisibility(View.GONE);
 			restoreButton.setVisibility(View.GONE);
 			clearButton.setVisibility(View.GONE);
+			expenseStatsButton.setVisibility(View.GONE);
 			dtTextView.setVisibility(View.GONE);
 			return;
 		}
@@ -222,21 +227,24 @@ public class ExpenseActivity extends Activity {
 			}
 		}
 		
-		//Edit delete button visibility
+		//Other buttons visibility
 		if (expenseFlag == PersonalDatabase.clearedExpenseFlag) {
 			editLayout.setVisibility(View.GONE);
 			restoreButton.setVisibility(View.GONE);
 			clearButton.setVisibility(View.GONE);
+			expenseStatsButton.setVisibility(View.GONE);
 		}
 		else if (expenseFlag == PersonalDatabase.deletedExpenseFlag){
 			editLayout.setVisibility(View.GONE);
 			restoreButton.setVisibility(View.VISIBLE);
 			clearButton.setVisibility(View.VISIBLE);
+			expenseStatsButton.setVisibility(View.VISIBLE);
 		}
 		else {
 			editLayout.setVisibility(View.VISIBLE);
 			restoreButton.setVisibility(View.GONE);
 			clearButton.setVisibility(View.VISIBLE);
+			expenseStatsButton.setVisibility(View.VISIBLE);
 		}
 		
 		String categoryString = pdb.getCategoryName(category);
@@ -256,7 +264,7 @@ public class ExpenseActivity extends Activity {
 		
 		MainActivity.setWeight(v1,1f);
 		MainActivity.setWeight(v2,1f);
-		MainActivity.setWeight(v3,1f);
+		MainActivity.setWeight(v3,0.8f);
 		
 		expenseTable.addView(convertView);
 	}
@@ -342,6 +350,11 @@ public class ExpenseActivity extends Activity {
 		
 		fillExpenses(categoryId);
 		expenseSpin.setSelection(expenseIdArrayPosition);
+	}
+	
+	public void openExpenseStats(View v) {
+		Intent intent = new Intent(this, ExpensesStatsActivity.class);
+		startActivity(intent);
 	}
 	
 	public void clearHistoryAlert(View v) {
