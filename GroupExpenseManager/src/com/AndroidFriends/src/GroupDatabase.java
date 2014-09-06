@@ -20,7 +20,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class GroupDatabase extends SQLiteOpenHelper{
 	private static String DATABASE_NAME = null;
-	private static final int DATABASE_VERSION = 4;
+	private static final int DATABASE_VERSION = 5;
 
 	public final static int eventFlag = 1;
 	public final static int cashTransferFlag = 2;
@@ -34,7 +34,7 @@ public class GroupDatabase extends SQLiteOpenHelper{
 	public final static String TransTable = "Transactions";
 	public final static String CashTable = "CashTransfer";
 
-	public final static String createMember = "CREATE TABLE IF NOT EXISTS "+GroupDatabase.MemberTable+" ( ID int(11) NOT NULL, Name varchar(255) NOT NULL, Paid float NOT NULL, Consumed float NOT NULL )";
+	public final static String createMember = "CREATE TABLE IF NOT EXISTS "+GroupDatabase.MemberTable+" ( ID int(11) NOT NULL, Name varchar(255) NOT NULL, Paid float NOT NULL, Consumed float NOT NULL, User int(1) NOT NULL DEFAULT 0 )";
 	public final static String createEvent = "CREATE TABLE IF NOT EXISTS "+GroupDatabase.EventTable+" ( ID int(11) NOT NULL, Name varchar(255) NOT NULL, Flag int(1), Date BIGINT NOT NULL Default 0)";
 	public final static String createTrans = "CREATE TABLE IF NOT EXISTS "+GroupDatabase.TransTable+" ( MemberId int(11) NOT NULL, Paid float, Consumed float, EventId int(11) NOT NULL )";
 	public final static String createCash = "CREATE TABLE IF NOT EXISTS "+GroupDatabase.CashTable+" ( FromMemberId int(11) NOT NULL, ToMemberId int(11) NOT NULL, Amount float NOT NULL, ID int(11) NOT NULL)";
@@ -91,6 +91,8 @@ public class GroupDatabase extends SQLiteOpenHelper{
 			db.execSQL("ALTER TABLE " + EventTable +" ADD COLUMN Date BIGINT NOT NULL Default 0");
 		case 3:
 			db.execSQL("UPDATE " + EventTable +" SET Flag = ? WHERE NAME = ?",new Object[]{balanceSettleFlag,balanceSettleString});
+		case 4:
+			db.execSQL("ALTER TABLE " + MemberTable +" ADD COLUMN User int(1) NOT NULL Default 0");
 		default:
 			break;
 		}
@@ -105,6 +107,7 @@ public class GroupDatabase extends SQLiteOpenHelper{
 			values.put("Name", members[j]);
 			values.put("Paid", 0);
 			values.put("Consumed", 0);
+			values.put("User", 0);
 			getDB().insert(MemberTable,null,values);
 		}
 	}
@@ -121,8 +124,25 @@ public class GroupDatabase extends SQLiteOpenHelper{
 			values.put("Name", members[i]);
 			values.put("Paid", 0);
 			values.put("Consumed", 0);
+			values.put("User", 0);
 			getDB().insert(MemberTable,null,values);
 		}
+	}
+	
+	public void addUserMember() {
+		getDB().execSQL("UPDATE "+MemberTable+" SET User = ? WHERE ID = ?", new Object[]{1, 1});
+	}
+	
+	public void editUserMember() {
+		getDB().execSQL("UPDATE "+MemberTable+" SET User = ? WHERE ID = ?", new Object[]{1, 1});
+		updatePersonalExpenseOnEditGroup();
+	}
+	
+	public boolean getUserMember() {
+		Cursor mquery = getDB().rawQuery("SELECT User FROM "+MemberTable+" WHERE ID = 1", null);
+		mquery.moveToFirst();
+		if (mquery.getInt(0) == 1) return true;
+		else return false;
 	}
 
 	public Cursor MemberListWithBalance(){
@@ -316,8 +336,26 @@ public class GroupDatabase extends SQLiteOpenHelper{
 				getDB().insert(TransTable,null,value2);
 
 				getDB().execSQL("UPDATE "+MemberTable+" SET Paid = Paid+?, Consumed = Consumed+? WHERE ID = ?",new Object[]{memberBalance[i],consumedBalance[i],(i+1)});
+			
+				// For syncing with personal expenses
+				int memberId = i+1;
+				Cursor userQuery = getDB().rawQuery("SELECT User FROM " + MemberTable + "WHERE ID = " + memberId, null);
+				userQuery.moveToFirst();
+				if (userQuery.getInt(0) == 1) {
+					updatePersonalExpenseOnEvent();
+				}
 			}
 		}
+	}
+	
+	private void updatePersonalExpenseOnEvent() {
+		// TODO
+		// call PersonalDatabase.insertGroupExpense(groupName, totalConsumed) at the end
+	}
+	
+	private void updatePersonalExpenseOnEditGroup() {
+		// TODO
+		// call PersonalDatabase.insertGroupExpense(groupName, totalConsumed) at the end
 	}
 
 	private void UpdateEventNameEdited(int eventid, String eventName){
@@ -372,7 +410,13 @@ public class GroupDatabase extends SQLiteOpenHelper{
 		getDB().insert(TransTable,null,value2);
 
 		getDB().execSQL("UPDATE "+MemberTable+" SET Paid = Paid+?, Consumed = Consumed+? WHERE ID = ?",new Object[]{amount,amount,member+1});
-
+		
+		int memberId = member+1;
+		Cursor userQuery = getDB().rawQuery("SELECT User FROM " + MemberTable + "WHERE ID = " + memberId, null);
+		userQuery.moveToFirst();
+		if (userQuery.getInt(0) == 1) {
+			updatePersonalExpenseOnEvent();
+		}
 	}
 
 	public void addIndividualEvent(String eventName, float amount, int member){

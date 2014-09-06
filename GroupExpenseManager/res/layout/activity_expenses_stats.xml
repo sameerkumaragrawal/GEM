@@ -18,7 +18,7 @@
 	        android:id="@+id/foodTextView"
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
-	        android:layout_weight="1.2"
+	        android:layout_weight="1"
 	        android:gravity="left"
 	        android:text="@string/food"
 	        android:textAppearance="?android:attr/textAppearanceSmall"
@@ -49,7 +49,7 @@
 	        android:id="@+id/entertainmentTextView"
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
-	        android:layout_weight="1.2"
+	        android:layout_weight="1"
 	        android:gravity="left"
 	        android:text="@string/entertainment"
 	        android:textAppearance="?android:attr/textAppearanceSmall"
@@ -80,7 +80,7 @@
 	        android:id="@+id/accommodationTextView"
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
-	        android:layout_weight="1.2"
+	        android:layout_weight="1"
 	        android:gravity="left"
 	        android:text="@string/accommodation"
 	        android:textAppearance="?android:attr/textAppearanceSmall"
@@ -111,11 +111,32 @@
 	        android:id="@+id/billsTextView"
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
-	        android:layout_weight="1.2"
+	        android:layout_weight="1"
 	        android:gravity="left"
 	        android:text="@string/bills"
 	        android:textAppearance="?android:attr/textAppearanceSmall"
 	        android:textStyle="bold" /> 
+        
+        <TextView
+	        android:id="@+id/groupsTextView"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:gravity="left"
+	        android:text="@string/groupExpenses"
+	        android:textAppearance="?android:attr/textAppearanceSmall"
+	        android:textStyle="bold" />
+        
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:orientation="horizontal" >
         
         <TextView
 	        android:id="@+id/miscellaneousTextView"
@@ -125,8 +146,8 @@
 	        android:gravity="left"
 	        android:text="@string/miscellaneous"
 	        android:textAppearance="?android:attr/textAppearanceSmall"
-	        android:textStyle="bold" />
-        
+	        android:textStyle="bold" /> 
+	                
     </LinearLayout>
        
 	<LinearLayout

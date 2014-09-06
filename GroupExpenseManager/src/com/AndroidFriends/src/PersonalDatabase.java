@@ -55,7 +55,8 @@ public class PersonalDatabase extends SQLiteOpenHelper{
 			db.execSQL("INSERT INTO " + categoryTable + " VALUES (5, 'Accommodation')");
 			db.execSQL("INSERT INTO " + categoryTable + " VALUES (6, 'Shopping')");
 			db.execSQL("INSERT INTO " + categoryTable + " VALUES (7, 'Bills')");
-			db.execSQL("INSERT INTO " + categoryTable + " VALUES (8, 'Miscellaneous')");
+			db.execSQL("INSERT INTO " + categoryTable + " VALUES (8, 'Group Expenses')");
+			db.execSQL("INSERT INTO " + categoryTable + " VALUES (9, 'Miscellaneous')");
 		}catch(Exception e){
 			Log.e("adi","error",e);
 		}
@@ -216,11 +217,35 @@ public class PersonalDatabase extends SQLiteOpenHelper{
 		ContentValues values = new ContentValues();
 		values.put("ID", ID1);
 		values.put("Name", "Cleared Expenses");
-		values.put("Category", 8);
+		values.put("Category", 9);
 		values.put("Amount", total);
 		values.put("Date",System.currentTimeMillis());
 		values.put("Flag", clearedExpenseFlag);
 		getDB().insert(expensesTable,null,values);
+	}
+	
+	public void insertGroupExpense(String name, float total) {
+		Cursor expenseQuery = getDB().rawQuery("SELECT * FROM " + expensesTable + " WHERE Name = ? AND Category = ?", new String[]{name, String.valueOf(8)});
+		if (expenseQuery.getCount() == 1) {
+			getDB().execSQL("UPDATE " + expensesTable + " SET Amount = ? WHERE Name = ? AND Category = ?", new Object[]{total, name, 8});
+		}
+		else {
+			int ID1=1;
+			Cursor count = getDB().rawQuery("SELECT MAX(ID) FROM " + expensesTable , null);
+			if(count.getCount()>0){
+				count.moveToLast();
+				ID1=count.getInt(0)+1;
+			}
+	
+			ContentValues values = new ContentValues();
+			values.put("ID", ID1);
+			values.put("Name", name);
+			values.put("Category", 8);
+			values.put("Amount", total);
+			values.put("Date",System.currentTimeMillis());
+			values.put("Flag", expenseFlag);
+			getDB().insert(expensesTable,null,values);
+		}
 	}
 	
 	public float getTotalExpenses() {

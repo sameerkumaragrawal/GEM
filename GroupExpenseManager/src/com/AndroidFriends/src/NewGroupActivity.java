@@ -2,6 +2,7 @@ package com.AndroidFriends.src;
 
 import java.util.ArrayList;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -12,6 +13,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -20,6 +24,7 @@ import android.widget.Toast;
 
 import com.AndroidFriends.R;
 
+@SuppressLint("InflateParams")
 public class NewGroupActivity extends Activity {
 
 	private LinearLayout list;
@@ -78,6 +83,9 @@ public class NewGroupActivity extends Activity {
 	public void addMember(View v) {
 		int position = numberItems;
 		View convertView = inflater.inflate(R.layout.new_group_item, null);
+		CheckBox meCheckBox = (CheckBox) convertView.findViewById(R.id.new_group_item_checkBox);
+		CheckBoxListener checkBoxListener = new CheckBoxListener();
+		meCheckBox.setOnCheckedChangeListener(checkBoxListener);
 		ImageButton removeButton = (ImageButton)convertView.findViewById(R.id.new_group_item_ib);
 		CustomRemoveClickListener removeListener = new CustomRemoveClickListener(); 
 		removeListener.setPosition(position);
@@ -89,6 +97,7 @@ public class NewGroupActivity extends Activity {
 
 		if(position==0){
 			removeButton.setVisibility(View.INVISIBLE);
+			meCheckBox.setVisibility(View.GONE);
 			MainActivity.setWeight(removeButton, 0);
 			memberText.setText("Group Name");
 
@@ -97,8 +106,22 @@ public class NewGroupActivity extends Activity {
 			groupNameEditText.setThreshold(1);
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, groupNames);
 			groupNameEditText.setAdapter(adapter);
-		}else{
+		}
+		else if (position==1) {
+			removeButton.setVisibility(View.GONE);
+			meCheckBox.setVisibility(View.VISIBLE);
+			memberText.setText("Member "+(position));
+
+			// Add auto complete to member name
+			AutoCompleteTextView memberNameEditText = (AutoCompleteTextView) convertView.findViewById(R.id.new_group_item_et);
+			memberNameEditText.setThreshold(2);
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, contactNames);
+			memberNameEditText.setAdapter(adapter);
+			MainActivity.setWeight(memberNameEditText, 0.9f);
+		}
+		else{
 			removeButton.setVisibility(View.VISIBLE);
+			meCheckBox.setVisibility(View.GONE);
 			MainActivity.setWeight(removeButton, MainActivity.imagebuttonweight);
 			memberText.setText("Member "+(position));
 
@@ -130,6 +153,15 @@ public class NewGroupActivity extends Activity {
 		}
 
 	}
+	
+	private class CheckBoxListener implements OnCheckedChangeListener{
+
+		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+			if (isChecked) {
+				createLongToast("Choosing this will result in your expenses in this group to be added automatically to your personal expenses");
+			}
+		}	
+	}
 
 	public void listNotifyDataSetChanged(){
 		int k=0;
@@ -148,6 +180,12 @@ public class NewGroupActivity extends Activity {
 
 	public void createToast(String message){
 		Toast n = Toast.makeText(NewGroupActivity.this,message, Toast.LENGTH_SHORT);
+		n.setGravity(Gravity.CENTER_VERTICAL,0,0);
+		n.show();
+	}
+	
+	public void createLongToast(String message){
+		Toast n = Toast.makeText(NewGroupActivity.this,message, Toast.LENGTH_LONG);
 		n.setGravity(Gravity.CENTER_VERTICAL,0,0);
 		n.show();
 	}
@@ -191,6 +229,7 @@ public class NewGroupActivity extends Activity {
 
 		int numberMembers = numberItems - 1;
 		members = new String[numberMembers];
+		boolean userMember = false;
 
 		for(int j=0;j<numberMembers;j++){
 			members[j]="";
@@ -203,24 +242,28 @@ public class NewGroupActivity extends Activity {
 			if (!checkMemberName(members[k],k)){
 				return;
 			}
+			if (k==0) {
+				CheckBox meCheckBox = (CheckBox) row.findViewById(R.id.new_group_item_checkBox);
+				userMember = meCheckBox.isChecked();
+			}
 		}
 
-		insertToDatabase(group_name, members, currencyId);
+		insertToDatabase(group_name, members, currencyId, userMember);
 	}
 
-	public void insertToDatabase(String groupName, String[] members, int currencyId) {
+	public void insertToDatabase(String groupName, String[] members, int currencyId, boolean userMember) {
 		int ID = commondb.insert(groupName, currencyId);
 		if(ID<0){
 			createToast("Error! Group "+groupName+" already exists");
 			return;
 		}
 		String DatabaseName="Database_"+ID;
-		createTables(DatabaseName,members);	        
+		createTables(DatabaseName,members,userMember);	        
 
 		this.finish();
 	}
 
-	public void createTables(String databaseName,String[] members){
+	public void createTables(String databaseName, String[] members, boolean userMember){
 		try{
 			this.deleteDatabase(databaseName);
 		}catch(Exception e){
@@ -228,6 +271,7 @@ public class NewGroupActivity extends Activity {
 		}
 		gpdb = GroupDatabase.get(this, databaseName);
 		gpdb.onCreateInsert(members);
+		if (userMember) gpdb.addUserMember();
 		gpdb.close();
 		GroupDatabase.closeAll();
 	}

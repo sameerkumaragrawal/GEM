@@ -25,7 +25,7 @@ public class BalanceActivity extends Activity {
     private int size, chartSize, xmarginSize;
 	float expenses, income, bills;
     float values[];
-    public final static int[] COLORS = {Color.GREEN, Color.YELLOW, Color.RED, Color.BLUE, Color.LTGRAY, Color.MAGENTA, Color.CYAN, Color.WHITE};
+    public final static int[] COLORS = {Color.GREEN, Color.YELLOW, Color.RED, Color.GRAY, Color.BLUE, Color.LTGRAY, Color.MAGENTA, Color.CYAN, Color.WHITE};
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

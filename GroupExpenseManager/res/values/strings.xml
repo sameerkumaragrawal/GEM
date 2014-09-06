@@ -145,5 +145,6 @@
     <string name="accommodation">Accommodation</string>
     <string name="shopping">Shopping</string>
     <string name="bills">Bills</string>
+    <string name="groupExpenses">Group Expenses</string>
     <string name="miscellaneous">Miscellaneous</string>
 </resources>

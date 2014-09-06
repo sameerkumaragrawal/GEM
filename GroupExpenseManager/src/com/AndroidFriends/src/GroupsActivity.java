@@ -8,6 +8,7 @@ import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -43,6 +44,7 @@ import com.AndroidFriends.R;
 import com.AndroidFriends.R.id;
 
 
+@SuppressLint("InflateParams")
 @TargetApi(11)
 public class GroupsActivity extends Activity {
 
