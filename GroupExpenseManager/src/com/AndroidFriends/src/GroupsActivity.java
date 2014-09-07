@@ -370,6 +370,10 @@ public class GroupsActivity extends Activity {
     	this.deleteDatabase(databasename);
     	commondb.deleteID(id);
     	items.remove(selPosition);
+    	
+    	PersonalDatabase pdb = PersonalDatabase.get(this);
+    	pdb.deleteGroupExpense(GroupName);
+    	
     	adaptor.notifyDataSetChanged();
     }
     
