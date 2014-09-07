@@ -3,6 +3,7 @@ package com.AndroidFriends.src;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -29,11 +30,13 @@ import android.widget.Toast;
 
 import com.AndroidFriends.R;
 
+@SuppressLint("InflateParams")
 public class EditEventActivity extends Activity {
 
 	private int nspinners = 0;
 	private int ndialogs = 0;
 	private String eventname = "";
+	private String grpName = "";
 	private int grpid = 0, eventid = 0;
 	private int currencyDecimals = 2;
 	private String[] namearray =null;
@@ -62,6 +65,7 @@ public class EditEventActivity extends Activity {
 		eventname = intent.getStringExtra(HistoryActivity.EVENT_NAME);
 
 		grpid = intent.getIntExtra(GroupsActivity.GROUP_ID,0);
+		grpName = intent.getStringExtra(GroupsActivity.GROUP_NAME);
 		eventid = intent.getIntExtra(HistoryActivity.EVENT_ID,0);
 
 		namearray = intent.getStringArrayExtra(GroupSummaryActivity.listofmember);
@@ -481,7 +485,7 @@ public class EditEventActivity extends Activity {
 			createToast("Error! The total amount paid is not equal to the total amount consumed (Paid = "+totalpaid+"; Consumed = "+totalconsumed+"; Difference = "+(totalpaid-totalconsumed)+").");
 			return false;
 		}
-		gpdb.updateEvent(eventid, eventName, amountPaid, paidMembers, amountConsumed, whoConsumed, namearray.length);
+		gpdb.updateEvent(eventid, eventName, amountPaid, paidMembers, amountConsumed, whoConsumed, namearray.length, grpName);
 		return true;
 	}
 
@@ -542,7 +546,7 @@ public class EditEventActivity extends Activity {
 	}
 
 	public boolean addIndividualEvent(String eventName, float amount, int member){
-		gpdb.updateIndividualEvent(eventid, eventName, amount, member);
+		gpdb.updateIndividualEvent(eventid, eventName, amount, member, grpName);
 		return true;
 	}
 

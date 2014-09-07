@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -31,6 +32,7 @@ import android.widget.Toast;
 
 import com.AndroidFriends.R;
 
+@SuppressLint("InflateParams")
 public class AddEventActivity extends Activity {
 
 	private int nspinners = 0;
@@ -482,7 +484,7 @@ public class AddEventActivity extends Activity {
 			createToast("Error! The total amount paid is not equal to the total amount consumed (Paid = "+totalpaid+"; Consumed = "+totalconsumed+"; Difference = "+(totalpaid-totalconsumed)+").");
 			return false;
 		}
-		gpdb.addEvent(eventName, amountPaid, paidMembers, amountConsumed, whoConsumed, namearray);
+		gpdb.addEvent(eventName, amountPaid, paidMembers, amountConsumed, whoConsumed, namearray, grpName);
 		return true;
 	}
 
@@ -543,7 +545,7 @@ public class AddEventActivity extends Activity {
 	}
 	
 	public boolean addIndividualEvent(String eventName, float amount, int member){
-		gpdb.addIndividualEvent(eventName, amount, member);
+		gpdb.addIndividualEvent(eventName, amount, member, grpName);
 		return true;
 	}
 	

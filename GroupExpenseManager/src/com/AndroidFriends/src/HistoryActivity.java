@@ -3,6 +3,7 @@ package com.AndroidFriends.src;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -28,6 +29,7 @@ import android.widget.TextView;
 import com.AndroidFriends.R;
 import com.AndroidFriends.R.id;
 
+@SuppressLint("InflateParams")
 public class HistoryActivity extends Activity {
 
 	public static final String EVENT_ID= "historyActivity/eventid";
@@ -321,6 +323,7 @@ public class HistoryActivity extends Activity {
 			if(tempFlag == GroupDatabase.eventFlag){
 				Intent intent = new Intent(this, EditEventActivity.class);
 				intent.putExtra(GroupsActivity.GROUP_ID, grpid);
+				intent.putExtra(GroupsActivity.GROUP_NAME, grpName);
 				intent.putExtra(GroupSummaryActivity.listofmember, namearray);
 				intent.putExtra(GroupSummaryActivity.stringDecimals, currencyDecimals);
 				intent.putExtra(EVENT_ID, tempid);
@@ -411,7 +414,7 @@ public class HistoryActivity extends Activity {
 
 		try{
 			if(tempflag==GroupDatabase.eventFlag){
-				gpdb.DeleteFromTransList(tempid);
+				gpdb.DeleteFromTransList(tempid, grpName);
 			}
 			else if(tempflag==GroupDatabase.cashTransferFlag){
 				gpdb.DeleteFromCashList(tempid);
@@ -428,7 +431,7 @@ public class HistoryActivity extends Activity {
 
 		try{
 			if(tempflag==GroupDatabase.deletedEventFlag){
-				gpdb.restoreInTransList(tempid);
+				gpdb.restoreInTransList(tempid, grpName);
 			}
 			else if(tempflag==GroupDatabase.deletedCashTransferFlag){
 				gpdb.restoreInCashList(tempid);

@@ -158,7 +158,7 @@ public class NewGroupActivity extends Activity {
 
 		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 			if (isChecked) {
-				createLongToast("Choosing this will result in your expenses in this group to be added automatically to your personal expenses");
+				createLongToast("Selecting this will result in your expenses in this group to be added automatically to your personal expenses");
 			}
 		}	
 	}

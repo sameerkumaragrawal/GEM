@@ -2,6 +2,7 @@ package com.AndroidFriends.src;
 
 import java.util.ArrayList;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -13,6 +14,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -21,6 +25,7 @@ import android.widget.Toast;
 
 import com.AndroidFriends.R;
 
+@SuppressLint("InflateParams")
 public class ImportGroupDatabase extends Activity {
 
 	private LinearLayout list;
@@ -126,6 +131,7 @@ public class ImportGroupDatabase extends Activity {
 	public void addMember(View v){
 		int position = numberItems;
 		View convertView = inflater.inflate(R.layout.new_group_item, null);
+		CheckBox meCheckBox = (CheckBox) convertView.findViewById(R.id.new_group_item_checkBox);
 		ImageButton removeButton = (ImageButton)convertView.findViewById(R.id.new_group_item_ib);
 		CustomRemoveClickListener removeListener = new CustomRemoveClickListener(); 
 		removeListener.setPosition(position);
@@ -138,6 +144,7 @@ public class ImportGroupDatabase extends Activity {
 		if(position==0){
 			removeButton.setVisibility(View.INVISIBLE);
 			MainActivity.setWeight(removeButton, 0);
+			meCheckBox.setVisibility(View.GONE);
 			memberText.setText("Group Name");
 			
 			// Add auto complete to the group name
@@ -146,12 +153,24 @@ public class ImportGroupDatabase extends Activity {
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, NewGroupActivity.groupNames);
 			groupNameEditText.setAdapter(adapter);
 		}else{
-			if(position <= numbermembers){
+			if (position==1) {
+				removeButton.setVisibility(View.GONE);
+				meCheckBox.setVisibility(View.VISIBLE);
+				
+				boolean userMember = gpdb.getUserMember();
+				if (userMember) meCheckBox.setChecked(true);
+				else meCheckBox.setChecked(false);
+				CheckBoxListener checkBoxListener = new CheckBoxListener();
+				meCheckBox.setOnCheckedChangeListener(checkBoxListener);
+			}
+			else if(position <= numbermembers){
 				removeButton.setVisibility(View.INVISIBLE);
 				MainActivity.setWeight(removeButton, 0);
+				meCheckBox.setVisibility(View.GONE);
 			}
 			else{
 				removeButton.setVisibility(View.VISIBLE);
+				meCheckBox.setVisibility(View.GONE);
 				MainActivity.setWeight(removeButton, MainActivity.imagebuttonweight);
 			}
 			memberText.setText("Member "+(position));
@@ -161,6 +180,8 @@ public class ImportGroupDatabase extends Activity {
 			memberNameEditText.setThreshold(2);
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, contactNames);
 			memberNameEditText.setAdapter(adapter);
+			if (position==1) MainActivity.setWeight(memberNameEditText, 0.9f);
+			else if (position <= numbermembers) MainActivity.setWeight(memberNameEditText, 1.3f);
 		}
 		list.addView(convertView);
 		numberItems++;
@@ -181,6 +202,15 @@ public class ImportGroupDatabase extends Activity {
 			
 		}
 	}
+	
+	private class CheckBoxListener implements OnCheckedChangeListener{
+
+		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+			if (isChecked) {
+				createLongToast("Selecting this will result in your expenses in this group to be added automatically to your personal expenses");
+			}
+		}	
+	}
 
 	public void listNotifyDataSetChanged(){
 		int k=0;
@@ -198,6 +228,12 @@ public class ImportGroupDatabase extends Activity {
 	
 	public void createToast(String message){
 		Toast n = Toast.makeText(ImportGroupDatabase.this,message, Toast.LENGTH_SHORT);
+		n.setGravity(Gravity.CENTER_VERTICAL,0,0);
+		n.show();
+	}
+	
+	public void createLongToast(String message){
+		Toast n = Toast.makeText(ImportGroupDatabase.this, message, Toast.LENGTH_LONG);
 		n.setGravity(Gravity.CENTER_VERTICAL,0,0);
 		n.show();
 	}
@@ -234,6 +270,7 @@ public class ImportGroupDatabase extends Activity {
 
 		int numberOfMembers = numberItems - 1;
 		members = new String[numberOfMembers];
+		boolean userMember = false;
 
 		for(int j=0;j<numberOfMembers;j++){
 			members[j]="";
@@ -246,6 +283,11 @@ public class ImportGroupDatabase extends Activity {
 			if (!checkMemberName(members[k],k)){
 				return;
 			}
+			
+			if (k==0) {
+				CheckBox meCheckBox = (CheckBox) row.findViewById(R.id.new_group_item_checkBox);
+				userMember = meCheckBox.isChecked();
+			}
 		}
 		
 		grpCurrency = currencySpinner.getSelectedItemPosition();
@@ -254,7 +296,7 @@ public class ImportGroupDatabase extends Activity {
 			return;
 		}
 		
-		if(!updatedatabase(group_name,members)){
+		if(!updatedatabase(group_name,members,userMember)){
 			return;
 		}
 		else {
@@ -263,13 +305,21 @@ public class ImportGroupDatabase extends Activity {
 		}
 	}
 	
-	public boolean updatedatabase(String grpname,String[] members){
+	public boolean updatedatabase(String grpname, String[] members, boolean userMember){
 		if(!updategroupname(grpname)){
 			return false;
 		}
 		
 		groupName=grpname;
 		gpdb.updateMembers(members,namearray);
+		if (userMember) {
+			gpdb.editUserMember(1);
+			gpdb.addGroupExpensesToPersonalExpenses(groupName);
+		}
+		else {
+			gpdb.editUserMember(0);
+			gpdb.removeGroupExpensesToPersonalExpenses(groupName);
+		}
 		return true;
 	}
 

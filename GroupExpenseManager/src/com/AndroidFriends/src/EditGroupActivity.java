@@ -204,7 +204,10 @@ public class EditGroupActivity extends Activity {
 
 		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 			if (isChecked) {
-				createLongToast("Choosing this will result in your expenses in this group to be added automatically to your personal expenses");
+				createLongToast("Selecting this will result in your expenses in this group to be added automatically to your personal expenses");
+			}
+			else {
+				createLongToast("Deselecting this will result in your expenses in this group to be automatically removed from your personal expenses");
 			}
 		}	
 	}
@@ -330,7 +333,14 @@ public class EditGroupActivity extends Activity {
 		
 		groupName=grpname;
 		gpdb.updateMembers(members,namearray);
-		if (userMember) gpdb.editUserMember();
+		if (userMember) {
+			gpdb.editUserMember(1);
+			gpdb.addGroupExpensesToPersonalExpenses(groupName);
+		}
+		else {
+			gpdb.editUserMember(0);
+			gpdb.removeGroupExpensesToPersonalExpenses(groupName);
+		}
 		return true;
 	}
 

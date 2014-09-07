@@ -21,6 +21,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class GroupDatabase extends SQLiteOpenHelper{
 	private static String DATABASE_NAME = null;
 	private static final int DATABASE_VERSION = 5;
+	private static Context CONTEXT;
 
 	public final static int eventFlag = 1;
 	public final static int cashTransferFlag = 2;
@@ -129,22 +130,6 @@ public class GroupDatabase extends SQLiteOpenHelper{
 		}
 	}
 	
-	public void addUserMember() {
-		getDB().execSQL("UPDATE "+MemberTable+" SET User = ? WHERE ID = ?", new Object[]{1, 1});
-	}
-	
-	public void editUserMember() {
-		getDB().execSQL("UPDATE "+MemberTable+" SET User = ? WHERE ID = ?", new Object[]{1, 1});
-		updatePersonalExpenseOnEditGroup();
-	}
-	
-	public boolean getUserMember() {
-		Cursor mquery = getDB().rawQuery("SELECT User FROM "+MemberTable+" WHERE ID = 1", null);
-		mquery.moveToFirst();
-		if (mquery.getInt(0) == 1) return true;
-		else return false;
-	}
-
 	public Cursor MemberListWithBalance(){
 		Cursor mquery = getDB().rawQuery("SELECT * FROM " + MemberTable,null);
 		return mquery;
@@ -239,7 +224,7 @@ public class GroupDatabase extends SQLiteOpenHelper{
 		return c;
 	}
 
-	public void UpdateMemberTableAfterEventDelete(int id){
+	public void UpdateMemberTableAfterEventDelete(int id, String groupName){
 		int memberId;
 		float paid, consumed;
 		Cursor mquery = getDB().rawQuery("SELECT * FROM " + TransTable + " WHERE EventId = " + id, null);
@@ -250,15 +235,21 @@ public class GroupDatabase extends SQLiteOpenHelper{
 			consumed = mquery.getFloat(2);
 			getDB().execSQL("UPDATE " + MemberTable + " SET Paid = Paid - ?, Consumed = Consumed - ? WHERE ID = ?", new Object[]{paid, consumed, memberId});
 		}while(mquery.moveToNext());
+		
+		Cursor userQuery = getDB().rawQuery("SELECT User FROM " + MemberTable + " WHERE ID = ?", new String[]{String.valueOf(1)});
+		userQuery.moveToFirst();
+		if (userQuery.getInt(0) == 1) {
+			addGroupExpensesToPersonalExpenses(groupName);
+		}
 	}
 
-	public void DeleteFromTransList(int id){
+	public void DeleteFromTransList(int id, String groupName){
 		String newName = "Deleted - ";
 		getDB().execSQL("UPDATE " + EventTable + " SET Name = ? || Name, Flag = ? WHERE ID = ?",new Object[]{newName, deletedEventFlag, id});
-		UpdateMemberTableAfterEventDelete(id);
+		UpdateMemberTableAfterEventDelete(id, groupName);
 	}
 
-	public void restoreInTransList(int id){
+	public void restoreInTransList(int id, String groupName){
 		getDB().execSQL("UPDATE " + EventTable + " SET Name = SUBSTR(Name, 11, LENGTH(Name)), Flag = ? WHERE ID = ?",new Object[]{eventFlag, id});
 
 		int memberId;
@@ -270,6 +261,12 @@ public class GroupDatabase extends SQLiteOpenHelper{
 			paid= mquery.getFloat(1);
 			consumed = mquery.getFloat(2);
 			getDB().execSQL("UPDATE " + MemberTable + " SET Paid = Paid + ?, Consumed = Consumed + ? WHERE ID = ?", new Object[]{paid, consumed, memberId});
+			
+			Cursor userQuery = getDB().rawQuery("SELECT User FROM " + MemberTable + " WHERE ID = ?", new String[]{String.valueOf(memberId)});
+			userQuery.moveToFirst();
+			if (userQuery.getInt(0) == 1) {
+				addGroupExpensesToPersonalExpenses(groupName);
+			}
 		}while(mquery.moveToNext());
 	}
 
@@ -293,7 +290,7 @@ public class GroupDatabase extends SQLiteOpenHelper{
 		}
 	}
 
-	private void addEntryInTransTable(int eventid, float[] amountPaid, int[] paidMembers, float[] amountConsumed, List<boolean[]> whoConsumed, int arraysize) {
+	private void addEntryInTransTable(int eventid, float[] amountPaid, int[] paidMembers, float[] amountConsumed, List<boolean[]> whoConsumed, int arraysize, String groupName) {
 		float[] memberBalance;
 		memberBalance=new float[arraysize];
 		float[] consumedBalance;
@@ -339,23 +336,13 @@ public class GroupDatabase extends SQLiteOpenHelper{
 			
 				// For syncing with personal expenses
 				int memberId = i+1;
-				Cursor userQuery = getDB().rawQuery("SELECT User FROM " + MemberTable + "WHERE ID = " + memberId, null);
+				Cursor userQuery = getDB().rawQuery("SELECT User FROM " + MemberTable + " WHERE ID = ?", new String[]{String.valueOf(memberId)});
 				userQuery.moveToFirst();
 				if (userQuery.getInt(0) == 1) {
-					updatePersonalExpenseOnEvent();
+					addGroupExpensesToPersonalExpenses(groupName);
 				}
 			}
 		}
-	}
-	
-	private void updatePersonalExpenseOnEvent() {
-		// TODO
-		// call PersonalDatabase.insertGroupExpense(groupName, totalConsumed) at the end
-	}
-	
-	private void updatePersonalExpenseOnEditGroup() {
-		// TODO
-		// call PersonalDatabase.insertGroupExpense(groupName, totalConsumed) at the end
 	}
 
 	private void UpdateEventNameEdited(int eventid, String eventName){
@@ -373,7 +360,7 @@ public class GroupDatabase extends SQLiteOpenHelper{
 		}
 	}
 
-	public void addEvent(String eventName, float[] amountPaid, int[] paidMembers, float[] amountConsumed, List<boolean[]> whoConsumed,String[] namearray){
+	public void addEvent(String eventName, float[] amountPaid, int[] paidMembers, float[] amountConsumed, List<boolean[]> whoConsumed,String[] namearray, String groupName){
 		int ID1=1;
 		Cursor count = getDB().rawQuery("SELECT MAX(ID) FROM " + EventTable , null);
 		if(count.getCount()>0){
@@ -388,20 +375,19 @@ public class GroupDatabase extends SQLiteOpenHelper{
 		value1.put("Date", System.currentTimeMillis());
 		getDB().insert(EventTable,null,value1);
 
-		addEntryInTransTable(ID1, amountPaid, paidMembers, amountConsumed, whoConsumed, namearray.length);
+		addEntryInTransTable(ID1, amountPaid, paidMembers, amountConsumed, whoConsumed, namearray.length, groupName);
 	}
 
-	public void updateEvent(int eventid, String eventName, float[] amountPaid, int[] paidMembers, float[] amountConsumed, List<boolean[]> whoConsumed,int arraysize){
-
+	public void updateEvent(int eventid, String eventName, float[] amountPaid, int[] paidMembers, float[] amountConsumed, List<boolean[]> whoConsumed,int arraysize, String groupName){
 		UpdateEventNameEdited(eventid, eventName);
 
-		UpdateMemberTableAfterEventDelete(eventid);
+		UpdateMemberTableAfterEventDelete(eventid, groupName);
 		getDB().delete(TransTable,"EventId = " + eventid, null);
 
-		addEntryInTransTable(eventid, amountPaid, paidMembers, amountConsumed, whoConsumed, arraysize);
+		addEntryInTransTable(eventid, amountPaid, paidMembers, amountConsumed, whoConsumed, arraysize, groupName);
 	}
 
-	private void addEntryInTransTableIndividualExpense(int eventid, int member,	float amount) {
+	private void addEntryInTransTableIndividualExpense(int eventid, int member,	float amount, String groupName) {
 		ContentValues value2 = new ContentValues();
 		value2.put("MemberId", member+1);
 		value2.put("Paid", amount);
@@ -412,14 +398,14 @@ public class GroupDatabase extends SQLiteOpenHelper{
 		getDB().execSQL("UPDATE "+MemberTable+" SET Paid = Paid+?, Consumed = Consumed+? WHERE ID = ?",new Object[]{amount,amount,member+1});
 		
 		int memberId = member+1;
-		Cursor userQuery = getDB().rawQuery("SELECT User FROM " + MemberTable + "WHERE ID = " + memberId, null);
+		Cursor userQuery = getDB().rawQuery("SELECT User FROM " + MemberTable + " WHERE ID = ?", new String[]{String.valueOf(memberId)});
 		userQuery.moveToFirst();
 		if (userQuery.getInt(0) == 1) {
-			updatePersonalExpenseOnEvent();
+			addGroupExpensesToPersonalExpenses(groupName);
 		}
 	}
 
-	public void addIndividualEvent(String eventName, float amount, int member){
+	public void addIndividualEvent(String eventName, float amount, int member,String groupName){
 		int ID1=1;
 		Cursor count = getDB().rawQuery("SELECT MAX(ID) FROM " + EventTable , null);
 		if(count.getCount()>0){
@@ -434,16 +420,16 @@ public class GroupDatabase extends SQLiteOpenHelper{
 		value1.put("Date", System.currentTimeMillis());
 		getDB().insert(EventTable,null,value1);
 
-		addEntryInTransTableIndividualExpense(ID1, member, amount);
+		addEntryInTransTableIndividualExpense(ID1, member, amount, groupName);
 	}
 
-	public void updateIndividualEvent(int eventid, String eventName, float amount, int member){
+	public void updateIndividualEvent(int eventid, String eventName, float amount, int member, String groupName){
 		UpdateEventNameEdited(eventid, eventName);
 
-		UpdateMemberTableAfterEventDelete(eventid);
+		UpdateMemberTableAfterEventDelete(eventid, groupName);
 		getDB().delete(TransTable,"EventId = " + eventid, null);
 
-		addEntryInTransTableIndividualExpense(eventid, member, amount);
+		addEntryInTransTableIndividualExpense(eventid, member, amount, groupName);
 	}
 
 	public void clearlog(){
@@ -488,7 +474,39 @@ public class GroupDatabase extends SQLiteOpenHelper{
 		mquery.moveToFirst();
 		return mquery.getLong(0);
 	}
+	
+	public void addUserMember() {
+		getDB().execSQL("UPDATE "+MemberTable+" SET User = ? WHERE ID = ?", new Object[]{1, 1});
+	}
+	
+	public void editUserMember(int userMember) {
+		getDB().execSQL("UPDATE "+MemberTable+" SET User = ? WHERE ID = ?", new Object[]{userMember, 1});
+	}
+	
+	public boolean getUserMember() {
+		Cursor mquery = getDB().rawQuery("SELECT User FROM "+MemberTable+" WHERE ID = 1", null);
+		mquery.moveToFirst();
+		if (mquery.getInt(0) == 1) return true;
+		else return false;
+	}
 
+	public void addGroupExpensesToPersonalExpenses(String name) {
+		Cursor userQuery = getDB().rawQuery("SELECT Consumed FROM " + MemberTable + " WHERE User = ?", new String[]{String.valueOf(1)});
+		float amount = 0;
+		if (userQuery.getCount() != 0) {
+			userQuery.moveToFirst();
+			amount = userQuery.getFloat(0);
+			
+			PersonalDatabase pdb = PersonalDatabase.get(CONTEXT);
+			pdb.addOrEditGroupExpense(name, amount);
+		}
+	}
+	
+	public void removeGroupExpensesToPersonalExpenses(String name) {
+		PersonalDatabase pdb = PersonalDatabase.get(CONTEXT);
+		pdb.deleteGroupExpense(name);
+	}
+		
 	private SQLiteDatabase getDB() {
 		if (db == null) {
 			db = getWritableDatabase();
@@ -510,6 +528,7 @@ public class GroupDatabase extends SQLiteOpenHelper{
 	private static GroupDatabase DB_;
 
 	public static GroupDatabase get(Context c,String name) {
+		CONTEXT = c;
 		if (DB_ == null) {
 			if(DATABASE_NAME == null){
 				DATABASE_NAME = name;
