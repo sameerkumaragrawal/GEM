@@ -369,12 +369,11 @@ public class GroupsActivity extends Activity {
     	String databasename="Database_"+id;
     	this.deleteDatabase(databasename);
     	commondb.deleteID(id);
-    	items.remove(selPosition);
+    	items.remove(selPosition);    	
+    	adaptor.notifyDataSetChanged();
     	
     	PersonalDatabase pdb = PersonalDatabase.get(this);
     	pdb.deleteGroupExpense(GroupName);
-    	
-    	adaptor.notifyDataSetChanged();
     }
     
     // Functions to import an existing database

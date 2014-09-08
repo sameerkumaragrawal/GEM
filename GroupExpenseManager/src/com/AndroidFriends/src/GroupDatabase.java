@@ -441,7 +441,7 @@ public class GroupDatabase extends SQLiteOpenHelper{
 		getDB().execSQL(createCash);
 	}
 
-	public void clearBalance(int ntransactions,String [][]solutionarray,float []tramountarray){
+	public void clearBalance(int ntransactions,String [][]solutionarray,float []tramountarray, String groupName){
 		int ID1=1;
 
 		Cursor count = getDB().rawQuery("SELECT MAX(ID) FROM " + EventTable , null);
@@ -467,6 +467,7 @@ public class GroupDatabase extends SQLiteOpenHelper{
 		}
 		getDB().execSQL("UPDATE "+MemberTable+" SET Paid = 0, Consumed = 0;");
 
+		removeGroupExpensesFromPersonalExpenses(groupName);
 	}
 
 	public long getEventDate(int id){
@@ -502,7 +503,7 @@ public class GroupDatabase extends SQLiteOpenHelper{
 		}
 	}
 	
-	public void removeGroupExpensesToPersonalExpenses(String name) {
+	public void removeGroupExpensesFromPersonalExpenses(String name) {
 		PersonalDatabase pdb = PersonalDatabase.get(CONTEXT);
 		pdb.deleteGroupExpense(name);
 	}

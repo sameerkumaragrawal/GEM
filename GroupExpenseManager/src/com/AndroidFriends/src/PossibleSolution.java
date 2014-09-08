@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Locale;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -28,6 +29,7 @@ import android.widget.TextView;
 
 import com.AndroidFriends.R;
 
+@SuppressLint("InflateParams")
 public class PossibleSolution extends Activity {
 
 	private String[] namearray;
@@ -66,7 +68,7 @@ public class PossibleSolution extends Activity {
 		String database="Database_"+grpid;
 		gpdb=GroupDatabase.get(this, database);
 		compute();
-		boolean clearflag=intent.getBooleanExtra(GroupSummaryActivity.clearflag, false);
+		boolean clearflag = intent.getBooleanExtra(GroupSummaryActivity.clearflag, false);
 		if(clearflag){
 			grpid = intent.getIntExtra(GroupsActivity.GROUP_ID,0);
 			clearbalance();
@@ -156,7 +158,7 @@ public class PossibleSolution extends Activity {
 	}
 
 	public void clearbalance(){
-		gpdb.clearBalance(ntransactions, solutionarray, tramountarray);
+		gpdb.clearBalance(ntransactions, solutionarray, tramountarray, groupName);
 	}
 	
 	public void shareScreenshot(View v) {

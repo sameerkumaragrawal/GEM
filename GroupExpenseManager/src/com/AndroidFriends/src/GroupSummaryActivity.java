@@ -360,6 +360,10 @@ public class GroupSummaryActivity extends Activity {
 		String databasename="Database_"+grpId;
 		this.deleteDatabase(databasename);
 		commondb.deleteID(grpId);
+		
+		PersonalDatabase pdb = PersonalDatabase.get(this);
+    	pdb.deleteGroupExpense(grpName);
+    	
 		this.finish();
 	}
 

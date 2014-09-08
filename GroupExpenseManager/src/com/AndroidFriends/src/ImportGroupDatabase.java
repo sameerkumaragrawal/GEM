@@ -318,7 +318,7 @@ public class ImportGroupDatabase extends Activity {
 		}
 		else {
 			gpdb.editUserMember(0);
-			gpdb.removeGroupExpensesToPersonalExpenses(groupName);
+			gpdb.removeGroupExpensesFromPersonalExpenses(groupName);
 		}
 		return true;
 	}

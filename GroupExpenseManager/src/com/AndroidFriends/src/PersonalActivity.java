@@ -89,7 +89,6 @@ public class PersonalActivity extends Activity {
 	@Override
 	public void onRestart(){
 		super.onRestart();
-		
 		adaptor = new ListAdaptor(this);
 		titles = new ArrayList<String>();
 		amounts = new ArrayList<String>();
@@ -99,6 +98,19 @@ public class PersonalActivity extends Activity {
 		getInfo();
 		makeList();
 	}
+	
+	 @Override
+    protected void onResume() {
+        super.onResume();
+        adaptor = new ListAdaptor(this);
+		titles = new ArrayList<String>();
+		amounts = new ArrayList<String>();
+		list = (ListView) findViewById(R.id.PersonalList);
+		list.setAdapter(adaptor);
+		
+		getInfo();
+		makeList();
+    }
 			
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

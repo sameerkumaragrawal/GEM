@@ -279,24 +279,31 @@ public class PersonalDatabase extends SQLiteOpenHelper{
 	public void addOrEditGroupExpense(String name, float total) {
 		Cursor expenseQuery = getDB().rawQuery("SELECT * FROM " + expensesTable + " WHERE Name = ? AND Category = ?", new String[]{name, String.valueOf(8)});
 		if (expenseQuery.getCount() != 0) {
-			getDB().execSQL("UPDATE " + expensesTable + " SET Amount = ?, Date = ? WHERE Name = ? AND Category = ?", new Object[]{total, System.currentTimeMillis(), name, 8});
+			if (total != 0) {
+				getDB().execSQL("UPDATE " + expensesTable + " SET Amount = ?, Date = ? WHERE Name = ? AND Category = ?", new Object[]{total, System.currentTimeMillis(), name, 8});
+			}
+			else {
+				getDB().execSQL("DELETE FROM " + expensesTable + " WHERE Name = ? AND Category = ?", new Object[]{name, 8});
+			}
 		}
 		else {
-			int ID1=1;
-			Cursor count = getDB().rawQuery("SELECT MAX(ID) FROM " + expensesTable , null);
-			if(count.getCount()>0){
-				count.moveToLast();
-				ID1=count.getInt(0)+1;
+			if (total != 0) {
+				int ID1=1;
+				Cursor count = getDB().rawQuery("SELECT MAX(ID) FROM " + expensesTable , null);
+				if(count.getCount()>0){
+					count.moveToLast();
+					ID1=count.getInt(0)+1;
+				}
+		
+				ContentValues values = new ContentValues();
+				values.put("ID", ID1);
+				values.put("Name", name);
+				values.put("Category", 8);
+				values.put("Amount", total);
+				values.put("Date",System.currentTimeMillis());
+				values.put("Flag", expenseFlag);
+				getDB().insert(expensesTable,null,values);
 			}
-	
-			ContentValues values = new ContentValues();
-			values.put("ID", ID1);
-			values.put("Name", name);
-			values.put("Category", 8);
-			values.put("Amount", total);
-			values.put("Date",System.currentTimeMillis());
-			values.put("Flag", expenseFlag);
-			getDB().insert(expensesTable,null,values);
 		}
 	}
 	

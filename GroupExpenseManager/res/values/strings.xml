@@ -15,11 +15,11 @@
     <string name="import_group">Import Group from File</string>
     <string name="add_new_group">Add New Group</string>
     <string name="menu_clear">Clear History</string>
-    <string name="deleteEvent">Delete Event</string>
-    <string name="editEvent">Edit Event</string>
-    <string name="previousEvent">Previous Event</string>
-    <string name="nextEvent">Next Event</string>
-    <string name="restoreEvent">Restore Deleted Event</string>
+    <string name="deleteEvent">Delete Expense</string>
+    <string name="editEvent">Edit Expense</string>
+    <string name="previousEvent">Previous Expense</string>
+    <string name="nextEvent">Next Expense</string>
+    <string name="restoreEvent">Restore Deleted Expense</string>
     <string name="menu_about">About</string>
     <string name="menu_exit">Exit</string>
     <string name="title_activity_main">GEM</string>
@@ -46,7 +46,7 @@
     <string name="consumed">Consumed</string>
     <string name="topay">To Pay</string>
     <string name="toget">To Get</string>
-    <string name="addevent">Add Event</string>
+    <string name="addevent">Add Expense</string>
     <string name="cashtransfer">Cash Transfer</string>
     <string name="title_activity_cash_transfer">Cash Transfer</string>
     <string name="amount">Amount</string>
@@ -54,7 +54,7 @@
     <string name="summary">Summary</string>
     <string name="history">History</string>
     <string name="clear">Clear Balance</string>
-    <string name="title_activity_add_event">Add Event</string>
+    <string name="title_activity_add_event">Add Expense</string>
     <string name="title_activity_possible_solution">Possible Solution</string>
     <string name="title_activity_individual_summary">Individual Summary</string>
     <string name="done_button1">Done</string>
@@ -64,7 +64,7 @@
     <string name="share_button">Share Among</string>
     <string name="paid">Paid</string>
     <string name="nextButton">Next</string>
-    <string name="eventname">Event Name</string>
+    <string name="eventname">Expense Name</string>
     <string name="eventtype">Type</string>
     <string name="addButton">Add</string>
     <string name="back">Back</string>
@@ -74,7 +74,7 @@
     <string name="title_activity_edit_group">Edit</string>
     <string name="groupsummaryname">Name</string>
     <string name="title_activity_history">History</string>
-    <string name="selectevent">Select Event</string>
+    <string name="selectevent">Select Expense</string>
     <string name="selectmember">Select Member</string>
     <string name="member">Member</string>
     <string name="paidby">Paid By</string>
@@ -94,7 +94,7 @@
     <string name="remove_member_button">Remove this Member</string>
     <string name="androidfriends">Android Friends</string>
     <string name="edit_name_button">Edit name of the group</string>
-    <string name="title_activity_edit_event">Edit Event</string>
+    <string name="title_activity_edit_event">Edit Expense</string>
     <string name="title_activity_edit_cash_transfer">Edit Cash Transfer Activity</string>
     <string name="title_activity_import_group_database">Import Group</string>
     <string name="title_activity_personal">Personal Expense Manager</string>
