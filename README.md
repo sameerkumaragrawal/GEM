@@ -9,7 +9,7 @@ GEM keeps account of all the transactions and expenses within a group and helps 
 A simple, fast, user friendly and lightweight application that saves you quite a lot of calculations (and arguments)!
 
 <b>Features:</b>  
-★ No ads  
+★ NO ADS  
 ★ Handle multiple groups with members imported from phone contacts  
 ★ Add events involving the group, for e.g. in a restaurant where a few individuals pay for all or some, or involving just an individual member in the group  
 ★ Add a cash transfer transaction (cash return) involving 2 individuals  
@@ -19,7 +19,12 @@ A simple, fast, user friendly and lightweight application that saves you quite a
 ★ View each individual's total payment and consumption within the group  
 ★ Export and import group database to and from SD card  
 ★ Share screenshot of group balance and solution with other members easily via social networking apps  
-★ Multiple currency support
+★ Multiple currency support  
+★ Personal expense manager for keeping an account of personal expenses  
+★ Add personal information including income to get an idea of expenses versus remaining balance  
+★ Categorization of personal expenses with breakdown displayed  
+★ Add due bills and pay them to add directly to your expenses  
+★ Group expenses automatically added to personal expenses
 
 Whats New
 ==========
@@ -66,28 +71,32 @@ Whats New
 - Bug fix in adding new group
 - Efficient member choosing option in cash transfer
 
+<b>Version 4.0:</b>  
+- Personal expense manager for keeping an account of personal expenses
+- Add personal information including income to get an idea of expenses versus remaining balance
+- Categorization of personal expenses with breakdown displayed
+- Add due bills and pay them to add directly to your expenses
+- Group expenses automatically added to personal expenses
+
 For Google Play
 ================
 <b>Short Description:</b>  
 A group expense manager for managing shared transactions and expenses in a group
 
 <b>Whats New:</b>  
-Version 3.1.1:
-- Bug fixes
+Version 4.0:
+- Personal expense manager for keeping account of personal expenses
+- Add personal income to get an idea of remaining balance
+- Categorization of personal expenses with breakdown displayed
+- Add due bills and pay them to add directly to your expenses
+- Group expenses automatically added to personal expenses
 
-Version 3.1:
-- Export/import group database to/from SD card
-
-Version 3.0:
+Version 3.x:
 - Edit and delete/restore previous events
-- Date and time stored and displayed for each event
+- Date and time for each event
 - Screenshot sharing via social networking apps
-- Improved viewing of event history
-- Auto complete member names imported from phone contacts
-- Auto complete suggestions for event and group names
+- Export/import group database to/from SD card
 
 Version 2.x:
 - Support for all screen sizes and resolutions
-- Each member's total payment and consumption summary within the group
-- Two types of events - group expense and individual expense
 - Multiple currency support
